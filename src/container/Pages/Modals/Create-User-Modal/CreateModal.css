@@ -1,0 +1,122 @@
+.modal-Reject-styles .modal-content {
+  position: relative;
+  top: 0px !important;
+  left: 100px;
+  height: 260px !important;
+  width: 650px !important;
+  background-color: #f3f2f1;
+  border-radius: 8px !important;
+  display: flex !important;
+  justify-content: center !important;
+  border: 1px solid #e0e1e2 !important;
+  padding: 5px 10px;
+  box-shadow: 10px 10px 40px rgb(0 0 0 / 10%);
+}
+
+.edit-Reject-label {
+  font-size: 20px;
+  font-weight: 500;
+  color: #f26522 !important;
+}
+
+.header-Reject-Modal-close-btn {
+  font-size: 11px;
+  border: none !important;
+  position: absolute;
+  right: 0px;
+  top: 15px;
+  font-size: 9px;
+  z-index: 2 !important;
+}
+
+.textfield-Reject-modal {
+  margin-top: 0px;
+  height: 55px !important;
+  font-size: 14px;
+  color: #45494d;
+}
+
+.Type-commet-heading {
+  position: absolute;
+  font-size: 12px;
+  color: #004990;
+  font-weight: 500;
+}
+
+.select-role {
+  width: 100%;
+}
+
+.select-status {
+  width: 100%;
+  margin-left: 0px;
+}
+
+.select-labels {
+  font-size: 12px;
+  color: #004990;
+  font-weight: 500;
+}
+
+.modal-Reject-footer {
+  width: 100% !important;
+  display: contents;
+}
+
+.footer-create-btn-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.update-btn {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 4px;
+  border: none;
+  background: #096fed !important;
+}
+
+.update-btn:hover {
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.discard-btn {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 4px;
+  border: none;
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.discard-btn:hover {
+  background: #096fed !important;
+}
+
+.icon-right {
+  margin-right: 5px;
+  font-size: 14px;
+}
+
+.required-color {
+  color: red !important;
+}
+
+.errorMessage {
+  height: 0px;
+  margin-top: 0px !important;
+  font-size: 12px !important;
+  font-weight: 500;
+  color: #f16b6b;
+  visibility: visible !important;
+}
+
+.errorMessage_hidden {
+  visibility: hidden;
+  margin: 0;
+  height: 16px;
+  color: #f16b6b !important;
+}

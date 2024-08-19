@@ -1,0 +1,93 @@
+.create-user-container {
+  width: 100% !important;
+  margin: 0 13px 0 0 !important;
+}
+
+.Pending-Approval-label {
+  font-size: 24px;
+  color: #4d4946;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.Createuser-table {
+  max-width: 100vw;
+  overflow: auto !important;
+  overflow-y: hidden;
+  border-radius: 0px !important;
+}
+
+.Createuser-table th.ant-table-cell {
+  color: #ffffff !important;
+  border-radius: 0% !important;
+  background: #f26522 !important;
+  font-family: "Roboto", sans-serif !important;
+}
+
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-table-wrapper
+  .ant-table-tbody
+  > tr
+  > td {
+  padding: 10px 15px !important;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif !important;
+}
+
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-table-wrapper
+  .ant-table-thead
+  > tr
+  > th {
+  position: relative;
+  padding: 10px 16px;
+  overflow-wrap: break-word;
+}
+
+.check-status {
+  color: #12a812 !important;
+  font-size: 18px;
+}
+
+.locked-status {
+  color: #cf5b5b !important;
+  font-size: 18px;
+}
+
+.usercreate-cross-icon {
+  color: #2230aa !important;
+  font-size: 18px;
+}
+
+.span-table {
+  width: 100% !important;
+  /* margin-left: 12px; */
+  border-radius: 4px;
+  padding: 3px 10px !important;
+  background-color: #ffffff !important;
+}
+
+.bottom-table-header {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.icon-Reject-column {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #000000 !important;
+  font-family: "Roboto", sans-serif !important;
+  cursor: pointer;
+}
+
+.icon-accept-column {
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #12a812 !important;
+  cursor: pointer;
+}
+
+.icon-close-column {
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #096fed !important;
+  cursor: pointer;
+}

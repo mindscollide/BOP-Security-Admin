@@ -1,0 +1,244 @@
+.report-user-container {
+  width: 100% !important;
+  margin: 0 13px 0 0;
+}
+
+.report-user-label {
+  font-size: 24px;
+  color: #4d4946;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.report-text-field-column {
+  display: flex;
+  justify-content: start;
+  gap: 6px;
+}
+
+.text-fields-report {
+  width: 100% !important;
+  font-size: 13px;
+  font-weight: 600;
+  /* color: #45494d; */
+  height: 37px;
+  border: 1px solid #ccc;
+}
+
+.start-date-field {
+  margin-right: -10px;
+  width: 150px;
+  margin-top: 1px;
+  font-size: 13px;
+  height: 36px;
+  border: 1px solid #ccc;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 0px;
+}
+
+.end-date-field {
+  margin-left: -7px;
+  width: 150px;
+  margin-top: 1px;
+  font-size: 13px;
+  height: 36px;
+  border: 1px solid #ccc;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 6px;
+}
+
+.report-select-field-edit {
+  z-index: 20;
+  font-size: 13px;
+  font-weight: 500;
+  width: 100%;
+  height: 37px !important;
+  margin-top: 21px !important;
+}
+
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-select-single:not(
+    .ant-select-customize-input
+  )
+  .ant-select-selector {
+  width: 100%;
+  height: 37px;
+  padding: 0 11px;
+}
+
+/* .JS-Security-Datepicker {
+  width: 100%;
+} */
+
+.date-picker-left {
+  padding: 0px 10px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  border-top-left-radius: 6px !important;
+  border-bottom-left-radius: 6px !important;
+  border: 1px solid #ced4da;
+  width: 185px !important;
+  height: 37px !important;
+  font-size: 13px !important;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif !important;
+  cursor: pointer;
+}
+.date-picker-left:is(:focus, :focus-visible) {
+  outline: none !important;
+}
+
+.date-to {
+  padding: 6px 13px;
+  margin-top: 23px;
+  align-items: center !important;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+}
+
+.date-picker-right {
+  padding: 0px 10px !important;
+  border-top-left-radius: 0px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-right-radius: 6px !important;
+  border-bottom-right-radius: 6px !important;
+  border: 1px solid #ced4da;
+  font-size: 13px !important;
+  font-weight: 500;
+  width: 185px !important;
+  height: 37px !important;
+  font-family: "Roboto", sans-serif !important;
+  cursor: pointer;
+}
+.date-picker-right:is(:focus, :focus-visible) {
+  outline: none !important;
+}
+
+.JS-Security-Datepicker .rmdp-header-values {
+  color: #000 !important;
+  font-weight: 700 !important;
+  margin: auto;
+}
+
+.JS-Security-Datepicker .rmdp-week-day {
+  color: #000 !important;
+  cursor: default;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.JS-Security-Datepicker .rmdp-calendar {
+  height: max-content;
+  padding: 0px;
+}
+
+.JS-Security-Datepicker .rmdp-day-picker {
+  padding: 0px;
+}
+
+.JS-Security-Datepicker .rmdp-day {
+  cursor: pointer;
+  height: 30px;
+  position: relative;
+  width: 34px;
+}
+
+.JS-Security-Datepicker .rmdp-day span {
+  border-radius: 0%;
+  bottom: 0px;
+  font-size: 13px;
+  font-weight: 500;
+  left: 0px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+.JS-Security-Datepicker .rmdp-day.rmdp-selected span:not(.highlight) {
+  background-color: #2e3cb2 !important;
+  border-radius: 4px;
+  border-color: #2e3cb2 !important;
+  box-shadow: 0 0 3px #8798ad;
+  color: #fff;
+}
+
+.JS-Security-Datepicker .rmdp-arrow {
+  border: solid #000000;
+  border-width: 0 1px 1px 0;
+  display: inline-block;
+  height: 3px;
+  margin-top: 5px;
+  padding: 3px;
+  width: 3px;
+}
+
+.user-report-reset {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 10px;
+  border-radius: 4px;
+  padding: 6px 14px !important;
+  border: none;
+  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+}
+
+.user-report-reset:hover {
+  background: #096fed !important;
+}
+
+.user-reset {
+  font-size: 17px;
+  align-items: center !important;
+  margin-right: 5px !important;
+}
+
+.user-status-heading {
+  font-size: 18px;
+  color: #4d4946;
+  font-weight: 600;
+}
+
+.report-btm-buttons {
+  font-size: 14px;
+  font-weight: 500;
+  width: 100% !important;
+  padding: 6px 12px;
+  background-color: white;
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
+}
+
+.report-btm-buttons:hover {
+  border: 1px solid #0d6efd !important;
+  background-color: #0d6efd !important;
+}
+
+.download-btn-icons {
+  margin-right: 10px !important;
+}
+
+.span-user-color {
+  border-radius: 4px;
+  padding: 3px 6px !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  background-color: #ffffff !important;
+  z-index: 10;
+}
+
+.status-user-panel {
+  border-radius: 4px;
+  padding: 3px 15px !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  background-color: #ffffff !important;
+}
+
+.userReport-col-class {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 15px !important;
+}

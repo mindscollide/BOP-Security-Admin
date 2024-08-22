@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../../../components/layout/Header/Header";
-import allUser from "../../Usermanagement/EditUser/EditUser";
-import PendingUserRequest from "../../Usermanagement/PendingApproval/PendingApproval";
+import allUser from "../../Usermanagement/CorporateUser/CorporateUser";
+import PendingUserRequest from "../../Usermanagement/PendingApprovalBank/PendingApprovalBank";
 import Userreport from "../../../container/Reports/Userreport";
 
 import Sidebar from "../../../components/layout/Sidebar/Sidebar";

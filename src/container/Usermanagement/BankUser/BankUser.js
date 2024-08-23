@@ -174,11 +174,12 @@ const BankUser = () => {
 
     if (name === "userLdapAccount" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
-      if (value !== "") {
+      let valueCheck = value.replace(/[^\d]/g, "");
+      if (valueCheck !== "") {
         setEditUser({
           ...editUser,
           userLdapAccount: {
-            value: value.trimStart(),
+            value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },

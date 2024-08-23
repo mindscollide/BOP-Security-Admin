@@ -16,6 +16,8 @@ import CorporateUser from "../container/Usermanagement/CorporateUser/CorporateUs
 import PendingApprovalBank from "../container/Usermanagement/PendingApprovalBank/PendingApprovalBank";
 import BankUser from "../container/Usermanagement/BankUser/BankUser";
 import PendingApprovalCorporate from "../container/Usermanagement/PendingApprovalCorporate/PendingApprovalCorporate";
+import ForgotPassword from "../container/SecurityLogin/forgetPassword/ForgotPassword";
+import EmailSentPage from "../container/SecurityLogin/PasswordEmailSent/EmailSentPage";
 
 export const router = createHashRouter(
   createRoutesFromElements(
@@ -25,6 +27,8 @@ export const router = createHashRouter(
       <Route exact path="/CreatePassword" element={<CreatePassword />} />
       <Route exact path="/ResetPassword" element={<ResetPassword />} />
       <Route exact path="/TwoFaVerification" element={<TwoFaVerification />} />
+      <Route exact path="/ForgotPassword" element={<ForgotPassword />} />
+      <Route exact path="/EmailSent" element={<EmailSentPage />} />
 
       {/* <Route element={<PrivateRoutes />}> */}
       <Route exact path="/JS/Admin/" element={<MainPage />}>

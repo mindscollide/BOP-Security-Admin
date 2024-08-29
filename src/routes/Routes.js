@@ -23,12 +23,12 @@ export const router = createHashRouter(
   createRoutesFromElements(
     <>
       <Route exact path="/" element={<SecurityLogin />} />
-      <Route exact path="/ChangePassword" element={<ChangePassword />} />
-      <Route exact path="/CreatePassword" element={<CreatePassword />} />
-      <Route exact path="/ResetPassword" element={<ResetPassword />} />
+      {/* <Route exact path="/ChangePassword" element={<ChangePassword />} /> */}
+      {/* <Route exact path="/CreatePassword" element={<CreatePassword />} /> */}
+      {/* <Route exact path="/ResetPassword" element={<ResetPassword />} /> */}
       <Route exact path="/TwoFaVerification" element={<TwoFaVerification />} />
       <Route exact path="/ForgotPassword" element={<ForgotPassword />} />
-      <Route exact path="/EmailSent" element={<EmailSentPage />} />
+      {/* <Route exact path="/EmailSent" element={<EmailSentPage />} /> */}
 
       {/* <Route element={<PrivateRoutes />}> */}
       <Route exact path="/JS/Admin/" element={<MainPage />}>

@@ -4,11 +4,10 @@ import { Table, Paper } from "../../../components/elements";
 import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
-import "./PendingApproval.css";
+import "./PendingApprovalCorporate.css";
 
-const PendingApproval = () => {
+const PendingApprovalCorporate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { securitReducer } = useSelector((state) => state);
@@ -107,7 +106,9 @@ const PendingApproval = () => {
       <section className="create-user-container">
         <Row>
           <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
-            <label className="Pending-Approval-label">Pending Approval</label>
+            <label className="Pending-Approval-label">
+              Pending Approval Corporate
+            </label>
           </Col>
         </Row>
 
@@ -142,4 +143,4 @@ const PendingApproval = () => {
   );
 };
 
-export default PendingApproval;
+export default PendingApprovalCorporate;

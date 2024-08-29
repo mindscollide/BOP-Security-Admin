@@ -19,16 +19,27 @@ const Sidebar = () => {
 
   //Create User Page Name is Pending User Requests
 
-  const navigateToAllUsers = () => {
+  const navigateToCorporateUser = () => {
     localStorage.setItem("defaultOpenKey ", "sub1");
     localStorage.setItem("defaultSelectedKey", "5");
-    navigate("/Js/Admin/EditUser");
+    navigate("/Js/Admin/CorporateUser");
+  };
+  const navigateToBankUser = () => {
+    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultSelectedKey", "6");
+    navigate("/Js/Admin/BankUser");
   };
 
   const navigateToPendingApproval = () => {
     localStorage.setItem("defaultOpenKey ", "sub1");
     localStorage.setItem("defaultSelectedKey", "7");
-    navigate("/JS/Admin/PendingApproval");
+    navigate("/JS/Admin/PendingApprovalBank");
+  };
+
+  const navigateToPendingApprovalCorporate = () => {
+    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultSelectedKey", "8");
+    navigate("/JS/Admin/PendingApprovalCorporate");
   };
 
   const navigateToReport = () => {
@@ -62,9 +73,9 @@ const Sidebar = () => {
                   : "menu-items-sidebar"
               }
               key="5"
-              onClick={navigateToAllUsers}
+              onClick={navigateToCorporateUser}
             >
-              Edit User
+              Corporate User
             </Menu.Item>
             <Menu.Item
               className={
@@ -73,9 +84,31 @@ const Sidebar = () => {
                   : "menu-items-sidebar"
               }
               key="6"
+              onClick={navigateToBankUser}
+            >
+              Bank User
+            </Menu.Item>
+            <Menu.Item
+              className={
+                defaultKeySidebar !== "7"
+                  ? "menu-items-sidebar noDefault"
+                  : "menu-items-sidebar"
+              }
+              key="7"
               onClick={navigateToPendingApproval}
             >
-              Pending Approval
+              Pending Approval Bank
+            </Menu.Item>
+            <Menu.Item
+              className={
+                defaultKeySidebar !== "8"
+                  ? "menu-items-sidebar noDefault"
+                  : "menu-items-sidebar"
+              }
+              key="8"
+              onClick={navigateToPendingApprovalCorporate}
+            >
+              Pending Approval Corporate
             </Menu.Item>
           </SubMenu>
 
@@ -87,11 +120,11 @@ const Sidebar = () => {
           >
             <Menu.Item
               className={
-                defaultKeySidebar !== "8"
+                defaultKeySidebar !== "9"
                   ? "menu-items-sidebar noDefault"
                   : "menu-items-sidebar"
               }
-              key="8"
+              key="9"
               onClick={navigateToReport}
             >
               User Report

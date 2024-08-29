@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
-import "./EditUser.css";
+import "./CorporateUser.css";
 
 const EditUser = () => {
   const navigate = useNavigate();
@@ -174,11 +174,12 @@ const EditUser = () => {
 
     if (name === "userLdapAccount" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
-      if (value !== "") {
+      let valueCheck = value.replace(/[^\d]/g, "");
+      if (valueCheck !== "") {
         setEditUser({
           ...editUser,
           userLdapAccount: {
-            value: value.trimStart(),
+            value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
@@ -295,22 +296,33 @@ const EditUser = () => {
   const dataSource = [
     {
       key: "1",
+      employeeID: "1",
       userLDAPAccount: "aunnaqvi12@gmail.com",
       firstName: "Aun",
       address: "10 Downing Street",
       lastName: "Naqvi",
+      BranchName: "Peshawar",
       userRoleID: "Data Entry - Business Team",
     },
     {
       key: "2",
+      employeeID: "2",
       userLDAPAccount: "johnnaqvi33@gmail.com",
       firstName: "Saif",
       lastName: "Naqvi",
+      BranchName: "Saddar",
       userRoleID: "Data Entry - Business Team",
     },
   ];
 
   const columns = [
+    {
+      title: <label className="bottom-table-header">Employee ID</label>,
+      dataIndex: "employeeID",
+      key: "employeeID",
+      align: "left",
+      ellipsis: true,
+    },
     {
       title: <label className="bottom-table-header">Login ID</label>,
       dataIndex: "userLDAPAccount",
@@ -336,6 +348,13 @@ const EditUser = () => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
+      align: "center",
+      ellipsis: true,
+    },
+    {
+      title: <label className="bottom-table-header">Branch</label>,
+      dataIndex: "BranchName",
+      key: "BranchName",
       align: "center",
       ellipsis: true,
     },
@@ -370,20 +389,6 @@ const EditUser = () => {
         );
       },
     },
-    {
-      title: <label className="bottom-table-header">Delete</label>,
-      dataIndex: "Delete",
-      key: "Delete",
-      ellipsis: true,
-      align: "center",
-      render: (text, record) => {
-        return (
-          <>
-            <i className="icon-trash Icon-trash-delete"></i>
-          </>
-        );
-      },
-    },
   ];
 
   const UpdateBtnHandle = () => {
@@ -396,7 +401,7 @@ const EditUser = () => {
       <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="edit-user-label">Edit User</div>
+            <div className="edit-user-label">Corporate User</div>
           </Col>
         </Row>
         <Row className="mt-3">

@@ -35,7 +35,6 @@ const SecurityLogin = () => {
     Password: "",
     fakePassword: "",
   });
-  console.log("showPasswordshowPassword", showPassword);
 
   // Enter key handler
   const enterKeyHandler = (event, nextInput) => {

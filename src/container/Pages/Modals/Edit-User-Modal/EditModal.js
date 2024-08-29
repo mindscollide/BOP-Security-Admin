@@ -81,6 +81,7 @@ const EditModal = ({
                       className="select-role"
                       value={modalEditState.selectRole}
                       options={Role}
+                      isDisabled={true}
                       onChange={SelectRoleChangeHandler}
                     />
                   </Col>

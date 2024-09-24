@@ -32,24 +32,30 @@ const BankUser = () => {
   const [editSelectStatus, setEditSelectStatus] = useState([]);
   const [editSelectStatusValue, setEditSelectStatusValue] = useState([]);
 
+  const [dropdownvalue, setDropdownvalue] = useState({
+    value: 50,
+    label: "50",
+  });
+
+  const options = [
+    { value: 50, label: "50" },
+    { value: 100, label: "100" },
+    { value: 150, label: "150" },
+  ];
+
   // state for edit user
-  const [editUser, setEditUser] = useState({
-    userLdapAccount: {
+  const [BankEditUser, setBankEditUser] = useState({
+    EmployeeID: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
-    email: {
+    LoginID: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
-    firstName: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    lastName: {
+    Name: {
       value: "",
       errorMessage: "",
       errorStatus: false,
@@ -172,23 +178,23 @@ const BankUser = () => {
     let name = e.target.name;
     let value = e.target.value;
 
-    if (name === "userLdapAccount" && value !== "") {
+    if (name === "EmployeeID" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
       let valueCheck = value.replace(/[^\d]/g, "");
       if (valueCheck !== "") {
-        setEditUser({
-          ...editUser,
-          userLdapAccount: {
+        setBankEditUser({
+          ...BankEditUser,
+          EmployeeID: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "userLdapAccount" && value === "") {
-      setEditUser({
-        ...editUser,
-        userLdapAccount: {
+    } else if (name === "EmployeeID" && value === "") {
+      setBankEditUser({
+        ...BankEditUser,
+        EmployeeID: {
           value: "",
           errorMessage: "",
           errorStatus: true,
@@ -198,8 +204,8 @@ const BankUser = () => {
     if (name === "email" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
       if (value !== "") {
-        setEditUser({
-          ...editUser,
+        setBankEditUser({
+          ...BankEditUser,
           email: {
             value: value.trimStart(),
             errorMessage: "",
@@ -208,8 +214,8 @@ const BankUser = () => {
         });
       }
     } else if (name === "email" && value === "") {
-      setEditUser({
-        ...editUser,
+      setBankEditUser({
+        ...BankEditUser,
         email: {
           value: "",
           errorMessage: "",
@@ -218,61 +224,59 @@ const BankUser = () => {
       });
     }
 
-    if (name === "firstName" && value !== "") {
-      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+    if (name === "LoginID" && value !== "") {
+      let valueCheck = value.replace(/[^\d]/g, "");
       if (valueCheck !== "") {
-        setEditUser({
-          ...editUser,
-          firstName: {
+        setBankEditUser({
+          ...BankEditUser,
+          LoginID: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "firstName" && value === "") {
-      setEditUser({
-        ...editUser,
-        firstName: { value: "", errorMessage: "", errorStatus: false },
+    } else if (name === "LoginID" && value === "") {
+      setBankEditUser({
+        ...BankEditUser,
+        LoginID: { value: "", errorMessage: "", errorStatus: false },
       });
     }
 
-    if (name === "lastName" && value !== "") {
+    if (name === "Name" && value !== "") {
       let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
       if (valueCheck !== "") {
-        setEditUser({
-          ...editUser,
-          lastName: {
+        setBankEditUser({
+          ...BankEditUser,
+          Name: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "lastName" && value === "") {
-      setEditUser({
-        ...editUser,
-        lastName: { value: "", errorMessage: "", errorStatus: false },
+    } else if (name === "Name" && value === "") {
+      setBankEditUser({
+        ...BankEditUser,
+        Name: { value: "", errorMessage: "", errorStatus: false },
       });
     }
   };
 
   //reset handler for edit user
   const resetHandler = () => {
-    setEditUser({
-      ...editUser,
-      email: {
-        value: "",
-      },
-      userLdapAccount: {
+    setBankEditUser({
+      ...BankEditUser,
+
+      EmployeeID: {
         value: "",
       },
 
-      firstName: {
+      LoginID: {
         value: "",
       },
 
-      lastName: {
+      Name: {
         value: "",
       },
 
@@ -295,22 +299,30 @@ const BankUser = () => {
   const dataSource = [
     {
       key: "1",
-      employeeID: "1",
-      userLDAPAccount: "aunnaqvi12@gmail.com",
-      firstName: "Aun",
-      address: "10 Downing Street",
-      lastName: "Naqvi",
-      BranchName: "Peshawar",
-      userRoleID: "Data Entry - Business Team",
+      employeeID: "01",
+      loginId: "aunnaqvi12@gmail.com",
+      name: "Aun",
+      userRoleID: "Dealer",
+      BranchName: "-",
+      userStatusID: <i className="icon-check edit-user-enabled"></i>,
     },
     {
       key: "2",
-      employeeID: "2",
-      userLDAPAccount: "johnnaqvi33@gmail.com",
-      firstName: "Saif",
-      lastName: "Naqvi",
-      BranchName: "Saddar",
-      userRoleID: "Data Entry - Business Team",
+      employeeID: "02",
+      loginId: "johnnaqvi33@gmail.com",
+      name: "Saif",
+      userRoleID: "Branch",
+      BranchName: "1234-Saddar",
+      userStatusID: <i className="icon-lock Icon-Lock-color"></i>,
+    },
+    {
+      key: "3",
+      employeeID: "03",
+      loginId: "bilalnaqvi33@gmail.com",
+      name: "Bilal",
+      userRoleID: "Branch",
+      BranchName: "-",
+      userStatusID: <i className="icon-lock Icon-Lock-color"></i>,
     },
   ];
 
@@ -323,23 +335,17 @@ const BankUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Login ID</label>,
-      dataIndex: "userLDAPAccount",
-      key: "userLDAPAccount",
+      title: <label className="bottom-table-header">LoginID</label>,
+      dataIndex: "loginId",
+      key: "loginId",
       align: "left",
+      width: "400px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">First Name</label>,
-      dataIndex: "firstName",
-      key: "firstName",
-      align: "center",
-      ellipsis: true,
-    },
-    {
-      title: <label className="bottom-table-header">Last Name</label>,
-      dataIndex: "lastName",
-      key: "lastName",
+      title: <label className="bottom-table-header">Empolyee Name</label>,
+      dataIndex: "name",
+      key: "name",
       align: "center",
       ellipsis: true,
     },
@@ -347,14 +353,14 @@ const BankUser = () => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
-      align: "center",
+      align: "left",
       ellipsis: true,
     },
     {
       title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "BranchName",
       key: "BranchName",
-      align: "center",
+      align: "left",
       ellipsis: true,
     },
     {
@@ -363,13 +369,13 @@ const BankUser = () => {
       key: "userStatusID",
       ellipsis: true,
       align: "center",
-      render: (text, record) => {
-        return (
-          <>
-            <i className="icon-check edit-user-enabled"></i>
-          </>
-        );
-      },
+      // render: (text, record) => {
+      //   return (
+      //     <>
+      //       <i className="icon-check edit-user-enabled"></i>
+      //     </>
+      //   );
+      // },
     },
     {
       title: <label className="bottom-table-header">Edit</label>,
@@ -390,6 +396,23 @@ const BankUser = () => {
     },
   ];
 
+  const paginationBankConfig = {
+    itemRender: (_, type, originalElement) => {
+      if (type === "prev") {
+        return <a className="Previous-pagination">Previous</a>;
+      }
+      if (type === "next") {
+        return <a className="Previous-pagination">Next</a>;
+      }
+      return originalElement;
+    },
+    // other pagination settings like current, pageSize, etc.
+  };
+
+  const handleChangeDropDown = (value) => {
+    setDropdownvalue(value);
+  };
+
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);
     setUpdateModal(true);
@@ -400,7 +423,7 @@ const BankUser = () => {
       <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="edit-user-label">Bank User</div>
+            <div className="edit-user-label">Edit Bank User</div>
           </Col>
         </Row>
         <Row className="mt-3">
@@ -409,34 +432,34 @@ const BankUser = () => {
               <Row className="mt-3">
                 <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name="userLdapAccount"
+                    name="EmployeeID"
                     className="text-fields-edituser"
                     labelClass="d-none"
+                    placeholder="Employee ID"
+                    maxLength={100}
+                    value={BankEditUser.EmployeeID.value}
+                    onChange={editUserValidateHandler}
+                  />
+                </Col>
+                <Col lg={3} md={3} sm={12} className="pe-0">
+                  <TextField
+                    name="LoginID"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
+                    maxLength={100}
                     placeholder="Login ID"
-                    maxLength={100}
-                    value={editUser.userLdapAccount.value}
+                    value={BankEditUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
                 <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name="firstName"
-                    className="text-fields-edituser"
-                    labelClass="d-none"
-                    maxLength={100}
-                    placeholder="First Name"
-                    value={editUser.firstName.value}
-                    onChange={editUserValidateHandler}
-                  />
-                </Col>
-                <Col lg={3} md={3} sm={12} className="pe-0">
-                  <TextField
-                    name="lastName"
+                    name="Name"
                     labelClass="d-none"
                     maxLength={100}
                     className="text-fields-edituser"
-                    placeholder="Last Name"
-                    value={editUser.lastName.value}
+                    placeholder="Employee Name"
+                    value={BankEditUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
@@ -444,46 +467,77 @@ const BankUser = () => {
                   <Select
                     name="roleID"
                     options={editSelectRole}
-                    className="select-field-edit"
-                    placeholder="Role"
+                    className="edit-user-select-status"
+                    placeholder="Select Role"
                     value={editSelectRoleValue}
                   />
                 </Col>
               </Row>
 
-              <Row>
+              <Row className="mt-3">
                 <Col lg={3} md={3} sm={12} className="pe-0">
                   <Select
                     name="statusID"
                     className="edit-user-select-status"
-                    placeholder="Status"
+                    placeholder="Select Status"
                     options={editSelectStatus}
                     value={editSelectStatusValue}
                   />
                 </Col>
 
-                <Col lg={6} md={6} sm={12}>
+                <Col lg={9} md={9} sm={12}>
                   <Button
                     icon={<i className="icon-search icon-search-space"></i>}
                     text="Search"
-                    className="search-Edit-User-btn"
+                    className="search-Bank-Edit-User-btn"
                   />
                   <Button
                     icon={<i className="icon-refresh icon-reset-space"></i>}
                     text="Reset"
                     onClick={resetHandler}
-                    className="reset-Edit-User-btn"
+                    className="reset-Bank-Edit-User-btn"
+                  />
+
+                  <Button
+                    icon={<i className="icon-download icon-reset-space"></i>}
+                    text="Export"
+                    className="export-Bank-Edit-User-btn"
                   />
                 </Col>
               </Row>
 
               <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
+                  <span>
+                    <Row>
+                      <Col
+                        lg={12}
+                        md={12}
+                        sm={12}
+                        className="d-flex gap-1 align-items-center"
+                      >
+                        <span className={"Bank-show-text-above-table"}>
+                          Show
+                        </span>
+
+                        <Select
+                          options={options}
+                          value={dropdownvalue}
+                          onChange={handleChangeDropDown}
+                          className="select-Bank-field-edit"
+                        />
+
+                        <span className={"Bank-show-text-above-table"}>
+                          entries
+                        </span>
+                      </Col>
+                    </Row>
+                  </span>
                   <Table
                     column={columns}
                     rows={dataSource}
                     className="Edituser-table"
-                    pagination={false}
+                    pagination={paginationBankConfig}
                   />
                 </Col>
               </Row>

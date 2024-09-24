@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -8,9 +8,9 @@ import {
 } from "../../../../components/elements";
 // import { Select } from "antd";
 import Select from "react-select";
-import "./EditModal.css";
+import "./EditCorporateModal.css";
 
-const EditModal = ({
+const EditCorporateModal = ({
   modalEdit,
   modalEditState,
   setModalEditState,
@@ -22,23 +22,9 @@ const EditModal = ({
   SelectStatusChangeHandler,
   onChangeTextFieldHandler,
 }) => {
-  // for select role state
-  const [selectedRole, setSelectedRole] = useState(null);
-
   // for close modal handler
   const closeEditModal = async () => {
     setModalEdit(false);
-  };
-
-  const options = [
-    { value: "1", label: "Dealer" },
-    { value: "2", label: "Treasury" },
-    { value: "3", label: "Branch" },
-  ];
-
-  const handleSelectRoleChange = (selectedOption) => {
-    setSelectedRole(selectedOption.value); // update state with selected value
-    SelectRoleChangeHandler(selectedOption);
   };
 
   return (
@@ -46,7 +32,7 @@ const EditModal = ({
       <Modal
         show={modalEdit}
         setShow={setModalEdit}
-        className="modaldialog modal-Edit-styles"
+        className="modaldialog modal-Corporate-Edit-styles"
         modalHeaderClassName={"header-Edit-Modal-close-btn"}
         modalFooterClassName="modal-footer-edit"
         size="lg"
@@ -79,9 +65,9 @@ const EditModal = ({
                     <TextField
                       name="Email"
                       value={modalEditState.Email.value}
+                      placeholder="mindscollide.aamir@hbl.com"
                       label={<small className="email-heading">Email</small>}
                       onChange={onChangeTextFieldHandler}
-                      placeholder="mindscollide.aamir@hbl.com"
                       className="textfield-edit-modal"
                       disable={true}
                     />
@@ -89,18 +75,8 @@ const EditModal = ({
                 </Row>
 
                 <Row className="mt-3">
-                  <Col lg={6} md={6} sm={12}>
-                    <label className="select-labels">Select Role</label>
-                    <Select
-                      placeholder="Select Role"
-                      className="select-role"
-                      value={modalEditState.selectRole}
-                      options={options}
-                      onChange={handleSelectRoleChange}
-                    />
-                  </Col>
-                  <Col lg={6} md={6} sm={12}>
-                    <label className="select-labels">Select Status </label>
+                  <Col lg={12} md={12} sm={12}>
+                    <label className="select-labels">Select Status</label>
                     <Select
                       value={modalEditState.selectStatus}
                       placeholder="Select Status"
@@ -110,22 +86,6 @@ const EditModal = ({
                     />
                   </Col>
                 </Row>
-                {selectedRole === "3" && (
-                  <>
-                    <Row className="mt-2">
-                      <Col lg={12} md={12} sm={12}>
-                        <label className="select-labels">Select Branch</label>
-                        <Select
-                          name="BranchField"
-                          // value={modalEditState.BranchField?.value}
-                          placeholder="Select Branch"
-                          // onChange={onChangeTextFieldHandler}
-                          className="select-status"
-                        />
-                      </Col>
-                    </Row>
-                  </>
-                )}
               </Fragment>
             ) : null}
           </Fragment>
@@ -155,4 +115,4 @@ const EditModal = ({
   );
 };
 
-export default EditModal;
+export default EditCorporateModal;

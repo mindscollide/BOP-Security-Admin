@@ -37,9 +37,9 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
     setMarketTiming(true);
   };
 
-  const onChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
-  };
+  // const onChange = (e) => {
+  //   console.log(`checked = ${e.target.checked}`);
+  // };
 
   return (
     <>

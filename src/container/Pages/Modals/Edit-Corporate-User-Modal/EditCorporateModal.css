@@ -1,12 +1,12 @@
-.modal-Edit-styles .modal-content {
+.modal-Corporate-Edit-styles .modal-content {
   /* position: relative;
   top: 0px !important;
   left: 100px; */
-  height: 370px !important;
-  width: 500px !important;
+  height: 304px !important;
+  width: 550px !important;
   background-color: #f3f2f1;
   border-radius: 8px !important;
-  margin: 0px 130px;
+  margin: 0px 120px;
   display: flex !important;
   justify-content: center !important;
   border: 1px solid #e0e1e2 !important;

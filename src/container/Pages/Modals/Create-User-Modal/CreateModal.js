@@ -105,8 +105,12 @@ const CreateModal = ({
                     lg={12}
                     md={12}
                     sm={12}
-                    className="d-flex justify-content-start"
-                  ></Col>
+                    className="d-flex justify-content-center"
+                  >
+                    <p className="paragraph-accepting">
+                      Are you sure you want to do this action?
+                    </p>
+                  </Col>
                 </Row>
 
                 <Row className="mt-2">

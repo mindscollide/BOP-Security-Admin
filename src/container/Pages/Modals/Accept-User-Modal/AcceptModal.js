@@ -37,10 +37,20 @@ const AcceptModal = ({
                     lg={12}
                     md={12}
                     sm={12}
+                    className="d-flex justify-content-center"
+                  >
+                    <p className="confirmation-heading">Confirmation</p>
+                  </Col>
+                </Row>
+                <Row className="mt-2">
+                  <Col
+                    lg={12}
+                    md={12}
+                    sm={12}
                     className="CreateModal textAreaDiv"
                   >
                     <p className="paragraph-accepting">
-                      Are you sure you want to creat new user
+                      Are you sure you want to do this action?
                     </p>
                   </Col>
                 </Row>
@@ -53,13 +63,13 @@ const AcceptModal = ({
             <Row className="mb-3">
               <Col lg={12} md={12} sm={12} className="footer-create-btn-col">
                 <Button
-                  text="Proceed"
+                  text="Yes"
                   className="proceed-btn"
-                  icon={<i class="icon-arrow-right icon-right"></i>}
+                  icon={<i class="icon-check icon-right"></i>}
                   onClick={acceptHandler}
                 />
                 <Button
-                  text="Discard"
+                  text="No"
                   className="discard-accept-btn"
                   onClick={closeAcceptModal}
                   icon={<i class="icon-close icon-right"></i>}

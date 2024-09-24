@@ -330,7 +330,7 @@ const saveSecurityAdmin = (navigate, Data) => {
               //     "refreshToken",
               //     JSON.stringify(response.data.responseResult.refreshToken)
               //   );
-              //   // navigate("/Js/Admin/");
+              //   // navigate("/BOP/Admin/");
               //   dispatch(
               //     saveUserSuccess(
               //       response.data.responseResult.responseMessage,

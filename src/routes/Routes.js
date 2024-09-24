@@ -31,7 +31,7 @@ export const router = createHashRouter(
       {/* <Route exact path="/EmailSent" element={<EmailSentPage />} /> */}
 
       {/* <Route element={<PrivateRoutes />}> */}
-      <Route exact path="/JS/Admin/" element={<MainPage />}>
+      <Route exact path="/BOP/Admin/" element={<MainPage />}>
         <Route path="Home" element={<CorporateUser />} />
         <Route path="" element={<CorporateUser />} />
         <Route path="CorporateUser" element={<CorporateUser />} />

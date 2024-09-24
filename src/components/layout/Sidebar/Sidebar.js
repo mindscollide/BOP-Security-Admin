@@ -22,30 +22,30 @@ const Sidebar = () => {
   const navigateToCorporateUser = () => {
     localStorage.setItem("defaultOpenKey ", "sub1");
     localStorage.setItem("defaultSelectedKey", "5");
-    navigate("/Js/Admin/CorporateUser");
+    navigate("/BOP/Admin/CorporateUser");
   };
   const navigateToBankUser = () => {
     localStorage.setItem("defaultOpenKey ", "sub1");
     localStorage.setItem("defaultSelectedKey", "6");
-    navigate("/Js/Admin/BankUser");
+    navigate("/BOP/Admin/BankUser");
   };
 
   const navigateToPendingApproval = () => {
     localStorage.setItem("defaultOpenKey ", "sub1");
     localStorage.setItem("defaultSelectedKey", "7");
-    navigate("/JS/Admin/PendingApprovalBank");
+    navigate("/BOP/Admin/PendingApprovalBank");
   };
 
   const navigateToPendingApprovalCorporate = () => {
     localStorage.setItem("defaultOpenKey ", "sub1");
     localStorage.setItem("defaultSelectedKey", "8");
-    navigate("/JS/Admin/PendingApprovalCorporate");
+    navigate("/BOP/Admin/PendingApprovalCorporate");
   };
 
   const navigateToReport = () => {
     localStorage.setItem("defaultOpenKey ", "sub3");
     localStorage.setItem("defaultSelectedKey", "8");
-    navigate("/Js/Admin/userReport");
+    navigate("/BOP/Admin/userReport");
   };
 
   let defaultKeySidebar = localStorage.getItem("defaultSelectedKey");
@@ -73,9 +73,9 @@ const Sidebar = () => {
                   : "menu-items-sidebar"
               }
               key="5"
-              onClick={navigateToCorporateUser}
+              onClick={navigateToBankUser}
             >
-              Corporate User
+              Edit Bank User
             </Menu.Item>
             <Menu.Item
               className={
@@ -84,9 +84,9 @@ const Sidebar = () => {
                   : "menu-items-sidebar"
               }
               key="6"
-              onClick={navigateToBankUser}
+              onClick={navigateToCorporateUser}
             >
-              Bank User
+              Edit Corporate User
             </Menu.Item>
             <Menu.Item
               className={

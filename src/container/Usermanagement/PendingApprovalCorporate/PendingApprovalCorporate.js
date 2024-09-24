@@ -30,45 +30,45 @@ const PendingApprovalCorporate = () => {
   const dataSource = [
     {
       key: "1",
+      corporateName: "Zelbury",
       email: "aunnaqvi12@gmail.com",
-      firstName: "Aun",
-      lastName: "Naqvi",
-      fK_UserRoleID: "Data Entry - Business Team",
+      userName: "Muhammad Naqvi",
     },
     {
       key: "2",
+      corporateName: "Zelbury",
       email: "johnnaqvi33@gmail.com",
-      firstName: "Saif",
-      lastName: "Naqvi",
-      fK_UserRoleID: "Data Entry - Business Team",
+      userName: "Muhammad Saif",
+    },
+    {
+      key: "3",
+      corporateName: "Zelbury",
+      email: "kashifnaqvi453@gmail.com",
+      userName: "Muhammad Kashif",
     },
   ];
 
   // column of create user
   const columnsCreate = [
     {
+      title: <label className="bottom-table-header">Corporate Name</label>,
+      dataIndex: "corporateName",
+      key: "corporateName",
+      width: "300px",
+
+      ellipsis: true,
+    },
+    {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "200px",
+      width: "400px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">First Name</label>,
-      dataIndex: "firstName",
-      key: "firstName",
-      ellipsis: true,
-    },
-    {
-      title: <label className="bottom-table-header">Last Name</label>,
-      dataIndex: "lastName",
-      key: "lastName",
-      ellipsis: true,
-    },
-    {
-      title: <label className="bottom-table-header">Role</label>,
-      dataIndex: "fK_UserRoleID",
-      key: "fK_UserRoleID",
+      title: <label className="bottom-table-header">User Name</label>,
+      dataIndex: "userName",
+      key: "userName",
       ellipsis: true,
     },
     {

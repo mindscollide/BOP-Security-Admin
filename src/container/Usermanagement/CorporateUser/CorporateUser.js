@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
-import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
+import EditCorporateModal from "../../Pages/Modals/Edit-Corporate-User-Modal/EditCorporateModal";
 import "./CorporateUser.css";
 
 const EditUser = () => {
@@ -32,9 +32,14 @@ const EditUser = () => {
   const [editSelectStatus, setEditSelectStatus] = useState([]);
   const [editSelectStatusValue, setEditSelectStatusValue] = useState([]);
 
+  const [dropdownvalue, setDropdownvalue] = useState({
+    value: 50,
+    label: "50",
+  });
+
   // state for edit user
   const [editUser, setEditUser] = useState({
-    userLdapAccount: {
+    CorporateName: {
       value: "",
       errorMessage: "",
       errorStatus: false,
@@ -44,18 +49,13 @@ const EditUser = () => {
       errorMessage: "",
       errorStatus: false,
     },
-    firstName: {
+    LoginID: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
-    lastName: {
+    Name: {
       value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    roleID: {
-      value: 0,
       errorMessage: "",
       errorStatus: false,
     },
@@ -172,29 +172,30 @@ const EditUser = () => {
     let name = e.target.name;
     let value = e.target.value;
 
-    if (name === "userLdapAccount" && value !== "") {
+    if (name === "CorporateName" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
-      let valueCheck = value.replace(/[^\d]/g, "");
+      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
       if (valueCheck !== "") {
         setEditUser({
           ...editUser,
-          userLdapAccount: {
+          CorporateName: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "userLdapAccount" && value === "") {
+    } else if (name === "CorporateName" && value === "") {
       setEditUser({
         ...editUser,
-        userLdapAccount: {
+        CorporateName: {
           value: "",
           errorMessage: "",
           errorStatus: true,
         },
       });
     }
+
     if (name === "email" && value !== "") {
       console.log("valuevalueemailvaluevalueemail", value);
       if (value !== "") {
@@ -218,41 +219,41 @@ const EditUser = () => {
       });
     }
 
-    if (name === "firstName" && value !== "") {
-      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+    if (name === "LoginID" && value !== "") {
+      let valueCheck = value.replace(/[^\d]/g, "");
       if (valueCheck !== "") {
         setEditUser({
           ...editUser,
-          firstName: {
+          LoginID: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "firstName" && value === "") {
+    } else if (name === "LoginID" && value === "") {
       setEditUser({
         ...editUser,
-        firstName: { value: "", errorMessage: "", errorStatus: false },
+        LoginID: { value: "", errorMessage: "", errorStatus: false },
       });
     }
 
-    if (name === "lastName" && value !== "") {
+    if (name === "Name" && value !== "") {
       let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
       if (valueCheck !== "") {
         setEditUser({
           ...editUser,
-          lastName: {
+          Name: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "lastName" && value === "") {
+    } else if (name === "Name" && value === "") {
       setEditUser({
         ...editUser,
-        lastName: { value: "", errorMessage: "", errorStatus: false },
+        Name: { value: "", errorMessage: "", errorStatus: false },
       });
     }
   };
@@ -261,23 +262,16 @@ const EditUser = () => {
   const resetHandler = () => {
     setEditUser({
       ...editUser,
-      email: {
-        value: "",
-      },
-      userLdapAccount: {
+      CorporateName: {
         value: "",
       },
 
-      firstName: {
+      LoginID: {
         value: "",
       },
 
-      lastName: {
+      Name: {
         value: "",
-      },
-
-      roleID: {
-        value: 0,
       },
 
       statusID: {
@@ -296,65 +290,43 @@ const EditUser = () => {
   const dataSource = [
     {
       key: "1",
-      employeeID: "1",
-      userLDAPAccount: "aunnaqvi12@gmail.com",
-      firstName: "Aun",
-      address: "10 Downing Street",
-      lastName: "Naqvi",
-      BranchName: "Peshawar",
-      userRoleID: "Data Entry - Business Team",
+      CorporateName: "AfrozAhmed",
+      loginID: "Asadnaqvi12@gmail.com",
+      name: "Asad",
     },
     {
       key: "2",
-      employeeID: "2",
-      userLDAPAccount: "johnnaqvi33@gmail.com",
-      firstName: "Saif",
-      lastName: "Naqvi",
-      BranchName: "Saddar",
-      userRoleID: "Data Entry - Business Team",
+      CorporateName: "AfrozAhmed",
+      loginID: "Aunnaqvi33@gmail.com",
+      name: "Aun",
+    },
+    {
+      key: "3",
+      CorporateName: "AfrozAhmed",
+      loginID: "Aunnaqvi33@gmail.com",
+      name: "Aun",
     },
   ];
 
   const columns = [
     {
-      title: <label className="bottom-table-header">Employee ID</label>,
-      dataIndex: "employeeID",
-      key: "employeeID",
+      title: <label className="bottom-table-header">Corporate Name</label>,
+      dataIndex: "CorporateName",
+      key: "CorporateName",
       align: "left",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Login ID</label>,
-      dataIndex: "userLDAPAccount",
-      key: "userLDAPAccount",
+      title: <label className="bottom-table-header">LoginID</label>,
+      dataIndex: "loginID",
+      key: "loginID",
       align: "left",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">First Name</label>,
-      dataIndex: "firstName",
-      key: "firstName",
-      align: "center",
-      ellipsis: true,
-    },
-    {
-      title: <label className="bottom-table-header">Last Name</label>,
-      dataIndex: "lastName",
-      key: "lastName",
-      align: "center",
-      ellipsis: true,
-    },
-    {
-      title: <label className="bottom-table-header">Role</label>,
-      dataIndex: "userRoleID",
-      key: "userRoleID",
-      align: "center",
-      ellipsis: true,
-    },
-    {
-      title: <label className="bottom-table-header">Branch</label>,
-      dataIndex: "BranchName",
-      key: "BranchName",
+      title: <label className="bottom-table-header">Name</label>,
+      dataIndex: "name",
+      key: "name",
       align: "center",
       ellipsis: true,
     },
@@ -368,6 +340,7 @@ const EditUser = () => {
         return (
           <>
             <i className="icon-check edit-user-enabled"></i>
+            {/* <i className="icon-lock edit-user-enabled"></i> */}
           </>
         );
       },
@@ -391,9 +364,32 @@ const EditUser = () => {
     },
   ];
 
+  const paginationConfig = {
+    itemRender: (_, type, originalElement) => {
+      if (type === "prev") {
+        return <a className="Previous-pagination">Previous</a>;
+      }
+      if (type === "next") {
+        return <a className="Previous-pagination">Next</a>;
+      }
+      return originalElement;
+    },
+    // other pagination settings like current, pageSize, etc.
+  };
+
+  const options = [
+    { value: 50, label: "50" },
+    { value: 100, label: "100" },
+    { value: 150, label: "150" },
+  ];
+
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);
     setUpdateModal(true);
+  };
+
+  const handleChangeDropDown = (value) => {
+    setDropdownvalue(value);
   };
 
   return (
@@ -401,90 +397,109 @@ const EditUser = () => {
       <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="edit-user-label">Corporate User</div>
+            <div className="edit-user-label">Edit Corporate User</div>
           </Col>
         </Row>
         <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
             <Paper className="span-edit-user">
               <Row className="mt-3">
-                <Col lg={3} md={3} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className="pe-0">
                   <TextField
-                    name="userLdapAccount"
-                    className="text-fields-edituser"
+                    name="CorporateName"
+                    className="text-fields-Corporate-edituser"
                     labelClass="d-none"
+                    placeholder="Corporate Name"
+                    maxLength={100}
+                    value={editUser.CorporateName.value}
+                    onChange={editUserValidateHandler}
+                  />
+                </Col>
+                <Col lg={2} md={2} sm={12} className="pe-0">
+                  <TextField
+                    name="LoginID"
+                    className="text-fields-Corporate-edituser"
+                    labelClass="d-none"
+                    maxLength={100}
                     placeholder="Login ID"
-                    maxLength={100}
-                    value={editUser.userLdapAccount.value}
+                    value={editUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className="pe-0">
                   <TextField
-                    name="firstName"
-                    className="text-fields-edituser"
+                    name="Name"
                     labelClass="d-none"
                     maxLength={100}
-                    placeholder="First Name"
-                    value={editUser.firstName.value}
+                    className="text-fields-Corporate-edituser"
+                    placeholder="Name"
+                    value={editUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className="pe-0">
-                  <TextField
-                    name="lastName"
-                    labelClass="d-none"
-                    maxLength={100}
-                    className="text-fields-edituser"
-                    placeholder="Last Name"
-                    value={editUser.lastName.value}
-                    onChange={editUserValidateHandler}
-                  />
-                </Col>
-                <Col lg={3} md={3} sm={12}>
-                  <Select
-                    name="roleID"
-                    options={editSelectRole}
-                    className="select-field-edit"
-                    placeholder="Role"
-                    value={editSelectRoleValue}
-                  />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col lg={3} md={3} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className="pe-0">
                   <Select
                     name="statusID"
-                    className="edit-user-select-status"
+                    className="edit-Corporate-user-select-status"
                     placeholder="Status"
                     options={editSelectStatus}
                     value={editSelectStatusValue}
                   />
                 </Col>
 
-                <Col lg={6} md={6} sm={12}>
+                <Col lg={4} md={12} sm={12}>
                   <Button
                     icon={<i className="icon-search icon-search-space"></i>}
                     text="Search"
-                    className="search-Edit-User-btn"
+                    className="search-Corporate-Edit-User-btn"
                   />
                   <Button
                     icon={<i className="icon-refresh icon-reset-space"></i>}
                     text="Reset"
                     onClick={resetHandler}
-                    className="reset-Edit-User-btn"
+                    className="reset-Corporate-Edit-User-btn"
+                  />
+
+                  <Button
+                    icon={<i className="icon-download icon-reset-space"></i>}
+                    text="Export"
+                    className="export-Corporate-Edit-User-btn"
                   />
                 </Col>
               </Row>
 
               <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
+                  <span>
+                    <Row>
+                      <Col
+                        lg={12}
+                        md={12}
+                        sm={12}
+                        className="d-flex gap-1 align-items-center"
+                      >
+                        <span className={"corporate-show-text-above-table"}>
+                          Show
+                        </span>
+
+                        <Select
+                          options={options}
+                          value={dropdownvalue}
+                          onChange={handleChangeDropDown}
+                          className="select-Bank-field-edit"
+                        />
+
+                        <span className={"corporate-show-text-above-table"}>
+                          entries
+                        </span>
+                      </Col>
+                    </Row>
+                  </span>
                   <Table
                     column={columns}
                     rows={dataSource}
                     className="Edituser-table"
-                    pagination={false}
+                    pagination={paginationConfig}
                   />
                 </Col>
               </Row>
@@ -541,7 +556,7 @@ const EditUser = () => {
       />
 
       {editModalSecurity ? (
-        <EditModal
+        <EditCorporateModal
           modalEdit={editModalSecurity}
           modalEditState={modalEditState}
           setModalEditState={setModalEditState}

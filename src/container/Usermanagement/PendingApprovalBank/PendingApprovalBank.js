@@ -32,16 +32,23 @@ const PendingApprovalBank = () => {
     {
       key: "1",
       email: "aunnaqvi12@gmail.com",
-      firstName: "Aun",
-      lastName: "Naqvi",
-      fK_UserRoleID: "Data Entry - Business Team",
+      name: "Naqvi",
+      fK_UserRoleID: "Dealer",
+      branch: "-",
     },
     {
       key: "2",
       email: "johnnaqvi33@gmail.com",
-      firstName: "Saif",
-      lastName: "Naqvi",
-      fK_UserRoleID: "Data Entry - Business Team",
+      name: "Naqvi",
+      fK_UserRoleID: "Branch",
+      branch: "1234-Saddar",
+    },
+    {
+      key: "3",
+      email: "jAlinaqvi33@gmail.com",
+      name: "Rizvi",
+      fK_UserRoleID: "Treasury",
+      branch: "-",
     },
   ];
 
@@ -51,25 +58,26 @@ const PendingApprovalBank = () => {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "200px",
+      width: "400px",
       ellipsis: true,
     },
+
     {
-      title: <label className="bottom-table-header">First Name</label>,
-      dataIndex: "firstName",
-      key: "firstName",
-      ellipsis: true,
-    },
-    {
-      title: <label className="bottom-table-header">Last Name</label>,
-      dataIndex: "lastName",
-      key: "lastName",
+      title: <label className="bottom-table-header">Employee Name</label>,
+      dataIndex: "name",
+      key: "name",
       ellipsis: true,
     },
     {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "fK_UserRoleID",
       key: "fK_UserRoleID",
+      ellipsis: true,
+    },
+    {
+      title: <label className="bottom-table-header">Branch</label>,
+      dataIndex: "branch",
+      key: "branch",
       ellipsis: true,
     },
     {

@@ -10,7 +10,7 @@ import { Select } from "antd";
 import "./CreateModal.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { getRejectUser } from "../../../../store/actions/Security_Admin";
+// import { getRejectUser } from "../../../../store/actions/Security_Admin";
 
 const CreateModal = ({
   ModalTitle,
@@ -68,7 +68,7 @@ const CreateModal = ({
         Comments: commentField.commentType.value,
         UserID: rejectUserData.fK_UserID,
       };
-      dispatch(getRejectUser(navigate, Data));
+      // dispatch(getRejectUser(navigate, Data));
       setModalReject(false);
       console.log(Data, "rejectUserDatarejectUserDatarejectUserData");
     } else {

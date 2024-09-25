@@ -2,8 +2,8 @@
 const baseURL = "http://192.168.18.241";
 
 // our service URLs
-const authenticationPort = ":12000/ERM_Auth";
-const securityAdmintPort = ":12001/SecurityAdmin";
+const authenticationPort = ":14006/ERM_Auth";
+const securityAdmintPort = ":14008/SecurityAdmin";
 const SystemAdminPort = ":12003/SystemAdmin";
 const downloadReportPort = ":12004/ExcelReport";
 

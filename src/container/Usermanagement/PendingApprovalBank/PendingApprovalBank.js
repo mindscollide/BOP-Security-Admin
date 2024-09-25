@@ -11,8 +11,8 @@ import "./PendingApprovalBank.css";
 const PendingApprovalBank = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { securitReducer } = useSelector((state) => state);
-  console.log(securitReducer, "aa");
+  const { securityReducer } = useSelector((state) => state);
+  console.log(securityReducer, "aa");
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
 

@@ -7,7 +7,7 @@ import {
   Notification,
 } from "../../../components/elements";
 import jsLogo from "../../../assets/images/js-logo.png";
-import { logIn } from "../../../store/actions/Auth_Actions";
+import { loginSecurityAdminAPI } from "../../../store/actions/Auth_Actions";
 import { useDispatch, useSelector } from "react-redux";
 import BOPlogo from "../../../assets/images/BOPlogo.png";
 import { useNavigate } from "react-router-dom";
@@ -67,18 +67,18 @@ const SecurityLogin = () => {
   // handler for submit login
   const loginValidateHandler = (e) => {
     e.preventDefault();
-    if (
-      securityCredentials.UserName !== "" &&
-      securityCredentials.Password !== ""
-    ) {
-      dispatch(logIn(navigate, securityCredentials));
-    } else {
-      setOpen({
-        ...open,
-        open: true,
-        message: "Please Enter All Credentials",
-      });
-    }
+    // if (
+    //   securityCredentials.UserName !== "" &&
+    //   securityCredentials.Password !== ""
+    // ) {
+    dispatch(loginSecurityAdminAPI(navigate));
+    // } else {
+    //   setOpen({
+    //     ...open,
+    //     open: true,
+    //     message: "Please Enter All Credentials",
+    //   });
+    // }
   };
 
   // eye on Click on Eye Icon on Password

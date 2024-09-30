@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import { Table, Paper } from "../../../components/elements";
 import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
@@ -7,14 +7,17 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import "./PendingApprovalBank.css";
+import { getNewBankUserRequestMainApi } from "../../../store/actions/Security_Admin";
 
 const PendingApprovalBank = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { securityReducer } = useSelector((state) => state);
-  console.log(securityReducer, "aa");
+  console.log(securityReducer, "Aasdaasasasa");
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
+
+  const [rowData, setRowData] = useState([]);
 
   //modal for accept user in create
   const [acceptModal, setAcceptModal] = useState(false);
@@ -27,6 +30,21 @@ const PendingApprovalBank = () => {
   const openRejectModal = async () => {
     setCreateRejectModal(true);
   };
+
+  useEffect(() => {
+    dispatch(getNewBankUserRequestMainApi(navigate));
+  }, []);
+
+  useEffect(() => {
+    if (
+      securityReducer.bankUserRequestData.userRequestList !== null &&
+      securityReducer.bankUserRequestData.userRequestList !== undefined
+    ) {
+      setRowData(securityReducer.bankUserRequestData.userRequestList);
+    } else {
+      setRowData([]);
+    }
+  }, []);
 
   const dataSource = [
     {
@@ -60,25 +78,37 @@ const PendingApprovalBank = () => {
       key: "email",
       width: "400px",
       ellipsis: true,
+      render: (text, record) => {
+        return <>{text}</>;
+      },
     },
 
     {
       title: <label className="bottom-table-header">Employee Name</label>,
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "firstname",
+      key: "firstname",
       ellipsis: true,
+      render: (text, record) => {
+        return <>{text}</>;
+      },
     },
     {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "fK_UserRoleID",
       key: "fK_UserRoleID",
       ellipsis: true,
+      render: (text, record) => {
+        return <>{text}</>;
+      },
     },
     {
       title: <label className="bottom-table-header">Branch</label>,
-      dataIndex: "branch",
-      key: "branch",
+      dataIndex: "branchName",
+      key: "branchName",
       ellipsis: true,
+      render: (text, record) => {
+        return <>{text}</>;
+      },
     },
     {
       title: <label className="bottom-table-header">Accept</label>,
@@ -126,7 +156,7 @@ const PendingApprovalBank = () => {
             <Col lg={12} md={12} sm={12} className="mt-3">
               <Table
                 column={columnsCreate}
-                rows={dataSource}
+                rows={rowData}
                 className="Createuser-table"
                 pagination={false}
               />

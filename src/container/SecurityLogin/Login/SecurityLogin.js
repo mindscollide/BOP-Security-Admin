@@ -26,7 +26,10 @@ const SecurityLogin = () => {
   const UserName = useRef(null);
   const Password = useRef(null);
 
-  const [passwordText, setPasswordText] = useState("");
+  const [errorMessages, setErrorMessages] = useState({
+    UserNameError: "",
+    PasswordError: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   //state for login credentials
@@ -44,41 +47,53 @@ const SecurityLogin = () => {
   };
 
   // credentials for email and password
-  const setCredentialHandler = (e) => {
-    if (e.target.name === "Password") {
-      let numChars = e.target.value;
-      let showText = "";
-      for (let i = 0; i < numChars.length; i++) {
-        showText += "•";
-      }
-      setSecurityCredentials({
-        ...securityCredentials,
-        [e.target.name]: e.target.value,
-        ["fakePassword"]: showText,
-      });
-    } else {
-      setSecurityCredentials({
-        ...securityCredentials,
-        [e.target.name]: e.target.value,
-      });
+  const emailOnchangeHandler = (e) => {
+    const value = e.target.value;
+    setSecurityCredentials((prevState) => ({
+      ...prevState,
+      UserName: value,
+    }));
+
+    // Clear error if value is not empty
+    if (value !== "") {
+      setErrorMessages((prevState) => ({ ...prevState, UserNameError: "" }));
+    }
+  };
+
+  // onChange for password
+  const passwordOnchangeHandler = (e) => {
+    const value = e.target.value;
+    setSecurityCredentials((prevState) => ({
+      ...prevState,
+      Password: value,
+    }));
+
+    // Clear error if value is not empty
+    if (value !== "") {
+      setErrorMessages((prevState) => ({ ...prevState, PasswordError: "" }));
     }
   };
 
   // handler for submit login
   const loginValidateHandler = (e) => {
     e.preventDefault();
-    // if (
-    //   securityCredentials.UserName !== "" &&
-    //   securityCredentials.Password !== ""
-    // ) {
-    dispatch(loginSecurityAdminAPI(navigate));
-    // } else {
-    //   setOpen({
-    //     ...open,
-    //     open: true,
-    //     message: "Please Enter All Credentials",
-    //   });
-    // }
+    let errors = {};
+    console.log(errors, "errorerrore");
+
+    // Check if fields are empty
+    if (securityCredentials.UserName === "") {
+      errors.UserNameError = "Email Field Is Empty";
+    }
+    if (securityCredentials.Password === "") {
+      errors.PasswordError = "Password Field Is Empty";
+    }
+
+    // If errors exist, update the errorMessages state
+    if (Object.keys(errors).length > 0) {
+      setErrorMessages(errors);
+    } else {
+      dispatch(loginSecurityAdminAPI(navigate)); // Proceed with login
+    }
   };
 
   // eye on Click on Eye Icon on Password
@@ -102,7 +117,7 @@ const SecurityLogin = () => {
                   <Form onSubmit={loginValidateHandler}>
                     <Row>
                       <Col sm={12} md={12} lg={12} className="mt-3">
-                        <InputGroup className="mb-3">
+                        <InputGroup>
                           <InputGroup.Text
                             id="basic-addon1"
                             className="Icon-Field-class"
@@ -117,13 +132,23 @@ const SecurityLogin = () => {
                             name="UserName"
                             autoComplete="off"
                             value={securityCredentials.UserName}
-                            onChange={setCredentialHandler}
+                            onChange={emailOnchangeHandler}
                             className="form-comtrol-textfield"
                             placeholder="Email ID"
                             aria-label="Username"
                             aria-describedby="basic-addon1"
                           />
                         </InputGroup>
+
+                        <p
+                          className={
+                            errorMessages.UserNameError
+                              ? "error-message"
+                              : "error-message-nothing"
+                          }
+                        >
+                          {errorMessages.UserNameError}
+                        </p>
                       </Col>
                       <Col sm={12} md={12} lg={12} className="mb-3">
                         <InputGroup>
@@ -142,8 +167,8 @@ const SecurityLogin = () => {
                             aria-label="passwordText"
                             aria-describedby="basic-addon2"
                             type={showPassword ? "text" : "password"}
-                            value={passwordText}
-                            onChange={(e) => setPasswordText(e.target.value)}
+                            value={securityCredentials.Password}
+                            onChange={passwordOnchangeHandler}
                           />
                           <InputGroup.Text
                             id="basic-addon2"
@@ -157,6 +182,15 @@ const SecurityLogin = () => {
                             )}
                           </InputGroup.Text>
                         </InputGroup>
+                        <p
+                          className={
+                            errorMessages.PasswordError
+                              ? "error-message"
+                              : "error-message-nothing"
+                          }
+                        >
+                          {errorMessages.PasswordError}
+                        </p>
                       </Col>
                       <Col
                         sm={12}

@@ -31,9 +31,9 @@ const loginSecurityAdminFailed = (message) => {
 const loginSecurityAdminAPI = (navigate) => {
   let data = {
     Device: "iPhone 13 Pro",
-    DeviceID: "1",
+    DeviceID: "ABCD1234-5678-90EF-GHIJ-KLMNOPQRSTUV",
     Password: "0",
-    UserName: "talha1234",
+    UserName: "mehdi.branchuser",
   };
   return (dispatch) => {
     dispatch(loginSecurityAdmininit());
@@ -108,7 +108,7 @@ const loginSecurityAdminAPI = (navigate) => {
                 "refreshToken",
                 JSON.stringify(response.data.responseResult.refreshToken)
               );
-              navigate("/BOP/Admin/");
+              navigate("/BOP/Admin/BankUser");
               dispatch(loginSecurityAdminSuccess("LDAP auth Successful"));
             }
           } else if (

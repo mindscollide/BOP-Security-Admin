@@ -19,15 +19,16 @@ const Sidebar = () => {
 
   //Create User Page Name is Pending User Requests
 
-  const navigateToCorporateUser = () => {
-    localStorage.setItem("defaultOpenKey ", "sub1");
-    localStorage.setItem("defaultSelectedKey", "5");
-    navigate("/BOP/Admin/CorporateUser");
-  };
   const navigateToBankUser = () => {
     localStorage.setItem("defaultOpenKey ", "sub1");
-    localStorage.setItem("defaultSelectedKey", "6");
+    localStorage.setItem("defaultSelectedKey", "5");
     navigate("/BOP/Admin/BankUser");
+  };
+
+  const navigateToCorporateUser = () => {
+    localStorage.setItem("defaultOpenKey ", "sub1");
+    localStorage.setItem("defaultSelectedKey", "6");
+    navigate("/BOP/Admin/CorporateUser");
   };
 
   const navigateToPendingApproval = () => {

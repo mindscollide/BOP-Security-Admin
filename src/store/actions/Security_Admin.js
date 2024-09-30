@@ -280,13 +280,13 @@ const getNewBankUserRequestFail = (message) => {
   };
 };
 
-const getNewBankUserRequestMainApi = () => {
+const getNewBankUserRequestMainApi = (navigate) => {
   let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(getNewBankUserRequestInit());
     let form = new FormData();
     form.append("RequestMethod", getNewBankUserRequestApi.RequestMethod);
-    form.append("RequestData", JSON.stringify(Data));
+    // form.append("RequestData", JSON.stringify(Data));
     axios({
       method: "post",
       url: securityAdminApi,

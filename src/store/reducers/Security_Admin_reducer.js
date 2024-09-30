@@ -4,6 +4,7 @@ const initialState = {
   Spinner: false,
   ResponseMessage: "",
   saveUserData: "",
+  bankUserRequestData: null,
   corporateUserData: "",
   rejectUserRequest: "",
   Loading: false,
@@ -27,6 +28,24 @@ const securityReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         saveBankUser: "",
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_NEW_BANK_USER_REQUESTS_INIT:
+      return { ...state, Loading: true };
+
+    case actions.GET_NEW_BANK_USER_REQUESTS_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        bankUserRequestData: action.response,
+        ResponseMessage: action.message,
+      };
+    case actions.GET_NEW_BANK_USER_REQUESTS_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        bankUserRequestData: null,
         ResponseMessage: action.message,
       };
 

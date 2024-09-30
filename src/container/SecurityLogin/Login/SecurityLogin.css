@@ -117,3 +117,13 @@
   border: 1px solid #ced4da !important;
   cursor: pointer;
 }
+
+.error-message {
+  color: red;
+  height: 2px;
+  font-size: 10px;
+}
+
+.error-message-nothing {
+  height: 2px !important;
+}

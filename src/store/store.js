@@ -4,11 +4,9 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import {
   authReducer,
-  securitReducer,
-  uploadReducer,
+  securityReducer,
   CorporateReducer,
   SearchReducer,
-  systemReducer,
   downloadReducer,
 } from "./reducers";
 import { configureStore } from "@reduxjs/toolkit";
@@ -16,11 +14,9 @@ import * as actions from "./action_types";
 
 const AppReducer = combineReducers({
   auth: authReducer,
-  securitReducer: securitReducer,
-  uploadReducer: uploadReducer,
+  securityReducer: securityReducer,
   CorporateReducer: CorporateReducer,
   SearchReducer: SearchReducer,
-  systemReducer: systemReducer,
   downloadReducer: downloadReducer,
 });
 

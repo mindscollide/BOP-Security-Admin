@@ -33,3 +33,30 @@ body::-webkit-scrollbar-thumb {
 :where(.css-dev-only-do-not-override-1e3x2xa)[class*=" ant-layout"] {
   font-family: "Roboto", sans-serif !important;
 }
+
+/* For Table pagination  */
+.ant-pagination .ant-pagination-item-active {
+  font-weight: 400;
+  background-color: #096fed;
+  /* border-color: #1677ff; */
+  color: #fff;
+  border-radius: 2px;
+  height: 38px;
+  width: 40px;
+  display: grid;
+  align-items: center !important;
+  /* padding: 0px 6px; */
+  border: 1px solid #000;
+}
+
+.ant-pagination .ant-pagination-item-active:hover {
+  background-color: #808285;
+  border: 1px solid #000;
+  color: #fff;
+}
+
+/* .ant-table-wrapper .ant-table-container {
+  border-start-start-radius: 8px;
+  border-start-end-radius: 8px;
+  border-bottom: 2px solid #5a5a5a !important;
+} */

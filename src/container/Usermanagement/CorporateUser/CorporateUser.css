@@ -16,9 +16,10 @@
   gap: 80px;
 }
 
-.text-fields-edituser {
-  font-size: 13px;
-  font-weight: 500;
+.text-fields-Corporate-edituser {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Roboto", sans-serif !important;
   width: 100% !important;
   max-width: 100% !important;
   height: 37px;
@@ -41,35 +42,48 @@
   padding: 0 11px;
 }
 
-.search-Edit-User-btn {
+.search-Corporate-Edit-User-btn {
   font-size: 14px;
   font-weight: 400 !important;
-  margin-top: 25px;
   border-radius: 4px;
-  padding: 7px 12px !important;
+  padding: 8px 16px !important;
   border: none;
   background: #096fed;
 }
 
-.search-Edit-User-btn:hover {
+.search-Corporate-Edit-User-btn:hover {
   border: none;
   background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
 }
 
-.reset-Edit-User-btn {
-  margin-left: 10px;
+.reset-Corporate-Edit-User-btn {
+  margin-left: 5px;
   font-weight: 400 !important;
-  margin-top: 25px;
   font-size: 14px;
   border-radius: 4px;
-  padding: 7px 12px !important;
+  padding: 8px 16px !important;
   border: none;
-  background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
+  background: #dc3545 !important;
 }
 
-.reset-Edit-User-btn:hover {
+.reset-Corporate-Edit-User-btn:hover {
   border: none;
-  background: #096fed !important;
+  background: #f85e35 !important;
+}
+
+.export-Corporate-Edit-User-btn {
+  margin-left: 5px;
+  font-weight: 400 !important;
+  font-size: 14px;
+  border-radius: 4px;
+  padding: 8px 28px !important;
+  border: none;
+  background: #019308 !important;
+}
+
+.export-Corporate-Edit-User-btn:hover {
+  border: none;
+  background: #019308 !important;
 }
 
 .col-edit-textfield {
@@ -270,12 +284,12 @@
   color: #000000 !important;
 }
 
-.edit-user-select-status {
+.edit-Corporate-user-select-status {
   font-size: 13px !important;
-  font-weight: 500;
+  font-weight: 400;
+  align-items: center !important;
+  font-family: "Roboto", sans-serif;
   width: 100% !important;
-  margin-top: 23px !important;
-  z-index: 2;
 }
 
 .edit-user-loginID-Textfield {
@@ -305,6 +319,13 @@
 .Icon-trash-delete {
   font-size: 17px !important;
   color: #cf5b5b !important;
+}
+
+.corporate-show-text-above-table {
+  font-size: 14px;
+  font-weight: 400;
+  color: #45494d;
+  font-family: "Roboto", sans-serif;
 }
 
 /* for responsiveness on zoom in and zoom out */

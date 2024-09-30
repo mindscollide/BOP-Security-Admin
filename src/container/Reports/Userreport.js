@@ -40,16 +40,12 @@ const Userreport = () => {
       errorMessage: "",
       errorStatus: false,
     },
-    firstName: {
+    name: {
       value: "",
       errorMessage: "",
       errorStatus: false,
     },
-    lastName: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
+
     startDate: {
       value: "",
       errorMessage: "",
@@ -117,41 +113,22 @@ const Userreport = () => {
       });
     }
 
-    if (name === "firstName" && value !== "") {
+    if (name === "name" && value !== "") {
       let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
       if (valueCheck !== "") {
         setUserReport({
           ...userReport,
-          firstName: {
+          name: {
             value: valueCheck.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
         });
       }
-    } else if (name === "firstName" && value === "") {
+    } else if (name === "name" && value === "") {
       setUserReport({
         ...userReport,
-        firstName: { value: "", errorMessage: "", errorStatus: false },
-      });
-    }
-
-    if (name === "lastName" && value !== "") {
-      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
-      if (valueCheck !== "") {
-        setUserReport({
-          ...userReport,
-          lastName: {
-            value: valueCheck.trimStart(),
-            errorMessage: "",
-            errorStatus: false,
-          },
-        });
-      }
-    } else if (name === "lastName" && value === "") {
-      setUserReport({
-        ...userReport,
-        lastName: { value: "", errorMessage: "", errorStatus: false },
+        name: { value: "", errorMessage: "", errorStatus: false },
       });
     }
   };
@@ -189,13 +166,9 @@ const Userreport = () => {
       loginID: {
         value: "",
       },
-      firstName: {
+      name: {
         value: "",
       },
-      lastName: {
-        value: "",
-      },
-
       startDate: {
         value: 0,
       },
@@ -267,21 +240,11 @@ const Userreport = () => {
                 <Col lg={2} md={2} sm={2} className="pe-0">
                   <TextField
                     maxLength={100}
-                    name="firstName"
-                    value={userReport.firstName.value}
+                    name="name"
+                    value={userReport.name.value}
                     onChange={userReportHandler}
                     className="text-fields-report"
-                    placeholder="First Name"
-                  />
-                </Col>
-                <Col lg={2} md={2} sm={2} className="pe-0">
-                  <TextField
-                    maxLength={100}
-                    name="lastName"
-                    value={userReport.lastName.value}
-                    onChange={userReportHandler}
-                    className="text-fields-report"
-                    placeholder="Last Name"
+                    placeholder="Name"
                   />
                 </Col>
 
@@ -328,14 +291,12 @@ const Userreport = () => {
                     placeholder="End Date"
                   />
                 </Col>
-              </Row>
 
-              <Row className="mb-2">
                 <Col
-                  lg={12}
-                  md={12}
-                  sm={12}
-                  className="d-flex justify-content-center mt-3"
+                  lg={2}
+                  md={2}
+                  sm={2}
+                  className="d-flex justify-content-center mt-4 align-items-center"
                 >
                   <Button
                     icon={<i className="icon-refresh user-reset"></i>}

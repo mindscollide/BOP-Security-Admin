@@ -1,11 +1,15 @@
 import * as actions from "../action_types";
 
 const initialState = {
+  UserDetails: null,
+  isLoggedIn: false,
   Loading: false,
+  Spinner: false,
   emailData: "",
   ResponseMessage: "",
   Token: "",
   Refresh: "",
+  SessionExpeireResponseMessage: "",
 };
 
 const authReducer = (state = initialState, action) => {
@@ -16,16 +20,24 @@ const authReducer = (state = initialState, action) => {
     case actions.LOG_IN_SUCCESS:
       return {
         ...state,
-        Loading: false,
+        UserDetails: action.response,
         ResponseMessage: action.message,
+        Loading: false,
+        Token: action.response.token,
+        Refresh: action.response.refreshToken,
       };
 
-    case actions.LOG_IN_FAIL:
+    case actions.LOG_IN_FAIL: {
+      console.log(action.message);
       return {
         ...state,
-        Loading: false,
+        UserDetails: null,
         ResponseMessage: action.message,
+        Loading: false,
+        Token: "",
+        Refresh: "",
       };
+    }
 
     case actions.SEND_EMAIL_RESET_PASSWORD_INIT:
       return { ...state, Loading: true };
@@ -45,6 +57,12 @@ const authReducer = (state = initialState, action) => {
         emailData: "",
         ResponseMessage: action.message,
       };
+    case actions.CLEARE_MESSAGE: {
+      return {
+        ...state,
+        ResponseMessage: "",
+      };
+    }
 
     case actions.SIGN_OUT:
       localStorage.clear();

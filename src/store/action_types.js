@@ -6,6 +6,12 @@ export const LOG_IN_FAIL = "LOG_IN_FAIL";
 //Sign out
 export const SIGN_OUT = "SIGN_OUT";
 
+//Refresh Token
+export const REFRESH_TOKEN_SUCCESS = "REFRESH_TOKEN_SUCCESS";
+export const REFRESH_TOKEN_FAIL = "REFRESH_TOKEN_FAIL";
+
+//Clear Message
+export const CLEARE_MESSAGE = "CLEARE_MESSAGE";
 // for save Bank User
 export const SAVE_BANK_USER_INIT = "SAVE_BANK_USER_INIT";
 export const SAVE_BANK_USER_SUCCESS = "SAVE_BANK_USER_SUCCESS";

@@ -35,16 +35,16 @@ const PendingApprovalBank = () => {
     dispatch(getNewBankUserRequestMainApi(navigate));
   }, []);
 
-  useEffect(() => {
-    if (
-      securityReducer.bankUserRequestData.userRequestList !== null &&
-      securityReducer.bankUserRequestData.userRequestList !== undefined
-    ) {
-      setRowData(securityReducer.bankUserRequestData.userRequestList);
-    } else {
-      setRowData([]);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     securityReducer.bankUserRequestData.userRequestList !== null &&
+  //     securityReducer.bankUserRequestData.userRequestList !== undefined
+  //   ) {
+  //     setRowData(securityReducer.bankUserRequestData.userRequestList);
+  //   } else {
+  //     setRowData([]);
+  //   }
+  // }, []);
 
   const dataSource = [
     {

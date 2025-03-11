@@ -8,7 +8,7 @@ import {
   rejectUserRequestApi,
 } from "../../commen/apis/Api_config";
 import { securityAdminApi } from "../../commen/apis/Api_ends_points";
-
+import { RefreshToken } from "./Auth_Actions";
 const saveBankInit = () => {
   return {
     type: actions.SAVE_BANK_USER_INIT,
@@ -30,7 +30,7 @@ const saveBankFail = (message) => {
   };
 };
 
-const saveBankUserMainApi = () => {
+const saveBankUserMainApi = (navigate, Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(saveBankInit());
@@ -155,7 +155,7 @@ const saveCorporateFail = (message) => {
   };
 };
 
-const saveCorporateUserMainApi = () => {
+const saveCorporateUserMainApi = (navigate, Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(saveCorporateInit());
@@ -280,20 +280,20 @@ const getNewBankUserRequestFail = (message) => {
   };
 };
 
-const getNewBankUserRequestMainApi = (navigate) => {
-  let token = JSON.parse(localStorage.getItem("token"));
-  return (dispatch) => {
+const getNewBankUserRequestMainApi = (navigate, Data) => {
+  // let token = JSON.parse(localStorage.getItem("token"));
+  return async (dispatch) => {
     dispatch(getNewBankUserRequestInit());
     let form = new FormData();
     form.append("RequestMethod", getNewBankUserRequestApi.RequestMethod);
-    // form.append("RequestData", JSON.stringify(Data));
+    form.append("RequestData", JSON.stringify(Data));
     axios({
       method: "post",
       url: securityAdminApi,
       data: form,
-      headers: {
-        _token: token,
-      },
+      // headers: {
+      //   _token: token,
+      // },
     })
       .then(async (response) => {
         if (response.data.responseCode === 417) {
@@ -365,7 +365,7 @@ const getNewCorporateUserRequestFail = (message) => {
   };
 };
 
-const getNewCorporateUserRequestMainApi = () => {
+const getNewCorporateUserRequestMainApi = (navigate, Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(getNewCorporateUserRequestInit());
@@ -450,7 +450,7 @@ const rejectUserRequestFail = (message) => {
   };
 };
 
-const rejectUserRequestMainApi = () => {
+const rejectUserRequestMainApi = (navigate, Data) => {
   const token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(rejectUserRequestInit());
@@ -527,4 +527,5 @@ export {
   saveCorporateUserMainApi,
   getNewBankUserRequestMainApi,
   getNewCorporateUserRequestMainApi,
+  rejectUserRequestMainApi,
 };

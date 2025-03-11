@@ -1,13 +1,10 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import { Container, Col, Row, InputGroup, Form } from "react-bootstrap";
+import { Button, Loader, Notification } from "../../../components/elements";
 import {
-  Button,
-  TextField,
-  Loader,
-  Notification,
-} from "../../../components/elements";
-import jsLogo from "../../../assets/images/js-logo.png";
-import { loginSecurityAdminAPI } from "../../../store/actions/Auth_Actions";
+  cleareMessage,
+  loginSecurityAdminAPI,
+} from "../../../store/actions/Auth_Actions";
 import { useDispatch, useSelector } from "react-redux";
 import BOPlogo from "../../../assets/images/BOPlogo.png";
 import { useNavigate } from "react-router-dom";
@@ -17,19 +14,26 @@ const SecurityLogin = () => {
   console.log(auth, "authReducerauthReducerauthReducer");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const ResponseMessageAuthReducerState = useSelector(
+    (state) => state.auth.ResponseMessage
+  );
 
+  const LoadingAuthReducerState = useSelector(
+    (state) => state.auth.ResponseMessage
+  );
+  console.log(LoadingAuthReducerState, "AuthReducerState");
+  //Auth States
   const [open, setOpen] = useState({
     open: false,
     message: "",
   });
-
   const UserName = useRef(null);
   const Password = useRef(null);
 
-  const [errorMessages, setErrorMessages] = useState({
-    UserNameError: "",
-    PasswordError: "",
-  });
+  // const [errorMessages, setErrorMessages] = useState({
+  //   UserNameError: "",
+  //   PasswordError: "",
+  // });
   const [showPassword, setShowPassword] = useState(false);
 
   //state for login credentials
@@ -47,69 +51,82 @@ const SecurityLogin = () => {
   };
 
   // credentials for email and password
-  const emailOnchangeHandler = (e) => {
-    const value = e.target.value;
-    setSecurityCredentials((prevState) => ({
-      ...prevState,
-      UserName: value,
-    }));
+  const setCredentialHandler = (e) => {
+    const { name, value } = e.target;
 
-    // Clear error if value is not empty
-    if (value !== "") {
-      setErrorMessages((prevState) => ({ ...prevState, UserNameError: "" }));
+    if (name === "Password") {
+      let maskedPassword = "";
+      for (let i = 0; i < value.length; i++) {
+        maskedPassword += "•";
+      }
+
+      setSecurityCredentials({
+        ...securityCredentials,
+        [name]: value, // Real password value
+        fakePassword: maskedPassword, // Masked password display
+      });
+    } else {
+      setSecurityCredentials({
+        ...securityCredentials,
+        [name]: value, // For UserName
+      });
     }
   };
 
-  // onChange for password
-  const passwordOnchangeHandler = (e) => {
-    const value = e.target.value;
-    setSecurityCredentials((prevState) => ({
-      ...prevState,
-      Password: value,
-    }));
-
-    // Clear error if value is not empty
-    if (value !== "") {
-      setErrorMessages((prevState) => ({ ...prevState, PasswordError: "" }));
-    }
-  };
-
-  // handler for submit login
   const loginValidateHandler = (e) => {
     e.preventDefault();
-    let errors = {};
-    console.log(errors, "errorerrore");
-
-    // Check if fields are empty
-    if (securityCredentials.UserName === "") {
-      errors.UserNameError = "Email Field Is Empty";
-    }
-    if (securityCredentials.Password === "") {
-      errors.PasswordError = "Password Field Is Empty";
-    }
-
-    // If errors exist, update the errorMessages state
-    if (Object.keys(errors).length > 0) {
-      setErrorMessages(errors);
+    if (
+      securityCredentials.UserName !== "" &&
+      securityCredentials.Password !== ""
+    ) {
+      let data = {
+        UserName: securityCredentials.UserName,
+        Password: securityCredentials.Password,
+        DeviceID: "1",
+        Device: "Browser",
+      };
+      dispatch(loginSecurityAdminAPI(navigate, data));
     } else {
-      dispatch(loginSecurityAdminAPI(navigate)); // Proceed with login
+      setOpen({
+        ...open,
+        open: true,
+        message: "Please Enter All Credentials",
+      });
     }
   };
-
   // eye on Click on Eye Icon on Password
   const toggleEyeIcon = () => {
     setShowPassword(!showPassword);
   };
 
+  useEffect(() => {
+    console.log("loginSecurityAdmin", ResponseMessageAuthReducerState);
+    if (ResponseMessageAuthReducerState) {
+      setOpen({
+        open: true,
+        message: ResponseMessageAuthReducerState,
+      });
+      setTimeout(() => {
+        setOpen({
+          open: false,
+          message: "",
+        });
+      }, 4000);
+      dispatch(cleareMessage());
+    } else if (ResponseMessageAuthReducerState !== undefined) {
+      dispatch(cleareMessage());
+    }
+  }, [ResponseMessageAuthReducerState]);
+
   return (
     <Fragment>
       <Col sm={12} lg={12} md={12} className="sign-in">
         <Container>
-          <Row className="">
+          <Row className="mt-5">
             <Col sm={12} md={12} lg={12} className="login-container">
               <Row>
                 <Col className="mb-4">
-                  <img src={BOPlogo} width="300px" />
+                  <img src={BOPlogo} width="300px" alt="" />
                 </Col>
               </Row>
               <Row>
@@ -117,7 +134,7 @@ const SecurityLogin = () => {
                   <Form onSubmit={loginValidateHandler}>
                     <Row>
                       <Col sm={12} md={12} lg={12} className="mt-3">
-                        <InputGroup>
+                        <InputGroup className="mb-3">
                           <InputGroup.Text
                             id="basic-addon1"
                             className="Icon-Field-class"
@@ -132,7 +149,7 @@ const SecurityLogin = () => {
                             name="UserName"
                             autoComplete="off"
                             value={securityCredentials.UserName}
-                            onChange={emailOnchangeHandler}
+                            onChange={setCredentialHandler}
                             className="form-comtrol-textfield"
                             placeholder="Email ID"
                             aria-label="Username"
@@ -140,7 +157,7 @@ const SecurityLogin = () => {
                           />
                         </InputGroup>
 
-                        <p
+                        {/* <p
                           className={
                             errorMessages.UserNameError
                               ? "error-message"
@@ -148,7 +165,7 @@ const SecurityLogin = () => {
                           }
                         >
                           {errorMessages.UserNameError}
-                        </p>
+                        </p> */}
                       </Col>
                       <Col sm={12} md={12} lg={12} className="mb-3">
                         <InputGroup>
@@ -159,7 +176,7 @@ const SecurityLogin = () => {
                             <i className="icon-lock"></i>
                           </InputGroup.Text>
                           <Form.Control
-                            name="passwordText"
+                            name="Password"
                             // ref={Password}
                             autoComplete="off"
                             className="form-comtrol-textfield-password"
@@ -167,22 +184,27 @@ const SecurityLogin = () => {
                             aria-label="passwordText"
                             aria-describedby="basic-addon2"
                             type={showPassword ? "text" : "password"}
-                            value={securityCredentials.Password}
-                            onChange={passwordOnchangeHandler}
+                            value={
+                              // showPassword
+                              //   ? securityCredentials.Password
+                              //   : securityCredentials.fakePassword
+                              securityCredentials.Password
+                            }
+                            onChange={setCredentialHandler}
                           />
                           <InputGroup.Text
                             id="basic-addon2"
                             className="eyeIcon-Field-class-BOP-login"
                             onClick={toggleEyeIcon}
                           >
-                            {showPassword ? (
+                            {!showPassword ? (
                               <i className="icon-eye-slash"></i>
                             ) : (
                               <i className="icon-eye"></i>
                             )}
                           </InputGroup.Text>
                         </InputGroup>
-                        <p
+                        {/* <p
                           className={
                             errorMessages.PasswordError
                               ? "error-message"
@@ -190,7 +212,7 @@ const SecurityLogin = () => {
                           }
                         >
                           {errorMessages.PasswordError}
-                        </p>
+                        </p> */}
                       </Col>
                       <Col
                         sm={12}
@@ -208,6 +230,7 @@ const SecurityLogin = () => {
           </Row>
         </Container>
       </Col>
+      {LoadingAuthReducerState && <Loader />}
       <Notification setOpen={setOpen} open={open.open} message={open.message} />
       {auth.Loading ? <Loader /> : null}
     </Fragment>

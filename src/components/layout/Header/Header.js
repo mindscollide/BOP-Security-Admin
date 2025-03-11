@@ -4,12 +4,22 @@ import Navbar from "react-bootstrap/Navbar";
 import BOPLogo from "../../../assets/images/BOPLogo-white.png";
 import SettingModal from "../../../container/Pages/Modals/Setting-Modal/SettingModal";
 import "./Header.css";
+import { signOut } from "../../../store/actions/Auth_Actions";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [SettingModalState, setSettingModalState] = useState(false);
 
   const onClickSetting = () => {
     setSettingModalState(true);
+  };
+
+  const handleLogout = () => {
+    dispatch(signOut(navigate, message));
   };
   return (
     <>
@@ -36,7 +46,7 @@ const Header = () => {
                     </label>
                   </Nav.Link>
                 </Dropdown.Item>
-                <Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}>
                   <i class="icon-logout me-1"></i>
                   <label className="dropdown-select-labels">Logout</label>
                 </Dropdown.Item>

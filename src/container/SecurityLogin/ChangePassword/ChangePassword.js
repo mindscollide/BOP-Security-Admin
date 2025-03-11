@@ -28,7 +28,7 @@ const ChangePassword = () => {
           <Col sm={12} md={12} lg={12} className="ChangePassword-container">
             <Row>
               <Col className="mb-4">
-                <img src={BOPlogo} width="300px" />
+                <img src={BOPlogo} width="300px" alt="BOPlogo" />
               </Col>
             </Row>
             <Row className="mt-2">

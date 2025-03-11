@@ -1,20 +1,20 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { Container, Col, Row } from "react-bootstrap";
+import React, { Fragment, useState } from "react";
+import { Col, Row } from "react-bootstrap";
 import {
   TextField,
   Button,
   Table,
   Paper,
-  Loader,
   Modal,
-  Notification,
 } from "../../../components/elements";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./BankUser.css";
+import { roleOptions, statusOptions } from "../../../helpers/Dropdown";
+import { bankEditUserSchema } from "../../../utils/schemas";
 
 const BankUser = () => {
   const navigate = useNavigate();
@@ -25,12 +25,15 @@ const BankUser = () => {
   const [updateModal, setUpdateModal] = useState(false);
 
   //state for selectRole
-  const [editSelectRole, setEditSelectRole] = useState([]);
-  const [editSelectRoleValue, setEditSelectRoleValue] = useState([]);
+  // const [editSelectRole, setEditSelectRole] = useState([...roleOptions]);
+  const editSelectRole = [...roleOptions];
+  const [editSelectRoleValue, setEditSelectRoleValue] = useState("");
 
   // state for select Status
-  const [editSelectStatus, setEditSelectStatus] = useState([]);
-  const [editSelectStatusValue, setEditSelectStatusValue] = useState([]);
+  // const [editSelectStatus, setEditSelectStatus] = useState([...statusOptions]);
+
+  const editSelectStatus = [...statusOptions];
+  const [editSelectStatusValue, setEditSelectStatusValue] = useState("");
 
   const [dropdownvalue, setDropdownvalue] = useState({
     value: 50,
@@ -44,33 +47,7 @@ const BankUser = () => {
   ];
 
   // state for edit user
-  const [BankEditUser, setBankEditUser] = useState({
-    EmployeeID: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    LoginID: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    Name: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    roleID: {
-      value: 0,
-      errorMessage: "",
-      errorStatus: false,
-    },
-    statusID: {
-      value: 0,
-      errorMessage: "",
-      errorStatus: false,
-    },
-  });
+  const [BankEditUser, setBankEditUser] = useState({ ...bankEditUserSchema });
 
   const [modalEditState, setModalEditState] = useState({
     Email: {
@@ -271,25 +248,21 @@ const BankUser = () => {
       EmployeeID: {
         value: "",
       },
-
       LoginID: {
         value: "",
       },
-
       Name: {
         value: "",
       },
-
-      roleID: {
-        value: 0,
+      Role: {
+        value: "",
       },
-
       statusID: {
-        value: 0,
+        value: "",
       },
     });
-    setEditSelectRoleValue([]);
-    setEditSelectStatusValue([]);
+    setEditSelectRoleValue("");
+    setEditSelectStatusValue("");
   };
 
   //onClose modal
@@ -301,7 +274,7 @@ const BankUser = () => {
       key: "1",
       employeeID: "01",
       loginId: "aunnaqvi12@gmail.com",
-      name: "Aun",
+      name: "Aun Ali Khosa",
       userRoleID: "Dealer",
       BranchName: "-",
       userStatusID: <i className="icon-check edit-user-enabled"></i>,
@@ -332,6 +305,7 @@ const BankUser = () => {
       dataIndex: "employeeID",
       key: "employeeID",
       align: "left",
+      width: "150px",
       ellipsis: true,
     },
     {
@@ -339,20 +313,22 @@ const BankUser = () => {
       dataIndex: "loginId",
       key: "loginId",
       align: "left",
-      width: "400px",
+      width: "250px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Empolyee Name</label>,
+      title: <label className="bottom-table-header">Name</label>,
       dataIndex: "name",
       key: "name",
-      align: "center",
+      width: "200px",
+      align: "left",
       ellipsis: true,
     },
     {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
+      width: "100px",
       align: "left",
       ellipsis: true,
     },
@@ -360,6 +336,7 @@ const BankUser = () => {
       title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "BranchName",
       key: "BranchName",
+      width: "100px",
       align: "left",
       ellipsis: true,
     },
@@ -418,6 +395,20 @@ const BankUser = () => {
     setUpdateModal(true);
   };
 
+  const handleSearch = () => {
+    let data = {
+      employeeID: BankEditUser.EmployeeID.value,
+      loginId: BankEditUser.LoginID.value,
+      name: BankEditUser.Name.value,
+      userRoleID: editSelectRoleValue.value,
+      userStatusID: editSelectStatusValue.value,
+    };
+    console.log("data is: ", data);
+  };
+  const handleProceed = () => {
+    console.log("Proceed clicked");
+    // dispatch();
+  };
   return (
     <>
       <section className="edit-user-container">
@@ -436,7 +427,7 @@ const BankUser = () => {
                     className="text-fields-edituser"
                     labelClass="d-none"
                     placeholder="Employee ID"
-                    maxLength={100}
+                    maxLength={50}
                     value={BankEditUser.EmployeeID.value}
                     onChange={editUserValidateHandler}
                   />
@@ -466,22 +457,27 @@ const BankUser = () => {
                 <Col lg={3} md={3} sm={12}>
                   <Select
                     name="roleID"
+                    // isClearable
+                    isSearchable
                     options={editSelectRole}
-                    className="edit-user-select-status"
                     placeholder="Select Role"
+                    className="edit-user-select-status"
                     value={editSelectRoleValue}
+                    onChange={setEditSelectRoleValue}
                   />
                 </Col>
               </Row>
 
-              <Row className="mt-3">
+              <Row className="dropdown mt-3">
                 <Col lg={3} md={3} sm={12} className="pe-0">
                   <Select
                     name="statusID"
                     className="edit-user-select-status"
                     placeholder="Select Status"
+                    // isClearable
                     options={editSelectStatus}
                     value={editSelectStatusValue}
+                    onChange={setEditSelectStatusValue}
                   />
                 </Col>
 
@@ -490,6 +486,7 @@ const BankUser = () => {
                     icon={<i className="icon-search icon-search-space"></i>}
                     text="Search"
                     className="search-Bank-Edit-User-btn"
+                    onClick={handleSearch}
                   />
                   <Button
                     icon={<i className="icon-refresh icon-reset-space"></i>}
@@ -586,6 +583,7 @@ const BankUser = () => {
                     </>
                   }
                   className="Update-Proceed-btn"
+                  onClick={handleProceed}
                 />
               </Col>
             </Row>

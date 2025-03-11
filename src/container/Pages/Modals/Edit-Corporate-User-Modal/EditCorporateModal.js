@@ -95,13 +95,13 @@ const EditCorporateModal = ({
             <Row className="mb-3">
               <Col lg={12} md={12} sm={12} className="footer-btn-col">
                 <Button
-                  icon={<i class="icon-refresh icon-right"></i>}
+                  icon={<i className="icon-refresh icon-right"></i>}
                   text="Update"
                   className="update-btn-editModal"
                   onClick={UpdateButtonOnClick}
                 />
                 <Button
-                  icon={<i class="icon-close icon-right"></i>}
+                  icon={<i className="icon-close icon-right"></i>}
                   text="Discard"
                   className="discard-btn-editModal"
                   onClick={closeEditModal}

@@ -1,3 +1,6 @@
+const authenticationRefreshToken = {
+  RequestMethod: "ServiceManager.RefreshToken",
+};
 const authenticationLogIn = {
   RequestMethod: "ServiceManager.Login",
 };
@@ -27,6 +30,7 @@ const rejectUserRequestApi = {
 };
 
 export {
+  authenticationRefreshToken,
   authenticationLogIn,
   emailSentResetPassword,
   saveBankUserApi,

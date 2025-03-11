@@ -94,14 +94,14 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
               <>
                 <Row className="mt-4">
                   <Col className="checkbox-border">
-                    <Checkbox onChange={() => e.target.checked()}>
+                    <Checkbox onChange={(e) => e.target.checked()}>
                       Chat Panel Overlap
                     </Checkbox>
                   </Col>
                 </Row>
                 <Row>
                   <Col className="checkbox-border">
-                    <Checkbox onChange={() => e.target.checked()}>
+                    <Checkbox onChange={(e) => e.target.checked()}>
                       Sound on every personal message
                     </Checkbox>
                   </Col>

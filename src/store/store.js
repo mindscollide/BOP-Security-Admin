@@ -8,6 +8,7 @@ import {
   CorporateReducer,
   SearchReducer,
   downloadReducer,
+  securityModalReducer,
 } from "./reducers";
 import { configureStore } from "@reduxjs/toolkit";
 import * as actions from "./action_types";
@@ -18,6 +19,7 @@ const AppReducer = combineReducers({
   CorporateReducer: CorporateReducer,
   SearchReducer: SearchReducer,
   downloadReducer: downloadReducer,
+  securityModalReducer: securityModalReducer,
 });
 
 const rootReducer = (state, action) => {

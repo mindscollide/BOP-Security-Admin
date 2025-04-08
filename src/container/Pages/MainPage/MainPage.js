@@ -8,6 +8,7 @@ import Userreport from "../../../container/Reports/Userreport";
 import Sidebar from "../../../components/layout/Sidebar/Sidebar";
 import { Row, Col } from "react-bootstrap";
 import { Layout } from "antd";
+import ResponseMessage from "../../../utils/ResponseMessage";
 
 const MainPage = () => {
   const { Sider, Content } = Layout;
@@ -24,6 +25,7 @@ const MainPage = () => {
             <Outlet />
           </Content>
         </Layout>
+        <ResponseMessage />
       </Layout>
     </>
     // <Fragment>

@@ -4,6 +4,8 @@ import {
   authenticationLogIn,
   authenticationRefreshToken,
   emailSentResetPassword,
+  GetAllUserStatus,
+  RoleList,
 } from "../../commen/apis/Api_config";
 import { authenticationAPI } from "../../commen/apis/Api_ends_points";
 
@@ -63,21 +65,37 @@ const RefreshToken = (navigate) => {
       data: form,
     })
       .then(async (response) => {
-        console.log("RefreshToken", response);
-        if (response.data.responseCode === 200) {
-          await dispatch(
-            refreshtokenSuccess(
-              response.data.responseResult,
-              "Refresh Token Update Successfully"
-            )
-          );
-        } else {
-          console.log("RefreshToken", response);
+        if (response.data.responseCode === 205) {
           let message2 = "Your Session has expired. Please login again";
           dispatch(signOut(navigate, message2));
-          await dispatch(
-            refreshtokenFail("Your Session has expired. Please login again.")
-          );
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted) {
+            if (
+              response.data.responseResult.responseMessage.includes.toLowerCase(
+                "ERM_AuthService_AuthManager_RefreshToken_01".toLowerCase()
+              )
+            ) {
+              await dispatch(
+                refreshtokenSuccess(
+                  response.data.responseResult,
+                  "Refresh Token Update Successfully"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage.includes.toLowerCase(
+                "ERM_AuthService_AuthManager_RefreshToken_02".toLowerCase()
+              )
+            ) {
+              let message2 = "Your Session has expired. Please login again";
+              dispatch(signOut(navigate, message2));
+            }
+          } else {
+            dispatch(signOut(navigate, ""));
+            await dispatch(refreshtokenFail("Something went wrong"));
+          }
+        } else {
+          dispatch(signOut(navigate, ""));
+          await dispatch(refreshtokenFail("Something went wrong"));
         }
       })
       .catch((response) => {
@@ -87,6 +105,7 @@ const RefreshToken = (navigate) => {
       });
   };
 };
+
 //Login API System Admin
 const loginSecurityAdmininit = () => {
   return {
@@ -502,6 +521,182 @@ const SendEmailResetPasswordAPI = (navigate, data) => {
       });
   };
 };
+//GetAllUserStatus
+const GetAllUserStatusInit = () => {
+  return {
+    type: actions.GET_ALL_USER_STATUS_INIT,
+  };
+};
+
+const GetAllUserStatusSuccess = (response, message) => {
+  console.log(response);
+  return {
+    type: actions.GET_ALL_USER_STATUS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const GetAllUserStatusFail = (message) => {
+  return {
+    type: actions.GET_ALL_USER_STATUS_FAIL,
+    message: message,
+  };
+};
+
+const GetAllUserStatusAPI = (navigate) => {
+  let token = localStorage.getItem("token");
+  return async (dispatch) => {
+    dispatch(GetAllUserStatusInit());
+    let form = new FormData();
+    form.append("RequestMethod", GetAllUserStatus.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        // console.log(
+        //   response,
+        //   response.data,
+        //   response.data.responseResult.responseMessage,
+        //   response.data.responseCode
+        // );
+        if (response.data?.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(GetAllUserStatusAPI(navigate));
+        } else if (response.data.responseCode === 200) {
+          // console.log(
+          //   response,
+          //   response.data,
+          //   response.data.responseResult.responseMessage,
+          //   response.data.responseCode,
+          //   response.data.responseResult.isExecuted
+          // );
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllUserStatus_01".toLowerCase()
+                )
+            ) {
+              dispatch(
+                GetAllUserStatusSuccess(
+                  response.data.responseResult,
+                  "Data Available"
+                )
+              );
+            } else if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_GetAllUserStatus_02".toLowerCase()
+            ) {
+              dispatch(GetAllUserStatusFail("No Data Available"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_GetAllUserStatus_03".toLowerCase()
+                )
+            ) {
+              dispatch(GetAllUserStatusFail("Exception"));
+            }
+          } else {
+            dispatch(GetAllUserStatusFail("Something went wrong"));
+          }
+        } else {
+          dispatch(GetAllUserStatusFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(GetAllUserStatusFail("something went wrong"));
+      });
+  };
+};
+const RoleListInit = () => {
+  console.log("here now");
+  return {
+    type: actions.ROLE_LIST_INIT,
+  };
+};
+
+const RoleListSuccess = (response, message) => {
+  console.log(response);
+  return {
+    type: actions.ROLE_LIST_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const RoleListFail = (message) => {
+  return {
+    type: actions.ROLE_LIST_FAIL,
+    message: message,
+  };
+};
+
+const RoleListAPI = (navigate) => {
+  let token = localStorage.getItem("token");
+  return async (dispatch) => {
+    dispatch(RoleListInit());
+    let form = new FormData();
+    form.append("RequestMethod", RoleList.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data?.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(RoleListAPI(navigate));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_RoleList_01".toLowerCase()
+                )
+            ) {
+              // console.log(response);
+
+              dispatch(
+                RoleListSuccess(response.data.responseResult, "Data Available")
+              );
+            } else if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_CommonManager_RoleList_02".toLowerCase()
+            ) {
+              dispatch(RoleListFail("No Data Available"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_CommonManager_RoleList_03".toLowerCase()
+                )
+            ) {
+              dispatch(RoleListFail("Exception"));
+            }
+          } else {
+            dispatch(RoleListFail("Something went wrong"));
+          }
+        } else {
+          dispatch(RoleListFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(RoleListFail("something went wrong"));
+      });
+  };
+};
 
 export {
   RefreshToken,
@@ -509,4 +704,6 @@ export {
   SendEmailResetPasswordAPI,
   cleareMessage,
   signOut,
+  GetAllUserStatusAPI,
+  RoleListAPI,
 };

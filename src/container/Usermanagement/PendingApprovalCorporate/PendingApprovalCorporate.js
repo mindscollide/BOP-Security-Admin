@@ -1,17 +1,38 @@
-import React, { useState } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import { Table, Paper } from "../../../components/elements";
+import React, { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
+import {
+  Table,
+  Paper,
+  Loader,
+  Notification,
+} from "../../../components/elements";
 import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "./PendingApprovalCorporate.css";
+import {
+  getNewCorporateUserRequestApi,
+  saveCorporateUserApi,
+} from "../../../store/actions/Security_Admin";
 
 const PendingApprovalCorporate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [tableData, setTableData] = useState([]);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+
+  //Global State
   const { securityReducer } = useSelector((state) => state);
-  console.log(securityReducer, "aa");
+  //Checking snakbar state
+  const [open, setOpen] = useState(false);
+
+  const GetNewCorporateUserRequests = useSelector(
+    (state) => state.securityReducer.GetNewCorporateUserRequestsData
+  );
+  console.log(GetNewCorporateUserRequests, "GetNewCorporateUserRequestsData");
+
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
 
@@ -19,34 +40,47 @@ const PendingApprovalCorporate = () => {
   const [acceptModal, setAcceptModal] = useState(false);
 
   //open modal accept
-  const openAcceptModal = async () => {
+  const openAcceptModal = async (requestId) => {
+    setSelectedRequestId(requestId);
     setAcceptModal(true);
   };
 
-  const openRejectModal = async () => {
+  const handleAccept = () => {
+    if (selectedRequestId) {
+      console.log("selectedRequestId", selectedRequestId);
+      try {
+        let registrationID = { UserRegistrationRequestID: selectedRequestId };
+        dispatch(saveCorporateUserApi(navigate, registrationID));
+        setAcceptModal(false);
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  };
+
+  const openRejectModal = async (record) => {
+    setSelectedRequestId(record.userRegistrationRequestID);
     setCreateRejectModal(true);
   };
 
-  const dataSource = [
-    {
-      key: "1",
-      corporateName: "Zelbury",
-      email: "aunnaqvi12@gmail.com",
-      userName: "Muhammad Naqvi",
-    },
-    {
-      key: "2",
-      corporateName: "Zelbury",
-      email: "johnnaqvi33@gmail.com",
-      userName: "Muhammad Saif",
-    },
-    {
-      key: "3",
-      corporateName: "Zelbury",
-      email: "kashifnaqvi453@gmail.com",
-      userName: "Muhammad Kashif",
-    },
-  ];
+  useEffect(() => {
+    dispatch(getNewCorporateUserRequestApi(navigate));
+  }, []);
+
+  useEffect(() => {
+    if (GetNewCorporateUserRequests !== null) {
+      try {
+        const { userRequestList } = GetNewCorporateUserRequests;
+        if (userRequestList.length > 0) {
+          setTableData(GetNewCorporateUserRequests.userRequestList);
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    } else if (GetNewCorporateUserRequests === null) {
+      setTableData("");
+    }
+  }, [GetNewCorporateUserRequests]);
 
   // column of create user
   const columnsCreate = [
@@ -62,13 +96,13 @@ const PendingApprovalCorporate = () => {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "400px",
+      width: "380px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">User Name</label>,
-      dataIndex: "userName",
-      key: "userName",
+      title: <label className="bottom-table-header">Name</label>,
+      dataIndex: "firstname",
+      key: "firstname",
       ellipsis: true,
     },
     {
@@ -77,9 +111,14 @@ const PendingApprovalCorporate = () => {
       key: "accept",
       ellipsis: true,
       align: "center",
-      render: (text, data) => {
+      render: (text, record) => {
         return (
-          <label onClick={() => openAcceptModal()}>
+          <label
+            onClick={() => {
+              console.log("record", record);
+              openAcceptModal(record.userRegistrationRequestID);
+            }}
+          >
             <i className="icon-check icon-accept-column"></i>
           </label>
         );
@@ -91,9 +130,9 @@ const PendingApprovalCorporate = () => {
       key: "reject",
       ellipsis: true,
       align: "center",
-      render: (text, rejectData) => {
+      render: (text, record) => {
         return (
-          <label onClick={() => openRejectModal()}>
+          <label onClick={() => openRejectModal(record)}>
             <i className="icon-close icon-close-column"></i>
           </label>
         );
@@ -117,7 +156,7 @@ const PendingApprovalCorporate = () => {
             <Col lg={12} md={12} sm={12} className="mt-3">
               <Table
                 column={columnsCreate}
-                rows={dataSource}
+                rows={tableData}
                 className="Createuser-table"
                 pagination={false}
               />
@@ -130,6 +169,7 @@ const PendingApprovalCorporate = () => {
         <CreateModal
           modalReject={createRejectModal}
           setModalReject={setCreateRejectModal}
+          rejectUserData={selectedRequestId}
         />
       ) : null}
 
@@ -137,8 +177,11 @@ const PendingApprovalCorporate = () => {
         <AcceptModal
           modalAccept={acceptModal}
           setModalAccept={setAcceptModal}
+          acceptHandler={handleAccept}
         />
       ) : null}
+      {securityReducer.Loading && <Loader />}
+      <Notification setOpen={setOpen} open={open.open} message={open.message} />
     </>
   );
 };

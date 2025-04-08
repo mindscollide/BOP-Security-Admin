@@ -9,33 +9,60 @@ const emailSentResetPassword = {
   RequestMethod: "ServiceManager.SendEmailForResetPasword",
 };
 
-const saveBankUserApi = {
+const SaveBankUser = {
   RequestMethod: "ServiceManager.SaveBankUser",
 };
 
-const saveCorporateUserApi = {
+const SaveCorporateUser = {
   RequestMethod: "ServiceManager.SaveCorporateUser",
 };
 
-const getNewBankUserRequestApi = {
+const GetNewBankUserRequests = {
   RequestMethod: "ServiceManager.GetNewBankUserRequests",
 };
 
-const getNewCorporateUserRequestApi = {
-  RequestMethod: "ServiceManager.GetNewCorporateUserRequest",
+const GetNewCorporateUserRequests = {
+  RequestMethod: "ServiceManager.GetNewCorporateUserRequests",
 };
 
-const rejectUserRequestApi = {
+const RejectUserRequest = {
   RequestMethod: "ServiceManager.RejectUserRequest",
+};
+
+const getAllUsersListApi = {
+  RequestMethod: "ServiceManager.GetAllUsersList",
+};
+
+//Search Corporate Users
+const SearchCorporateUsers = {
+  RequestMethod: "ServiceManager.SearchCorporateUsers",
+};
+//Search Bank Users
+const SearchBankUsers = {
+  RequestMethod: "ServiceManager.SearchBankUsers",
+};
+
+//Get All User Status
+const GetAllUserStatus = {
+  RequestMethod: "ServiceManager.GetAllUserStatus",
+};
+
+const RoleList = {
+  RequestMethod: "ServiceManager.RoleList",
 };
 
 export {
   authenticationRefreshToken,
   authenticationLogIn,
   emailSentResetPassword,
-  saveBankUserApi,
-  saveCorporateUserApi,
-  getNewBankUserRequestApi,
-  getNewCorporateUserRequestApi,
-  rejectUserRequestApi,
+  SaveBankUser,
+  SaveCorporateUser,
+  GetNewBankUserRequests,
+  GetNewCorporateUserRequests,
+  RejectUserRequest,
+  getAllUsersListApi,
+  SearchCorporateUsers,
+  SearchBankUsers,
+  GetAllUserStatus,
+  RoleList,
 };

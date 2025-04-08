@@ -10,6 +10,8 @@ const initialState = {
   Token: "",
   Refresh: "",
   SessionExpeireResponseMessage: "",
+  allUserStatusData: [],
+  RoleList: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -47,6 +49,50 @@ const authReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         emailData: action.response,
+        ResponseMessage: action.message,
+      };
+    case actions.GET_ALL_USER_STATUS_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_ALL_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        allUserStatusData: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_USER_STATUS_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        allUserStatusData: [],
+        ResponseMessage: action.message,
+      };
+
+    //RoleList Reducer
+    case actions.ROLE_LIST_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.ROLE_LIST_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        RoleList: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.ROLE_LIST_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        RoleList: [],
         ResponseMessage: action.message,
       };
 

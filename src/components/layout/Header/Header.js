@@ -46,8 +46,9 @@ const Header = () => {
                     </label>
                   </Nav.Link>
                 </Dropdown.Item>
+
                 <Dropdown.Item onClick={handleLogout}>
-                  <i class="icon-logout me-1"></i>
+                  <i className="icon-logout me-1"></i>
                   <label className="dropdown-select-labels">Logout</label>
                 </Dropdown.Item>
               </Dropdown.Menu>

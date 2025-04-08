@@ -15,10 +15,19 @@ import Select from "react-select";
 
 import EditCorporateModal from "../../Pages/Modals/Edit-Corporate-User-Modal/EditCorporateModal";
 import "./CorporateUser.css";
-
+import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
+import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal";
+import { searchCorporateUserSchema } from "../../../utils/schemas";
+import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
 const EditUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  //Global State
+  const { securityReducer } = useSelector((state) => state);
+
+  // Get all user status selector
+  const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
 
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
@@ -32,39 +41,20 @@ const EditUser = () => {
   const [editSelectStatus, setEditSelectStatus] = useState([]);
   const [editSelectStatusValue, setEditSelectStatusValue] = useState([]);
 
+  //state for storieng user Status
+  const [statusOptions, setStatusOptions] = useState([]);
+
+  const [statusID, setStatusID] = useState({
+    value: 0,
+    label: "",
+  });
   const [dropdownvalue, setDropdownvalue] = useState({
     value: 50,
     label: "50",
   });
 
   // state for edit user
-  const [editUser, setEditUser] = useState({
-    CorporateName: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    email: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    LoginID: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    Name: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    statusID: {
-      value: 0,
-      errorMessage: "",
-      errorStatus: false,
-    },
-  });
+  const [editUser, setEditUser] = useState(searchCorporateUserSchema);
 
   const [modalEditState, setModalEditState] = useState({
     Email: {
@@ -258,8 +248,22 @@ const EditUser = () => {
     }
   };
 
+  const handleSelectStatus = async (selectedStatus) => {
+    setStatusID(selectedStatus);
+
+    setEditUser((prevState) => ({
+      ...prevState,
+      statusID: { ...prevState.statusID, value: selectedStatus.value },
+    }));
+  };
+
   //reset handler for edit user
   const resetHandler = () => {
+    dispatch(ConfirmationModalSecurityAdmin(true));
+  };
+
+  //reset handler for edit user
+  const resetHandlerYes = () => {
     setEditUser({
       ...editUser,
       CorporateName: {
@@ -279,7 +283,11 @@ const EditUser = () => {
       },
     });
     setEditSelectRoleValue([]);
-    setEditSelectStatusValue([]);
+    setStatusID({
+      value: 0,
+      label: "",
+    });
+    // setEditSelectStatusValue([]);
   };
 
   //onClose modal
@@ -391,6 +399,24 @@ const EditUser = () => {
   const handleChangeDropDown = (value) => {
     setDropdownvalue(value);
   };
+  useEffect(() => {
+    dispatch(GetAllUserStatusAPI(navigate));
+  }, []);
+
+  useEffect(() => {
+    if (GetAllUserStatus !== null) {
+      try {
+        let newUserStatusData = GetAllUserStatus.status.map((status) => {
+          return {
+            ...status,
+            value: { value: status.statusID },
+            label: status.statusName,
+          };
+        });
+        setStatusOptions(newUserStatusData);
+      } catch (error) {}
+    }
+  }, [GetAllUserStatus]);
 
   return (
     <>
@@ -437,13 +463,14 @@ const EditUser = () => {
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className="dropdown pe-0">
                   <Select
                     name="statusID"
-                    className="edit-Corporate-user-select-status"
+                    // className="edit-Corporate-user-select-status"
                     placeholder="Status"
-                    options={editSelectStatus}
-                    value={editSelectStatusValue}
+                    options={statusOptions}
+                    value={statusID.value !== 0 ? statusID : null}
+                    onChange={handleSelectStatus}
                   />
                 </Col>
 
@@ -567,6 +594,8 @@ const EditUser = () => {
           onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />
       ) : null}
+      {securityReducer.Loading && <Loader />}
+      <ActivateConfirmationModal onConfirm={resetHandlerYes} />
     </>
   );
 };

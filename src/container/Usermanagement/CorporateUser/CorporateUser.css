@@ -327,6 +327,9 @@
   color: #45494d;
   font-family: "Roboto", sans-serif;
 }
+.dropdown {
+  z-index: 3;
+}
 
 /* for responsiveness on zoom in and zoom out */
 

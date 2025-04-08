@@ -26,8 +26,13 @@ export const bankEditUserSchema = {
   },
 };
 
-export const searchBankUserSchema = {
-  EmployeeID: {
+export const searchCorporateUserSchema = {
+  CorporateName: {
+    value: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  email: {
     value: "",
     errorMessage: "",
     errorStatus: false,
@@ -39,11 +44,6 @@ export const searchBankUserSchema = {
   },
   Name: {
     value: "",
-    errorMessage: "",
-    errorStatus: false,
-  },
-  roleID: {
-    value: 0,
     errorMessage: "",
     errorStatus: false,
   },

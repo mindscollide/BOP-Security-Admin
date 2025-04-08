@@ -1,105 +1,111 @@
 import React, { useEffect, useState } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import { Table, Paper } from "../../../components/elements";
+import { Col, Row } from "react-bootstrap";
+import {
+  Table,
+  Paper,
+  Loader,
+  Notification,
+} from "../../../components/elements";
 import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import "./PendingApprovalBank.css";
-import { getNewBankUserRequestMainApi } from "../../../store/actions/Security_Admin";
+import {
+  getNewBankUserRequestApi,
+  saveBankUserApi,
+} from "../../../store/actions/Security_Admin";
 
 const PendingApprovalBank = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [tableData, setTableData] = useState([]);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
+
+  //Global State
   const { securityReducer } = useSelector((state) => state);
-  console.log(securityReducer, "Aasdaasasasa");
+  //Checking snakbar state
+  const [open, setOpen] = useState(false);
+
+  const GetNewBankUserRequests = useSelector(
+    (state) => state.securityReducer.GetNewBankUserRequestsData
+  );
+
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
-
-  const [rowData, setRowData] = useState([]);
 
   //modal for accept user in create
   const [acceptModal, setAcceptModal] = useState(false);
 
   //open modal accept
-  const openAcceptModal = async () => {
+  const openAcceptModal = async (requestId) => {
+    // console.log(requestId);
+    setSelectedRequestId(requestId);
+
     setAcceptModal(true);
   };
+  const handleAccept = () => {
+    if (selectedRequestId) {
+      // console.log("selectedRequestId", selectedRequestId);
+      try {
+        let registrationID = { UserRegistrationRequestID: selectedRequestId };
+        dispatch(saveBankUserApi(navigate, registrationID));
+        setAcceptModal(false);
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  };
 
-  const openRejectModal = async () => {
+  const openRejectModal = async (record) => {
+    setSelectedRequestId(record.userRegistrationRequestID);
     setCreateRejectModal(true);
   };
 
   useEffect(() => {
-    dispatch(getNewBankUserRequestMainApi(navigate));
+    dispatch(getNewBankUserRequestApi(navigate));
   }, []);
 
-  // useEffect(() => {
-  //   if (
-  //     securityReducer.bankUserRequestData.userRequestList !== null &&
-  //     securityReducer.bankUserRequestData.userRequestList !== undefined
-  //   ) {
-  //     setRowData(securityReducer.bankUserRequestData.userRequestList);
-  //   } else {
-  //     setRowData([]);
-  //   }
-  // }, []);
-
-  const dataSource = [
-    {
-      key: "1",
-      email: "aunnaqvi12@gmail.com",
-      name: "Naqvi",
-      fK_UserRoleID: "Dealer",
-      branch: "-",
-    },
-    {
-      key: "2",
-      email: "johnnaqvi33@gmail.com",
-      name: "Naqvi",
-      fK_UserRoleID: "Branch",
-      branch: "1234-Saddar",
-    },
-    {
-      key: "3",
-      email: "jAlinaqvi33@gmail.com",
-      name: "Rizvi",
-      fK_UserRoleID: "Treasury",
-      branch: "-",
-    },
-  ];
+  useEffect(() => {
+    if (GetNewBankUserRequests !== null) {
+      try {
+        const { userRequestList } = GetNewBankUserRequests;
+        if (userRequestList.length > 0) {
+          setTableData(GetNewBankUserRequests.userRequestList);
+        }
+      } catch (error) {
+        console.log("Error", error);
+      }
+    } else if (GetNewBankUserRequests === null) {
+      setTableData("");
+    }
+  }, [GetNewBankUserRequests]);
 
   // column of create user
-  const columnsCreate = [
+  const columns = [
     {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "400px",
+      width: "380px",
+
       ellipsis: true,
-      render: (text, record) => {
-        return <>{text}</>;
-      },
     },
 
     {
-      title: <label className="bottom-table-header">Employee Name</label>,
+      title: <label className="bottom-table-header">Name</label>,
       dataIndex: "firstname",
       key: "firstname",
+      width: "280px",
+
       ellipsis: true,
-      render: (text, record) => {
-        return <>{text}</>;
-      },
     },
     {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "fK_UserRoleID",
       key: "fK_UserRoleID",
       ellipsis: true,
-      render: (text, record) => {
-        return <>{text}</>;
-      },
     },
     {
       title: <label className="bottom-table-header">Branch</label>,
@@ -107,7 +113,9 @@ const PendingApprovalBank = () => {
       key: "branchName",
       ellipsis: true,
       render: (text, record) => {
-        return <>{text}</>;
+        return (
+          <label>{record.branchName !== "" ? record.branchName : "-"}</label>
+        );
       },
     },
     {
@@ -116,9 +124,14 @@ const PendingApprovalBank = () => {
       key: "accept",
       ellipsis: true,
       align: "center",
-      render: (text, data) => {
+      render: (text, record) => {
         return (
-          <label onClick={() => openAcceptModal()}>
+          <label
+            onClick={() => {
+              // console.log("record", record);
+              openAcceptModal(record.userRegistrationRequestID);
+            }}
+          >
             <i className="icon-check icon-accept-column"></i>
           </label>
         );
@@ -130,9 +143,9 @@ const PendingApprovalBank = () => {
       key: "reject",
       ellipsis: true,
       align: "center",
-      render: (text, rejectData) => {
+      render: (text, record) => {
         return (
-          <label onClick={() => openRejectModal()}>
+          <label onClick={() => openRejectModal(record)}>
             <i className="icon-close icon-close-column"></i>
           </label>
         );
@@ -155,8 +168,8 @@ const PendingApprovalBank = () => {
           <Paper className="span-table">
             <Col lg={12} md={12} sm={12} className="mt-3">
               <Table
-                column={columnsCreate}
-                rows={rowData}
+                column={columns}
+                rows={tableData}
                 className="Createuser-table"
                 pagination={false}
               />
@@ -169,6 +182,7 @@ const PendingApprovalBank = () => {
         <CreateModal
           modalReject={createRejectModal}
           setModalReject={setCreateRejectModal}
+          rejectUserData={selectedRequestId}
         />
       ) : null}
 
@@ -176,8 +190,11 @@ const PendingApprovalBank = () => {
         <AcceptModal
           modalAccept={acceptModal}
           setModalAccept={setAcceptModal}
+          acceptHandler={handleAccept}
         />
       ) : null}
+      {securityReducer.Loading && <Loader />}
+      <Notification setOpen={setOpen} open={open.open} message={open.message} />
     </>
   );
 };

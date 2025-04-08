@@ -7,12 +7,25 @@ import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
 import "./Userreport.css";
 import moment from "moment";
+import ActivateConfirmationModal from "../../helpers/Modals/ActivateConfirmationModal";
+import { ConfirmationModalSecurityAdmin } from "../../store/actions/Security_Admin_Modal";
+import { GetAllUserStatusAPI } from "../../store/actions/Auth_Actions";
 
 const Userreport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Get all user status selector
+  const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
+
   let reportBankId = localStorage.getItem("bankID");
+
+  //state for storieng user Status
+  const [statusOptions, setStatusOptions] = useState([]);
+  const [statusID, setStatusID] = useState({
+    value: 0,
+    label: "",
+  });
   // state for disable the previous date from end date by selecting date from start date
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -30,8 +43,7 @@ const Userreport = () => {
   });
 
   // state for select Role
-  const [selectRoleReport, setSelectRoleReport] = useState([]);
-  const [selectRoleValueReport, setSelectRoleValueReport] = useState([]);
+  // const [selectRoleValueReport, setSelectRoleValueReport] = useState([]);
 
   //state for userReports fields
   const [userReport, setUserReport] = useState({
@@ -88,6 +100,14 @@ const Userreport = () => {
     },
   });
 
+  const handleSelectStatus = async (selectedStatus) => {
+    setStatusID(selectedStatus);
+
+    setUserReport((prevState) => ({
+      ...prevState,
+      statusID: { ...prevState.statusID, value: selectedStatus.value },
+    }));
+  };
   // onchange handler for user report
   const userReportHandler = (e) => {
     let name = e.target.name;
@@ -159,8 +179,13 @@ const Userreport = () => {
     });
   };
 
-  //reset handler
+  //reset handler for edit user
   const resetHandler = () => {
+    dispatch(ConfirmationModalSecurityAdmin(true));
+  };
+
+  //reset handler
+  const resetHandlerYes = () => {
     setUserReport({
       ...userReport,
       loginID: {
@@ -188,20 +213,33 @@ const Userreport = () => {
       ...endDateProps,
       value: "",
     });
-    setReportStatusValue([]);
-    setSelectRoleValueReport([]);
+
+    setStatusID({
+      value: 0,
+      label: "",
+    });
+    // setReportStatusValue([]);
+    // setSelectRoleValueReport([]);
   };
 
-  // onchange handler for user Report select role
-  const reportSelectRoleHandler = async (selectedRole) => {
-    setSelectRoleValueReport(selectedRole);
-    setUserReport({
-      ...userReport,
-      roleID: {
-        value: selectedRole,
-      },
-    });
-  };
+  useEffect(() => {
+    dispatch(GetAllUserStatusAPI(navigate));
+  }, []);
+
+  useEffect(() => {
+    if (GetAllUserStatus !== null) {
+      try {
+        let newUserStatusData = GetAllUserStatus.status.map((status) => {
+          return {
+            ...status,
+            value: { value: status.statusID },
+            label: status.statusName,
+          };
+        });
+        setStatusOptions(newUserStatusData);
+      } catch (error) {}
+    }
+  }, [GetAllUserStatus]);
 
   return (
     <>
@@ -215,10 +253,11 @@ const Userreport = () => {
         <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
             <Paper className="span-user-color">
-              <Row className="mb-2">
+              <Row className="g-2 mt-2 mb-2">
                 <Col lg={2} md={2} sm={2} className="pe-0">
                   <TextField
                     name="loginID"
+                    labelClass={"d-none"}
                     maxLength={100}
                     value={userReport.loginID.value}
                     onChange={userReportHandler}
@@ -228,13 +267,13 @@ const Userreport = () => {
                 </Col>
                 <Col lg={2} md={2} sm={2} className="pe-0">
                   <Select
-                    name="roleID"
-                    menuPosition="fixed"
-                    options={selectRoleReport}
-                    onChange={reportSelectRoleHandler}
                     className="report-select-field-edit"
-                    placeholder="Select"
-                    value={selectRoleValueReport}
+                    menuPosition="fixed"
+                    isSearchable
+                    placeholder="Select Status"
+                    options={statusOptions}
+                    value={statusID.value !== 0 ? statusID : null}
+                    onChange={handleSelectStatus}
                   />
                 </Col>
                 <Col lg={2} md={2} sm={2} className="pe-0">
@@ -242,13 +281,14 @@ const Userreport = () => {
                     maxLength={100}
                     name="name"
                     value={userReport.name.value}
+                    labelClass={"d-none"}
                     onChange={userReportHandler}
                     className="text-fields-report"
                     placeholder="Name"
                   />
                 </Col>
 
-                <Col lg={4} md={4} sm={12} className="JS-Security-Datepicker">
+                <Col lg={4} md={4} sm={12} className="d-flex">
                   <DatePicker
                     selected={startDate}
                     highlightToday={true}
@@ -296,7 +336,7 @@ const Userreport = () => {
                   lg={2}
                   md={2}
                   sm={2}
-                  className="d-flex justify-content-center mt-4 align-items-center"
+                  className="d-flex justify-content-center reset-button"
                 >
                   <Button
                     icon={<i className="icon-refresh user-reset"></i>}
@@ -353,6 +393,7 @@ const Userreport = () => {
           </Col>
         </Row>
       </section>
+      <ActivateConfirmationModal onConfirm={resetHandlerYes} />
     </>
   );
 };

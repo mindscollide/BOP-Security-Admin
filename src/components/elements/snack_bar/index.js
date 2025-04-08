@@ -30,7 +30,7 @@ const Notification = ({ setOpen, open, message }) => {
   };
   return (
     <>
-      {message != "" ? (
+      {message !== "" ? (
         <div className={classes.root}>
           <Snackbar
             autoHideDuration={4000}

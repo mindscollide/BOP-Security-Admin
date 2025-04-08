@@ -30,16 +30,10 @@ const EditModal = ({
     setModalEdit(false);
   };
 
-  const options = [
-    { value: "1", label: "Dealer" },
-    { value: "2", label: "Treasury" },
-    { value: "3", label: "Branch" },
-  ];
-
-  const handleSelectRoleChange = (selectedOption) => {
-    setSelectedRole(selectedOption.value); // update state with selected value
-    SelectRoleChangeHandler(selectedOption);
-  };
+  // const handleSelectRoleChange = (selectedOption) => {
+  //   setSelectedRole(selectedOption.value); // update state with selected value
+  //   SelectRoleChangeHandler(selectedOption);
+  // };
 
   return (
     <Fragment>
@@ -95,8 +89,8 @@ const EditModal = ({
                       placeholder="Select Role"
                       className="select-role"
                       value={modalEditState.selectRole}
-                      options={options}
-                      onChange={handleSelectRoleChange}
+                      options={Role}
+                      onChange={SelectRoleChangeHandler}
                     />
                   </Col>
                   <Col lg={6} md={6} sm={12}>

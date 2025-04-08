@@ -1,39 +1,63 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import {
   TextField,
   Button,
   Table,
   Paper,
+  Loader,
   Modal,
 } from "../../../components/elements";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./BankUser.css";
-import { roleOptions, statusOptions } from "../../../helpers/Dropdown";
 import { bankEditUserSchema } from "../../../utils/schemas";
+import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
+import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal";
+import {
+  GetAllUserStatusAPI,
+  RoleListAPI,
+} from "../../../store/actions/Auth_Actions";
 
 const BankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const { securityReducer } = useSelector((state) => state);
+  //Search all corporate Users
+  const SearchBankUsers = useSelector(
+    (state) => state.securityReducer.SearchBankUsersData
+  );
+
+  // Get all user status selector
+  const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
+
+  //Role List
+  const RoleList = useSelector((state) => state.auth.RoleList);
+
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
 
-  //state for selectRole
-  // const [editSelectRole, setEditSelectRole] = useState([...roleOptions]);
-  const editSelectRole = [...roleOptions];
+  // state for selectRole
   const [editSelectRoleValue, setEditSelectRoleValue] = useState("");
 
   // state for select Status
-  // const [editSelectStatus, setEditSelectStatus] = useState([...statusOptions]);
+  const [roleOptions, setRoleOptions] = useState([]);
+  const [roleID, setRoleID] = useState({
+    value: 0,
+    label: "",
+  });
 
-  const editSelectStatus = [...statusOptions];
-  const [editSelectStatusValue, setEditSelectStatusValue] = useState("");
+  //state for storieng user Status
+  const [statusOptions, setStatusOptions] = useState([]);
+  const [statusID, setStatusID] = useState({
+    value: 0,
+    label: "",
+  });
 
   const [dropdownvalue, setDropdownvalue] = useState({
     value: 50,
@@ -47,7 +71,33 @@ const BankUser = () => {
   ];
 
   // state for edit user
-  const [BankEditUser, setBankEditUser] = useState({ ...bankEditUserSchema });
+  const [BankEditUser, setBankEditUser] = useState({
+    EmployeeID: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    LoginID: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    Name: {
+      value: "",
+      errorMessage: "",
+      errorStatus: false,
+    },
+    roleID: {
+      value: 0,
+      errorMessage: "",
+      errorStatus: false,
+    },
+    statusID: {
+      value: 0,
+      errorMessage: "",
+      errorStatus: false,
+    },
+  });
 
   const [modalEditState, setModalEditState] = useState({
     Email: {
@@ -242,27 +292,48 @@ const BankUser = () => {
 
   //reset handler for edit user
   const resetHandler = () => {
+    dispatch(ConfirmationModalSecurityAdmin(true));
+  };
+
+  // show error message When user hit activate btn
+  const resetHandlerYes = () => {
     setBankEditUser({
       ...BankEditUser,
 
-      EmployeeID: {
-        value: "",
-      },
-      LoginID: {
-        value: "",
-      },
-      Name: {
-        value: "",
-      },
-      Role: {
-        value: "",
-      },
-      statusID: {
-        value: "",
-      },
+      EmployeeID: { value: "", errorMessage: "", errorStatus: false },
+      LoginID: { value: "", errorMessage: "", errorStatus: false },
+      Name: { value: "", errorMessage: "", errorStatus: false },
+      Role: { value: "", errorMessage: "", errorStatus: false },
+      statusID: { value: "", errorMessage: "", errorStatus: false },
     });
     setEditSelectRoleValue("");
-    setEditSelectStatusValue("");
+    setStatusID({
+      value: 0,
+      label: "",
+    });
+    setRoleID({
+      value: 0,
+      label: "",
+    });
+  };
+
+  const handleSelectStatus = async (selectedStatus) => {
+    setStatusID(selectedStatus);
+
+    bankEditUserSchema((prevState) => ({
+      ...prevState,
+      statusID: { ...prevState.statusID, value: selectedStatus.value },
+    }));
+  };
+
+  //handle select RoleID
+  const handleSelectRole = async (selectedRole) => {
+    setRoleID(selectedRole);
+
+    bankEditUserSchema((prevState) => ({
+      ...prevState,
+      roleID: { ...prevState.roleID, value: selectedRole.value },
+    }));
   };
 
   //onClose modal
@@ -274,7 +345,7 @@ const BankUser = () => {
       key: "1",
       employeeID: "01",
       loginId: "aunnaqvi12@gmail.com",
-      name: "Aun Ali Khosa",
+      name: "Aun",
       userRoleID: "Dealer",
       BranchName: "-",
       userStatusID: <i className="icon-check edit-user-enabled"></i>,
@@ -282,8 +353,8 @@ const BankUser = () => {
     {
       key: "2",
       employeeID: "02",
-      loginId: "johnnaqvi33@gmail.com",
-      name: "Saif",
+      loginId: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@",
+      name: "123456789012345678901",
       userRoleID: "Branch",
       BranchName: "1234-Saddar",
       userStatusID: <i className="icon-lock Icon-Lock-color"></i>,
@@ -305,7 +376,6 @@ const BankUser = () => {
       dataIndex: "employeeID",
       key: "employeeID",
       align: "left",
-      width: "150px",
       ellipsis: true,
     },
     {
@@ -313,14 +383,14 @@ const BankUser = () => {
       dataIndex: "loginId",
       key: "loginId",
       align: "left",
-      width: "250px",
+      width: "260px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Name</label>,
+      title: <label className="bottom-table-header">Empolyee Name</label>,
       dataIndex: "name",
       key: "name",
-      width: "200px",
+      width: "190px",
       align: "left",
       ellipsis: true,
     },
@@ -328,7 +398,6 @@ const BankUser = () => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
-      width: "100px",
       align: "left",
       ellipsis: true,
     },
@@ -336,7 +405,7 @@ const BankUser = () => {
       title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "BranchName",
       key: "BranchName",
-      width: "100px",
+      width: "190px",
       align: "left",
       ellipsis: true,
     },
@@ -346,13 +415,6 @@ const BankUser = () => {
       key: "userStatusID",
       ellipsis: true,
       align: "center",
-      // render: (text, record) => {
-      //   return (
-      //     <>
-      //       <i className="icon-check edit-user-enabled"></i>
-      //     </>
-      //   );
-      // },
     },
     {
       title: <label className="bottom-table-header">Edit</label>,
@@ -376,10 +438,10 @@ const BankUser = () => {
   const paginationBankConfig = {
     itemRender: (_, type, originalElement) => {
       if (type === "prev") {
-        return <a className="Previous-pagination">Previous</a>;
+        return <href className="Previous-pagination">Previous</href>;
       }
       if (type === "next") {
-        return <a className="Previous-pagination">Next</a>;
+        return <href className="Previous-pagination">Next</href>;
       }
       return originalElement;
     },
@@ -401,7 +463,7 @@ const BankUser = () => {
       loginId: BankEditUser.LoginID.value,
       name: BankEditUser.Name.value,
       userRoleID: editSelectRoleValue.value,
-      userStatusID: editSelectStatusValue.value,
+      userStatusID: statusID.statusID,
     };
     console.log("data is: ", data);
   };
@@ -409,6 +471,39 @@ const BankUser = () => {
     console.log("Proceed clicked");
     // dispatch();
   };
+
+  useEffect(() => {
+    dispatch(GetAllUserStatusAPI(navigate));
+    dispatch(RoleListAPI(navigate));
+  }, []);
+
+  useEffect(() => {
+    if (GetAllUserStatus !== null) {
+      try {
+        let newUserStatusData = GetAllUserStatus.status.map((status) => {
+          return {
+            ...status,
+            value: { value: status.statusID },
+            label: status.statusName,
+          };
+        });
+        setStatusOptions(newUserStatusData);
+      } catch (error) {}
+    }
+    if (RoleList !== null) {
+      try {
+        let newRolesData = RoleList.roles.map((role) => {
+          return {
+            ...role,
+            value: role.roleID,
+            label: role.roleName,
+          };
+        });
+        setRoleOptions(newRolesData);
+      } catch (error) {}
+    }
+  }, [GetAllUserStatus, RoleList]);
+
   return (
     <>
       <section className="edit-user-container">
@@ -427,7 +522,7 @@ const BankUser = () => {
                     className="text-fields-edituser"
                     labelClass="d-none"
                     placeholder="Employee ID"
-                    maxLength={50}
+                    maxLength={100}
                     value={BankEditUser.EmployeeID.value}
                     onChange={editUserValidateHandler}
                   />
@@ -456,28 +551,25 @@ const BankUser = () => {
                 </Col>
                 <Col lg={3} md={3} sm={12}>
                   <Select
-                    name="roleID"
-                    // isClearable
                     isSearchable
-                    options={editSelectRole}
+                    options={roleOptions}
                     placeholder="Select Role"
                     className="edit-user-select-status"
-                    value={editSelectRoleValue}
-                    onChange={setEditSelectRoleValue}
+                    value={roleID.value !== 0 ? roleID : null}
+                    onChange={handleSelectRole}
                   />
                 </Col>
               </Row>
 
-              <Row className="dropdown mt-3">
+              <Row className="mt-3">
                 <Col lg={3} md={3} sm={12} className="pe-0">
                   <Select
-                    name="statusID"
                     className="edit-user-select-status"
+                    isSearchable
                     placeholder="Select Status"
-                    // isClearable
-                    options={editSelectStatus}
-                    value={editSelectStatusValue}
-                    onChange={setEditSelectStatusValue}
+                    options={statusOptions}
+                    value={statusID.value !== 0 ? statusID : null}
+                    onChange={handleSelectStatus}
                   />
                 </Col>
 
@@ -486,7 +578,6 @@ const BankUser = () => {
                     icon={<i className="icon-search icon-search-space"></i>}
                     text="Search"
                     className="search-Bank-Edit-User-btn"
-                    onClick={handleSearch}
                   />
                   <Button
                     icon={<i className="icon-refresh icon-reset-space"></i>}
@@ -542,7 +633,6 @@ const BankUser = () => {
           </Col>
         </Row>
       </section>
-
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
@@ -583,26 +673,27 @@ const BankUser = () => {
                     </>
                   }
                   className="Update-Proceed-btn"
-                  onClick={handleProceed}
                 />
               </Col>
             </Row>
           </Fragment>
         }
       />
-
       {editModalSecurity ? (
         <EditModal
           modalEdit={editModalSecurity}
           modalEditState={modalEditState}
           setModalEditState={setModalEditState}
           setModalEdit={setEditModalSecurity}
-          Role={editSelectRole}
-          StatusData={editSelectStatus}
+          SelectRoleChangeHandler={handleSelectRole}
+          Role={roleOptions}
+          StatusData={statusOptions}
           UpdateButtonOnClick={UpdateBtnHandle}
           onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />
       ) : null}
+      <ActivateConfirmationModal onConfirm={resetHandlerYes} />
+      {securityReducer.Loading && <Loader />}
     </>
   );
 };

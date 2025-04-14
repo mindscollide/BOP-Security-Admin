@@ -20,7 +20,7 @@ export const bankEditUserSchema = {
     errorStatus: false,
   },
   statusID: {
-    value: "",
+    value: 0,
     errorMessage: "",
     errorStatus: false,
   },

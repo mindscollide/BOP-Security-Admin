@@ -335,6 +335,29 @@ const BankUser = () => {
       roleID: { ...prevState.roleID, value: selectedRole.value },
     }));
   };
+  //Handle Select Role for Edit Modal
+  const handleEditModalRole = (option) => {
+    console.log("Role Option is:", option);
+
+    setModalEditState({
+      ...modalEditState,
+      selectRole: {
+        label: option.label,
+        value: option.value,
+      },
+    });
+  };
+
+  const handleEditModalStatus = (option) => {
+    console.log("Staus Option is:", option);
+    setModalEditState({
+      ...modalEditState,
+      selectStatus: {
+        label: option.label,
+        value: option.value,
+      },
+    });
+  };
 
   //onClose modal
   const closeUpdateModal = () => {
@@ -462,13 +485,20 @@ const BankUser = () => {
       employeeID: BankEditUser.EmployeeID.value,
       loginId: BankEditUser.LoginID.value,
       name: BankEditUser.Name.value,
-      userRoleID: editSelectRoleValue.value,
+      userRoleID: roleID.roleID,
       userStatusID: statusID.statusID,
     };
     console.log("data is: ", data);
   };
+
   const handleProceed = () => {
     console.log("Proceed clicked");
+    const data = {
+      SelectRole: modalEditState.selectRole.value,
+      selectStatus: modalEditState.selectStatus.value.value,
+    };
+
+    console.log("data to store is: ", data);
     // dispatch();
   };
 
@@ -503,6 +533,22 @@ const BankUser = () => {
       } catch (error) {}
     }
   }, [GetAllUserStatus, RoleList]);
+
+  // useEffect(() => {
+  //   if (editModalSecurity === false) {
+  //     setModalEditState({
+  //       ...modalEditState,
+  //       selectRole: {
+  //         label: null,
+  //         value: null,
+  //       },
+  //       selectStatus: {
+  //         label: null,
+  //         value: null,
+  //       },
+  //     });
+  //   }
+  // }, [editModalSecurity]);
 
   return (
     <>
@@ -578,6 +624,7 @@ const BankUser = () => {
                     icon={<i className="icon-search icon-search-space"></i>}
                     text="Search"
                     className="search-Bank-Edit-User-btn"
+                    onClick={handleSearch}
                   />
                   <Button
                     icon={<i className="icon-refresh icon-reset-space"></i>}
@@ -673,6 +720,7 @@ const BankUser = () => {
                     </>
                   }
                   className="Update-Proceed-btn"
+                  onClick={handleProceed}
                 />
               </Col>
             </Row>
@@ -685,7 +733,8 @@ const BankUser = () => {
           modalEditState={modalEditState}
           setModalEditState={setModalEditState}
           setModalEdit={setEditModalSecurity}
-          SelectRoleChangeHandler={handleSelectRole}
+          SelectRoleChangeHandler={handleEditModalRole}
+          SelectStatusChangeHandler={handleEditModalStatus}
           Role={roleOptions}
           StatusData={statusOptions}
           UpdateButtonOnClick={UpdateBtnHandle}

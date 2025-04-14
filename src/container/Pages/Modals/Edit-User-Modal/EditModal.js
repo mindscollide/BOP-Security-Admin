@@ -1,11 +1,6 @@
 import React, { Fragment, useState } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import {
-  TextField,
-  Button,
-  Table,
-  Modal,
-} from "../../../../components/elements";
+import { Col, Row } from "react-bootstrap";
+import { TextField, Button, Modal } from "../../../../components/elements";
 // import { Select } from "antd";
 import Select from "react-select";
 import "./EditModal.css";
@@ -13,18 +8,16 @@ import "./EditModal.css";
 const EditModal = ({
   modalEdit,
   modalEditState,
-  setModalEditState,
+  // setModalEditState,
   setModalEdit,
   Role,
   StatusData,
   UpdateButtonOnClick,
   SelectRoleChangeHandler,
+  handleEditModalStatus,
   SelectStatusChangeHandler,
   onChangeTextFieldHandler,
 }) => {
-  // for select role state
-  const [selectedRole, setSelectedRole] = useState(null);
-
   // for close modal handler
   const closeEditModal = async () => {
     setModalEdit(false);
@@ -34,7 +27,7 @@ const EditModal = ({
   //   setSelectedRole(selectedOption.value); // update state with selected value
   //   SelectRoleChangeHandler(selectedOption);
   // };
-
+  console.log("selected Role is: ", modalEditState.selectRole.value);
   return (
     <Fragment>
       <Modal
@@ -74,7 +67,7 @@ const EditModal = ({
                       name="Email"
                       value={modalEditState.Email.value}
                       label={<small className="email-heading">Email</small>}
-                      onChange={onChangeTextFieldHandler}
+                      // onChange={onChangeTextFieldHandler}
                       placeholder="mindscollide.aamir@hbl.com"
                       className="textfield-edit-modal"
                       disable={true}
@@ -88,7 +81,11 @@ const EditModal = ({
                     <Select
                       placeholder="Select Role"
                       className="select-role"
-                      value={modalEditState.selectRole}
+                      value={
+                        modalEditState.selectRole.value !== 0
+                          ? modalEditState.selectRole
+                          : null
+                      }
                       options={Role}
                       onChange={SelectRoleChangeHandler}
                     />
@@ -96,7 +93,11 @@ const EditModal = ({
                   <Col lg={6} md={6} sm={12}>
                     <label className="select-labels">Select Status </label>
                     <Select
-                      value={modalEditState.selectStatus}
+                      value={
+                        modalEditState.selectStatus.value !== 0
+                          ? modalEditState.selectStatus
+                          : null
+                      }
                       placeholder="Select Status"
                       className="select-status"
                       options={StatusData}
@@ -104,7 +105,7 @@ const EditModal = ({
                     />
                   </Col>
                 </Row>
-                {selectedRole === "3" && (
+                {modalEditState.selectRole.value === 9 && (
                   <>
                     <Row className="mt-2">
                       <Col lg={12} md={12} sm={12}>

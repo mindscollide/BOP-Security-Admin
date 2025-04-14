@@ -7,7 +7,6 @@ import {
   Paper,
   Loader,
   Modal,
-  Notification,
 } from "../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -74,12 +73,12 @@ const EditUser = () => {
     },
     ldapAccount: "",
 
-    selectRole: {
-      value: 0,
-      label: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
+    // selectRole: {
+    //   value: 0,
+    //   label: "",
+    //   errorMessage: "",
+    //   errorStatus: false,
+    // },
     selectStatus: {
       value: 0,
       label: "",
@@ -256,6 +255,16 @@ const EditUser = () => {
       statusID: { ...prevState.statusID, value: selectedStatus.value },
     }));
   };
+  const handleEditModalStatus = (option) => {
+    console.log("Staus Option is:", option);
+    setModalEditState({
+      ...modalEditState,
+      selectStatus: {
+        label: option.label,
+        value: option.value,
+      },
+    });
+  };
 
   //reset handler for edit user
   const resetHandler = () => {
@@ -300,12 +309,15 @@ const EditUser = () => {
       key: "1",
       CorporateName: "AfrozAhmed",
       loginID: "Asadnaqvi12@gmail.com",
+      // loginID: "123456789012345678901234567890",
       name: "Asad",
     },
     {
       key: "2",
       CorporateName: "AfrozAhmed",
       loginID: "Aunnaqvi33@gmail.com",
+      // loginID: "1234567890123456789012345678901",
+
       name: "Aun",
     },
     {
@@ -321,21 +333,24 @@ const EditUser = () => {
       title: <label className="bottom-table-header">Corporate Name</label>,
       dataIndex: "CorporateName",
       key: "CorporateName",
+      width: "190px",
       align: "left",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">LoginID</label>,
+      title: <label className="bottom-table-header">Login ID</label>,
       dataIndex: "loginID",
       key: "loginID",
       align: "left",
+      width: "270px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Name</label>,
+      title: <label className="bottom-table-header">User Name</label>,
       dataIndex: "name",
       key: "name",
-      align: "center",
+      width: "190px",
+      align: "centers",
       ellipsis: true,
     },
     {
@@ -399,6 +414,16 @@ const EditUser = () => {
   const handleChangeDropDown = (value) => {
     setDropdownvalue(value);
   };
+
+  const handleSearch = () => {
+    let data = {
+      CorporateName: editUser.CorporateName.value,
+      loginId: editUser.LoginID.value,
+      name: editUser.Name.value,
+      userStatusID: statusID.statusID,
+    };
+    console.log("data is: ", data);
+  };
   useEffect(() => {
     dispatch(GetAllUserStatusAPI(navigate));
   }, []);
@@ -417,6 +442,18 @@ const EditUser = () => {
       } catch (error) {}
     }
   }, [GetAllUserStatus]);
+
+  useEffect(() => {
+    if (editModalSecurity === false) {
+      setModalEditState({
+        ...modalEditState,
+        selectStatus: {
+          label: null,
+          value: null,
+        },
+      });
+    }
+  }, [editModalSecurity]);
 
   return (
     <>
@@ -466,7 +503,7 @@ const EditUser = () => {
                 <Col lg={2} md={2} sm={12} className="dropdown pe-0">
                   <Select
                     name="statusID"
-                    // className="edit-Corporate-user-select-status"
+                    className="edit-Corporate-user-select-status"
                     placeholder="Status"
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
@@ -479,6 +516,7 @@ const EditUser = () => {
                     icon={<i className="icon-search icon-search-space"></i>}
                     text="Search"
                     className="search-Corporate-Edit-User-btn"
+                    onClick={handleSearch}
                   />
                   <Button
                     icon={<i className="icon-refresh icon-reset-space"></i>}
@@ -588,8 +626,9 @@ const EditUser = () => {
           modalEditState={modalEditState}
           setModalEditState={setModalEditState}
           setModalEdit={setEditModalSecurity}
-          Role={editSelectRole}
-          StatusData={editSelectStatus}
+          SelectStatusChangeHandler={handleEditModalStatus}
+          // Role={roleOptions}
+          StatusData={statusOptions}
           UpdateButtonOnClick={UpdateBtnHandle}
           onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />

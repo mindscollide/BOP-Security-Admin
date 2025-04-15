@@ -14,7 +14,10 @@ import Select from "react-select";
 
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./BankUser.css";
-import { bankEditUserSchema } from "../../../utils/schemas";
+import {
+  bankModalEditStateSchema,
+  searchEditBankUserSchema,
+} from "../../../utils/schemas";
 import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal";
 import {
@@ -38,12 +41,17 @@ const BankUser = () => {
   //Role List
   const RoleList = useSelector((state) => state.auth.RoleList);
 
+  // state for edit bank user
+  const [BankEditUser, setBankEditUser] = useState(searchEditBankUserSchema);
+
+  // state for Modal Edit Bank User
+  const [modalEditState, setModalEditState] = useState(
+    bankModalEditStateSchema
+  );
+
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
-
-  // state for selectRole
-  const [editSelectRoleValue, setEditSelectRoleValue] = useState("");
 
   // state for select Status
   const [roleOptions, setRoleOptions] = useState([]);
@@ -52,7 +60,7 @@ const BankUser = () => {
     label: "",
   });
 
-  //state for storieng user Status
+  //state for storing user Status
   const [statusOptions, setStatusOptions] = useState([]);
   const [statusID, setStatusID] = useState({
     value: 0,
@@ -70,74 +78,11 @@ const BankUser = () => {
     { value: 150, label: "150" },
   ];
 
-  // state for edit user
-  const [BankEditUser, setBankEditUser] = useState({
-    EmployeeID: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    LoginID: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    Name: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    roleID: {
-      value: 0,
-      errorMessage: "",
-      errorStatus: false,
-    },
-    statusID: {
-      value: 0,
-      errorMessage: "",
-      errorStatus: false,
-    },
-  });
-
-  const [modalEditState, setModalEditState] = useState({
-    Email: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    FirstName: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    LastName: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    ldapAccount: "",
-
-    selectRole: {
-      value: 0,
-      label: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    selectStatus: {
-      value: 0,
-      label: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    userID: 0,
-  });
-
   const onchangeModalTextFieldsHandler = (e) => {
     let name = e.target.name;
     let value = e.target.value;
 
     if (name === "Email" && value !== "") {
-      console.log("valuevalueemailvaluevalueemail", value);
       if (value !== "") {
         setModalEditState({
           ...modalEditState,
@@ -290,37 +235,10 @@ const BankUser = () => {
     }
   };
 
-  //reset handler for edit user
-  const resetHandler = () => {
-    dispatch(ConfirmationModalSecurityAdmin(true));
-  };
-
-  // show error message When user hit activate btn
-  const resetHandlerYes = () => {
-    setBankEditUser({
-      ...BankEditUser,
-
-      EmployeeID: { value: "", errorMessage: "", errorStatus: false },
-      LoginID: { value: "", errorMessage: "", errorStatus: false },
-      Name: { value: "", errorMessage: "", errorStatus: false },
-      Role: { value: "", errorMessage: "", errorStatus: false },
-      statusID: { value: "", errorMessage: "", errorStatus: false },
-    });
-    setEditSelectRoleValue("");
-    setStatusID({
-      value: 0,
-      label: "",
-    });
-    setRoleID({
-      value: 0,
-      label: "",
-    });
-  };
-
   const handleSelectStatus = async (selectedStatus) => {
     setStatusID(selectedStatus);
 
-    bankEditUserSchema((prevState) => ({
+    setBankEditUser((prevState) => ({
       ...prevState,
       statusID: { ...prevState.statusID, value: selectedStatus.value },
     }));
@@ -330,11 +248,12 @@ const BankUser = () => {
   const handleSelectRole = async (selectedRole) => {
     setRoleID(selectedRole);
 
-    bankEditUserSchema((prevState) => ({
+    setBankEditUser((prevState) => ({
       ...prevState,
       roleID: { ...prevState.roleID, value: selectedRole.value },
     }));
   };
+
   //Handle Select Role for Edit Modal
   const handleEditModalRole = (option) => {
     console.log("Role Option is:", option);
@@ -359,10 +278,37 @@ const BankUser = () => {
     });
   };
 
+  //reset handler for edit user
+  const resetHandler = () => {
+    dispatch(ConfirmationModalSecurityAdmin(true));
+  };
+
+  // show error message When user hit activate btn
+  const resetHandlerYes = () => {
+    setBankEditUser({
+      ...BankEditUser,
+
+      EmployeeID: { value: "", errorMessage: "", errorStatus: false },
+      LoginID: { value: "", errorMessage: "", errorStatus: false },
+      Name: { value: "", errorMessage: "", errorStatus: false },
+      Role: { value: "", errorMessage: "", errorStatus: false },
+      statusID: { value: "", errorMessage: "", errorStatus: false },
+    });
+    setStatusID({
+      value: 0,
+      label: "",
+    });
+    setRoleID({
+      value: 0,
+      label: "",
+    });
+  };
+
   //onClose modal
   const closeUpdateModal = () => {
     setUpdateModal(false);
   };
+
   const dataSource = [
     {
       key: "1",
@@ -533,22 +479,6 @@ const BankUser = () => {
       } catch (error) {}
     }
   }, [GetAllUserStatus, RoleList]);
-
-  // useEffect(() => {
-  //   if (editModalSecurity === false) {
-  //     setModalEditState({
-  //       ...modalEditState,
-  //       selectRole: {
-  //         label: null,
-  //         value: null,
-  //       },
-  //       selectStatus: {
-  //         label: null,
-  //         value: null,
-  //       },
-  //     });
-  //   }
-  // }, [editModalSecurity]);
 
   return (
     <>

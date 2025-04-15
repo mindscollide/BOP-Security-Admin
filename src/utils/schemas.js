@@ -1,4 +1,4 @@
-export const bankEditUserSchema = {
+export const searchEditBankUserSchema = {
   EmployeeID: {
     value: "",
     errorMessage: "",
@@ -26,17 +26,46 @@ export const bankEditUserSchema = {
   },
 };
 
-export const searchCorporateUserSchema = {
+export const bankModalEditStateSchema = {
+  Email: {
+    value: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  FirstName: {
+    value: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  LastName: {
+    value: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  ldapAccount: "",
+
+  selectRole: {
+    value: 0,
+    label: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  selectStatus: {
+    value: 0,
+    label: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  userID: 0,
+};
+
+export const searchEditCorporateUserSchema = {
   CorporateName: {
     value: "",
     errorMessage: "",
     errorStatus: false,
   },
-  email: {
-    value: "",
-    errorMessage: "",
-    errorStatus: false,
-  },
+
   LoginID: {
     value: "",
     errorMessage: "",
@@ -52,4 +81,31 @@ export const searchCorporateUserSchema = {
     errorMessage: "",
     errorStatus: false,
   },
+};
+
+export const corportateModalEditState = {
+  Email: {
+    value: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  FirstName: {
+    value: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  LastName: {
+    value: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  ldapAccount: "",
+
+  selectStatus: {
+    value: 0,
+    label: "",
+    errorMessage: "",
+    errorStatus: false,
+  },
+  userID: 0,
 };

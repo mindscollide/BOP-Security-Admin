@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Container, Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import {
   TextField,
   Button,
@@ -16,7 +16,10 @@ import EditCorporateModal from "../../Pages/Modals/Edit-Corporate-User-Modal/Edi
 import "./CorporateUser.css";
 import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal";
-import { searchCorporateUserSchema } from "../../../utils/schemas";
+import {
+  corportateModalEditState,
+  searchEditCorporateUserSchema,
+} from "../../../utils/schemas";
 import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
 const EditUser = () => {
   const navigate = useNavigate();
@@ -28,72 +31,41 @@ const EditUser = () => {
   // Get all user status selector
   const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
 
+  // state for edit corporate user
+  const [editUser, setEditUser] = useState(searchEditCorporateUserSchema);
+
+  // state for Modal edit corporate user
+  const [modalEditState, setModalEditState] = useState(
+    corportateModalEditState
+  );
+
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
 
-  //state for selectRole
-  const [editSelectRole, setEditSelectRole] = useState([]);
-  const [editSelectRoleValue, setEditSelectRoleValue] = useState([]);
-
-  // state for select Status
-  const [editSelectStatus, setEditSelectStatus] = useState([]);
-  const [editSelectStatusValue, setEditSelectStatusValue] = useState([]);
-
-  //state for storieng user Status
+  //state for storing user Status
   const [statusOptions, setStatusOptions] = useState([]);
-
   const [statusID, setStatusID] = useState({
     value: 0,
     label: "",
   });
+
   const [dropdownvalue, setDropdownvalue] = useState({
     value: 50,
     label: "50",
   });
 
-  // state for edit user
-  const [editUser, setEditUser] = useState(searchCorporateUserSchema);
-
-  const [modalEditState, setModalEditState] = useState({
-    Email: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    FirstName: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    LastName: {
-      value: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    ldapAccount: "",
-
-    // selectRole: {
-    //   value: 0,
-    //   label: "",
-    //   errorMessage: "",
-    //   errorStatus: false,
-    // },
-    selectStatus: {
-      value: 0,
-      label: "",
-      errorMessage: "",
-      errorStatus: false,
-    },
-    userID: 0,
-  });
+  const options = [
+    { value: 50, label: "50" },
+    { value: 100, label: "100" },
+    { value: 150, label: "150" },
+  ];
 
   const onchangeModalTextFieldsHandler = (e) => {
     let name = e.target.name;
     let value = e.target.value;
 
     if (name === "Email" && value !== "") {
-      console.log("valuevalueemailvaluevalueemail", value);
       if (value !== "") {
         setModalEditState({
           ...modalEditState,
@@ -255,6 +227,7 @@ const EditUser = () => {
       statusID: { ...prevState.statusID, value: selectedStatus.value },
     }));
   };
+
   const handleEditModalStatus = (option) => {
     console.log("Staus Option is:", option);
     setModalEditState({
@@ -291,7 +264,7 @@ const EditUser = () => {
         value: 0,
       },
     });
-    setEditSelectRoleValue([]);
+    // setEditSelectRoleValue([]);
     setStatusID({
       value: 0,
       label: "",
@@ -397,14 +370,7 @@ const EditUser = () => {
       }
       return originalElement;
     },
-    // other pagination settings like current, pageSize, etc.
   };
-
-  const options = [
-    { value: 50, label: "50" },
-    { value: 100, label: "100" },
-    { value: 150, label: "150" },
-  ];
 
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);
@@ -424,6 +390,7 @@ const EditUser = () => {
     };
     console.log("data is: ", data);
   };
+
   useEffect(() => {
     dispatch(GetAllUserStatusAPI(navigate));
   }, []);

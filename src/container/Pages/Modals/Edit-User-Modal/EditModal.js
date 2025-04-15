@@ -81,12 +81,12 @@ const EditModal = ({
                     <Select
                       placeholder="Select Role"
                       className="select-role"
+                      options={Role}
                       value={
                         modalEditState.selectRole.value !== 0
                           ? modalEditState.selectRole
                           : null
                       }
-                      options={Role}
                       onChange={SelectRoleChangeHandler}
                     />
                   </Col>

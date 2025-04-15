@@ -13,12 +13,12 @@ import "./EditCorporateModal.css";
 const EditCorporateModal = ({
   modalEdit,
   modalEditState,
-  setModalEditState,
+  // setModalEditState,
   setModalEdit,
-  Role,
+  // Role,
   StatusData,
   UpdateButtonOnClick,
-  SelectRoleChangeHandler,
+  // SelectRoleChangeHandler,
   SelectStatusChangeHandler,
   onChangeTextFieldHandler,
 }) => {
@@ -78,7 +78,11 @@ const EditCorporateModal = ({
                   <Col lg={12} md={12} sm={12}>
                     <label className="select-labels">Select Status</label>
                     <Select
-                      value={modalEditState.selectStatus}
+                      value={
+                        modalEditState.selectStatus.value !== 0
+                          ? modalEditState.selectStatus
+                          : null
+                      }
                       placeholder="Select Status"
                       className="select-status"
                       options={StatusData}

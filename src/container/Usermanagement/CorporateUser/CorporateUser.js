@@ -11,7 +11,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-
 import EditCorporateModal from "../../Pages/Modals/Edit-Corporate-User-Modal/EditCorporateModal";
 import "./CorporateUser.css";
 import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";

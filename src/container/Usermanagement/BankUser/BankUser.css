@@ -19,7 +19,7 @@
 .text-fields-edituser {
   font-size: 13px;
   font-weight: 400;
-  font-family: "Roboto", sans-serif !important;
+  /* font-family: "Roboto", sans-serif !important; */
   width: 100% !important;
   max-width: 100% !important;
   height: 37px;
@@ -31,7 +31,7 @@
   font-size: 13px !important;
   font-weight: 400;
   align-items: center !important;
-  font-family: "Roboto", sans-serif;
+  /* font-family: "Roboto", sans-serif; */
   width: 90px !important;
   z-index: 2 !important;
 }
@@ -40,7 +40,7 @@
   font-size: 14px;
   font-weight: 400;
   color: #45494d;
-  font-family: "Roboto", sans-serif;
+  /* font-family: "Roboto", sans-serif; */
 }
 
 .Previous-pagination {

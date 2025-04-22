@@ -21,7 +21,6 @@ const PendingApprovalCorporate = () => {
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const [selectedRecord, setSelectedRecord] = useState(null);
 
   //Global State
   const { securityReducer } = useSelector((state) => state);

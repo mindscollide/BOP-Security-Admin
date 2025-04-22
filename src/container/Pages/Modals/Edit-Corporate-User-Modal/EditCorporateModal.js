@@ -1,11 +1,6 @@
 import React, { Fragment } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import {
-  TextField,
-  Button,
-  Table,
-  Modal,
-} from "../../../../components/elements";
+import { Col, Row } from "react-bootstrap";
+import { TextField, Button, Modal } from "../../../../components/elements";
 // import { Select } from "antd";
 import Select from "react-select";
 import "./EditCorporateModal.css";
@@ -79,7 +74,7 @@ const EditCorporateModal = ({
                     <label className="select-labels">Select Status</label>
                     <Select
                       value={
-                        modalEditState.selectStatus.value !== 0
+                        modalEditState.selectStatus.value !== null
                           ? modalEditState.selectStatus
                           : null
                       }

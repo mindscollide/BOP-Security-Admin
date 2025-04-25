@@ -47,8 +47,9 @@ const refreshtokenSuccess = (response, message) => {
 };
 // API
 const RefreshToken = (navigate) => {
-  let Token = JSON.parse(localStorage.getItem("token"));
-  let RefreshToken = JSON.parse(localStorage.getItem("refreshToken"));
+  console.log("RefreshTokenRefreshToken");
+  let Token = localStorage.getItem("token");
+  let RefreshToken = localStorage.getItem("refreshToken");
   console.log("RefreshToken", Token, RefreshToken);
   let Data = {
     Token: Token,
@@ -67,7 +68,7 @@ const RefreshToken = (navigate) => {
       .then(async (response) => {
         if (response.data.responseCode === 205) {
           let message2 = "Your Session has expired. Please login again";
-          dispatch(signOut(navigate, message2));
+          signOut(navigate, message2);
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted) {
             if (
@@ -332,7 +333,10 @@ const loginSecurityAdminAPI = (navigate, data) => {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminSuccess("LDAP auth Successful"));
               localStorage.setItem("token", response.data.responseResult.token);
-              localStorage.setItem("refreshToken", response.data.responseResult.refreshToken)
+              localStorage.setItem(
+                "refreshToken",
+                response.data.responseResult.refreshToken
+              );
               localStorage.setItem(
                 "userID",
                 response.data.responseResult.userID

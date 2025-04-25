@@ -672,7 +672,7 @@ const SearchCorporateUsersAPI = (navigate, data) => {
           if (response.data.responseResult.isExecuted === true) {
             if (
               response.data.responseResult.responseMessage.toLowerCase() ===
-              "SystemAdmin_SystemAdminManager_SearchCorporateUsers_01".toLowerCase()
+              "SecurityAdmin_SecurityAdminManager_SearchCorporateUsers_01".toLowerCase()
             ) {
               dispatch(
                 SearchCorporateUsersSuccess(
@@ -684,7 +684,7 @@ const SearchCorporateUsersAPI = (navigate, data) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SystemAdmin_SystemAdminManager_SearchCorporateUsers_02".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SearchCorporateUsers_02".toLowerCase()
                 )
             ) {
               dispatch(SearchCorporateUsersFail("No Data Available"));
@@ -692,7 +692,7 @@ const SearchCorporateUsersAPI = (navigate, data) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SystemAdmin_SystemAdminManager_SearchCorporateUsers_03".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SearchCorporateUsers_03".toLowerCase()
                 )
             ) {
               dispatch(SearchCorporateUsersFail("Exception"));
@@ -755,7 +755,7 @@ const SearchBankUsersAPI = (navigate, data) => {
           if (response.data.responseResult.isExecuted === true) {
             if (
               response.data.responseResult.responseMessage.toLowerCase() ===
-              "SystemAdmin_SystemAdminManager_SearchBankUsers_01".toLowerCase()
+              "SecurityAdmin_SecurityAdminManager_SearchBankUsers_01".toLowerCase()
             ) {
               dispatch(
                 SearchBankUsersSuccess(
@@ -767,7 +767,7 @@ const SearchBankUsersAPI = (navigate, data) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SystemAdmin_SystemAdminManager_SearchBankUsers_02".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SearchBankUsers_02".toLowerCase()
                 )
             ) {
               dispatch(SearchBankUsersFail("No Data Available"));
@@ -775,7 +775,7 @@ const SearchBankUsersAPI = (navigate, data) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "SystemAdmin_SystemAdminManager_SearchBankUsers_03".toLowerCase()
+                  "SecurityAdmin_SecurityAdminManager_SearchBankUsers_03".toLowerCase()
                 )
             ) {
               dispatch(SearchBankUsersFail("Exception"));

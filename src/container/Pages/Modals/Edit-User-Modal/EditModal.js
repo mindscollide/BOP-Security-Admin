@@ -7,17 +7,12 @@ import "./EditModal.css";
 
 const EditModal = ({
   modalEdit,
-  modalEditState,
-  // setModalEditState,
+  editBankUserUpdate,
   setModalEdit,
-  Role,
-  StatusData,
-  UpdateButtonOnClick,
-  SelectRoleChangeHandler,
-  handleEditModalStatus,
-  SelectStatusChangeHandler,
-  onChangeTextFieldHandler,
+  Roles,
+  StatusList,
 }) => {
+  // const [edit]
   // for close modal handler
   const closeEditModal = async () => {
     setModalEdit(false);
@@ -27,16 +22,17 @@ const EditModal = ({
   //   setSelectedRole(selectedOption.value); // update state with selected value
   //   SelectRoleChangeHandler(selectedOption);
   // };
-  console.log("selected Role is: ", modalEditState.selectRole.value);
+  console.log("selected Role is: ", editBankUserUpdate);
+  // let selectRole = 
   return (
     <Fragment>
       <Modal
         show={modalEdit}
         setShow={setModalEdit}
-        className="modaldialog modal-Edit-styles"
+        className='modaldialog modal-Edit-styles'
         modalHeaderClassName={"header-Edit-Modal-close-btn"}
-        modalFooterClassName="modal-footer-edit"
-        size="lg"
+        modalFooterClassName='modal-footer-edit'
+        size='lg'
         onHide={closeEditModal}
         ModalBody={
           <Fragment>
@@ -47,65 +43,63 @@ const EditModal = ({
                     lg={12}
                     md={12}
                     sm={12}
-                    className="d-flex justify-content-center"
-                  >
-                    <label className="Modal-Title-Heading">Edit User</label>
+                    className='d-flex justify-content-center'>
+                    <label className='Modal-Title-Heading'>Edit User</label>
                   </Col>
                 </Row>
-                <Row className="mt-3">
+                <Row className='mt-3'>
                   <Col
                     lg={12}
                     md={12}
                     sm={12}
-                    className="d-flex justify-content-start"
-                  ></Col>
+                    className='d-flex justify-content-start'></Col>
                 </Row>
 
                 <Row>
                   <Col lg={12} md={12} sm={12}>
                     <TextField
-                      name="Email"
-                      value={modalEditState.Email.value}
-                      label={<small className="email-heading">Email</small>}
+                      name='Email'
+                      value={editBankUserUpdate.email}
+                      label={<small className='email-heading'>Email</small>}
                       // onChange={onChangeTextFieldHandler}
-                      placeholder="mindscollide.aamir@hbl.com"
-                      className="textfield-edit-modal"
+                      // placeholder='mindscollide.aamir@hbl.com'
+                      className='textfield-edit-modal'
                       disable={true}
                     />
                   </Col>
                 </Row>
 
-                <Row className="mt-3">
+                <Row className='mt-3'>
                   <Col lg={6} md={6} sm={12}>
-                    <label className="select-labels">Select Role</label>
+                    <label className='select-labels'>Select Role</label>
                     <Select
-                      placeholder="Select Role"
-                      className="select-role"
-                      options={Role}
-                      value={
-                        modalEditState.selectRole.value !== 0
-                          ? modalEditState.selectRole
-                          : null
-                      }
-                      onChange={SelectRoleChangeHandler}
+                      placeholder='Select Role'
+                      className='select-role'
+                      options={Roles}
+                      // value={
+                      //   editBankUserUpdate.userRoleID.value !== 0
+                      //     ? modalEditState.selectRole
+                      //     : null
+                      // }
+                      // onChange={SelectRoleChangeHandler}
                     />
                   </Col>
                   <Col lg={6} md={6} sm={12}>
-                    <label className="select-labels">Select Status </label>
+                    <label className='select-labels'>Select Status </label>
                     <Select
-                      value={
-                        modalEditState.selectStatus.value !== 0
-                          ? modalEditState.selectStatus
-                          : null
-                      }
-                      placeholder="Select Status"
-                      className="select-status"
-                      options={StatusData}
-                      onChange={SelectStatusChangeHandler}
+                      // value={
+                      //   modalEditState.selectStatus.value !== 0
+                      //     ? modalEditState.selectStatus
+                      //     : null
+                      // }
+                      placeholder='Select Status'
+                      className='select-status'
+                      options={StatusList}
+                      // onChange={SelectStatusChangeHandler}
                     />
                   </Col>
                 </Row>
-                {modalEditState.selectRole.value === 9 && (
+                {/* {modalEditState.selectRole.value === 9 && (
                   <>
                     <Row className="mt-2">
                       <Col lg={12} md={12} sm={12}>
@@ -120,25 +114,25 @@ const EditModal = ({
                       </Col>
                     </Row>
                   </>
-                )}
+                )} */}
               </Fragment>
             ) : null}
           </Fragment>
         }
         ModalFooter={
           <Fragment>
-            <Row className="mb-3">
-              <Col lg={12} md={12} sm={12} className="footer-btn-col">
+            <Row className='mb-3'>
+              <Col lg={12} md={12} sm={12} className='footer-btn-col'>
                 <Button
-                  icon={<i className="icon-refresh icon-right"></i>}
-                  text="Update"
-                  className="update-btn-editModal"
-                  onClick={UpdateButtonOnClick}
+                  icon={<i className='icon-refresh icon-right'></i>}
+                  text='Update'
+                  className='update-btn-editModal'
+                  // onClick={UpdateButtonOnClick}
                 />
                 <Button
-                  icon={<i className="icon-close icon-right"></i>}
-                  text="Discard"
-                  className="discard-btn-editModal"
+                  icon={<i className='icon-close icon-right'></i>}
+                  text='Discard'
+                  className='discard-btn-editModal'
                   onClick={closeEditModal}
                 />
               </Col>

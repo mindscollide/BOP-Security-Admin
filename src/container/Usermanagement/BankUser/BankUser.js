@@ -36,7 +36,9 @@ const BankUser = () => {
     (state) => state.securityReducer.SearchBankUsersData
   );
 
-  console.log(SearchBankUsers, "SearchBankUsersSearchBankUsers");
+  const [editBankUserUpdate, setBankUserUpdate] = useState(null);
+
+  console.log(editBankUserUpdate, "SearchBankUsersSearchBankUsers");
 
   // Get all user status selector
   const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
@@ -312,7 +314,6 @@ const BankUser = () => {
   const resetHandlerYes = () => {
     setBankEditUser({
       ...BankEditUser,
-
       EmployeeID: { value: "", errorMessage: "", errorStatus: false },
       LoginID: { value: "", errorMessage: "", errorStatus: false },
       Name: { value: "", errorMessage: "", errorStatus: false },
@@ -327,6 +328,15 @@ const BankUser = () => {
       value: 0,
       label: "",
     });
+    let Data = {
+      Name: "",
+      EmployeeID: "",
+      Email: "",
+      RoleID: 0,
+      PageNumber: 1,
+      Length: 10,
+    };
+    dispatch(SearchBankUsersAPI(navigate, Data));
   };
 
   //onClose modal
@@ -334,35 +344,11 @@ const BankUser = () => {
     setUpdateModal(false);
   };
 
-  const dataSource = [
-    {
-      key: "1",
-      employeeID: "01",
-      loginId: "aunnaqvi12@gmail.com",
-      name: "Aun",
-      userRoleID: "Dealer",
-      BranchName: "-",
-      userStatusID: <i className='icon-check edit-user-enabled'></i>,
-    },
-    {
-      key: "2",
-      employeeID: "02",
-      loginId: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@",
-      name: "123456789012345678901",
-      userRoleID: "Branch",
-      BranchName: "1234-Saddar",
-      userStatusID: <i className='icon-lock Icon-Lock-color'></i>,
-    },
-    {
-      key: "3",
-      employeeID: "03",
-      loginId: "bilalnaqvi33@gmail.com",
-      name: "Bilal",
-      userRoleID: "Branch",
-      BranchName: "-",
-      userStatusID: <i className='icon-lock Icon-Lock-color'></i>,
-    },
-  ];
+  const handleClickEdit = (record) => {
+    setEditModalSecurity(true);
+    setBankUserUpdate(record);
+    // setModalEditState
+  };
 
   const columns = [
     {
@@ -371,7 +357,7 @@ const BankUser = () => {
       key: "employeeID",
       align: "left",
       ellipsis: true,
-      width: "200px",
+      width: "100px",
     },
     {
       title: <label className='bottom-table-header'>LoginID</label>,
@@ -394,13 +380,24 @@ const BankUser = () => {
       dataIndex: "userRoleID",
       key: "userRoleID",
       align: "left",
+      width: "190px",
       ellipsis: true,
+      render: (text, record) => {
+        if (roleOptions.length > 0) {
+          let roleNameFind = roleOptions.find(
+            (role, index) => role.roleID === record.userRoleID
+          );
+          console.log(roleNameFind, "roleNameFind");
+          return roleNameFind.roleName;
+        }
+        return text;
+      },
     },
     {
       title: <label className='bottom-table-header'>Branch</label>,
       dataIndex: "BranchName",
       key: "BranchName",
-      width: "190px",
+      width: "110px",
       align: "left",
       ellipsis: true,
       render: (text, record) => {
@@ -415,6 +412,16 @@ const BankUser = () => {
       key: "userStatusID",
       ellipsis: true,
       align: "center",
+      render: (text, record) => {
+        if (statusOptions.length > 0) {
+          let StatusNameFind = statusOptions.find(
+            (role, index) => role.statusID === record.userStatusID
+          );
+          console.log(StatusNameFind, "roleNameFind");
+          return StatusNameFind.statusName;
+        }
+        return text;
+      },
     },
     {
       title: <label className='bottom-table-header'>Edit</label>,
@@ -426,7 +433,9 @@ const BankUser = () => {
         return (
           <label
             className='edit-update-column'
-            onClick={() => setEditModalSecurity(true)}>
+            onClick={() => handleClickEdit(record)}
+            // onClick={() => handleClickEdit setEditModalSecurity(true)}
+          >
             <i className='icon-edit edit-user-icon-color' />
           </label>
         );
@@ -457,14 +466,6 @@ const BankUser = () => {
   };
 
   const handleSearch = () => {
-    let data = {
-      employeeID: BankEditUser.EmployeeID.value,
-      loginId: BankEditUser.LoginID.value,
-      name: BankEditUser.Name.value,
-      userRoleID: roleID.roleID,
-      userStatusID: statusID.statusID,
-    };
-    console.log("data is: ", data);
     let Data = {
       Name: BankEditUser.Name.value,
       EmployeeID: BankEditUser.EmployeeID.valu,
@@ -641,7 +642,7 @@ const BankUser = () => {
                     rows={bankUserTableData}
                     className='Edituser-table'
                     pagination={paginationBankConfig}
-                    scroll={{ y: 350 }}
+                    scroll={{ y: 350, x: true }}
                   />
                 </Col>
               </Row>
@@ -658,55 +659,42 @@ const BankUser = () => {
         modalFooterClassName='modal-update-footer'
         onHide={closeUpdateModal}
         ModalBody={
-          <Fragment>
-            {updateModal ? (
-              <Fragment>
-                <Row>
-                  <Col lg={12} md={12} sm={12}>
-                    <p className='update-modal-heading'>
-                      Are you sure want to update?
-                    </p>
-                  </Col>
-                </Row>
-              </Fragment>
-            ) : null}
-          </Fragment>
+          <Row>
+            <Col lg={12} md={12} sm={12}>
+              <p className='update-modal-heading'>
+                Are you sure want to update?
+              </p>
+            </Col>
+          </Row>
         }
         ModalFooter={
-          <Fragment>
-            <Row>
-              <Col
-                lg={12}
-                md={12}
-                sm={12}
-                className='d-flex justify-content-center'>
-                <Button
-                  icon={
-                    <>
-                      <span>Proceed</span>
-                      <i className='icon-arrow-right'></i>
-                    </>
-                  }
-                  className='Update-Proceed-btn'
-                  onClick={handleProceed}
-                />
-              </Col>
-            </Row>
-          </Fragment>
+          <Row>
+            <Col
+              lg={12}
+              md={12}
+              sm={12}
+              className='d-flex justify-content-center'>
+              <Button
+                icon={
+                  <>
+                    <span>Proceed</span>
+                    <i className='icon-arrow-right'></i>
+                  </>
+                }
+                className='Update-Proceed-btn'
+                onClick={handleProceed}
+              />
+            </Col>
+          </Row>
         }
       />
       {editModalSecurity ? (
         <EditModal
           modalEdit={editModalSecurity}
-          modalEditState={modalEditState}
-          setModalEditState={setModalEditState}
+          editBankUserUpdate={editBankUserUpdate}
           setModalEdit={setEditModalSecurity}
-          SelectRoleChangeHandler={handleEditModalRole}
-          SelectStatusChangeHandler={handleEditModalStatus}
-          Role={roleOptions}
-          StatusData={statusOptions}
-          UpdateButtonOnClick={UpdateBtnHandle}
-          onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
+          Roles={roleOptions}
+          StatusList={statusOptions}
         />
       ) : null}
       <ActivateConfirmationModal onConfirm={resetHandlerYes} />

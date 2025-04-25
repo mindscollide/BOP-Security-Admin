@@ -332,6 +332,7 @@ const loginSecurityAdminAPI = (navigate, data) => {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminSuccess("LDAP auth Successful"));
               localStorage.setItem("token", response.data.responseResult.token);
+              localStorage.setItem("refreshToken", response.data.responseResult.refreshToken)
               localStorage.setItem(
                 "userID",
                 response.data.responseResult.userID

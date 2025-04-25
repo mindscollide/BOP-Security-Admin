@@ -31,7 +31,7 @@ const Header = () => {
             </Navbar.Brand>
             <Dropdown>
               <Dropdown.Toggle className="dropdown-toggle-header2">
-                <p className="user-name-header2">Owais Wajid</p>
+                <p className="user-name-header2">{localStorage.getItem("userName")}</p>
                 <i className="icon-arrow-down"></i>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown_menu-Header2">

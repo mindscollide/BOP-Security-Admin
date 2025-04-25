@@ -20,13 +20,20 @@ import {
   searchEditCorporateUserSchema,
 } from "../../../utils/schemas";
 import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
+import { SearchCorporateUsersAPI } from "../../../store/actions/Security_Admin";
 const EditUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   //Global State
   const { securityReducer } = useSelector((state) => state);
-
+  const SearchCorporateUsersData = useSelector(
+    (state) => state.securityReducer.SearchCorporateUsersData
+  );
+  console.log(
+    SearchCorporateUsersData,
+    "securityReducersecurityReducersecurityReducer"
+  );
   // Get all user status selector
   const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
 
@@ -49,6 +56,8 @@ const EditUser = () => {
     label: "",
   });
 
+  const [corporateUserTableData, setCorporateUserTableData] = useState([]);
+
   const [dropdownvalue, setDropdownvalue] = useState({
     value: 50,
     label: "50",
@@ -60,6 +69,28 @@ const EditUser = () => {
     { value: 150, label: "150" },
   ];
 
+  useEffect(() => {
+    dispatch(GetAllUserStatusAPI(navigate));
+    let Data = {
+      Name: "",
+      CompanyName: "",
+      Email: "",
+      PageNumber: 1,
+      Length: 10,
+    };
+
+    dispatch(SearchCorporateUsersAPI(navigate, Data));
+  }, []);
+
+  useEffect(() => {
+    if (SearchCorporateUsersData !== null) {
+      try {
+        const { corporateUsers, totalRecords, pageNumbers } =
+          SearchCorporateUsersData;
+        setCorporateUserTableData(corporateUsers);
+      } catch (error) {}
+    }
+  }, [SearchCorporateUsersData]);
   const onchangeModalTextFieldsHandler = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -245,6 +276,15 @@ const EditUser = () => {
 
   //reset handler for edit user
   const resetHandlerYes = () => {
+    let Data = {
+      Name: "",
+      CompanyName: "",
+      Email: "",
+      PageNumber: 1,
+      Length: 10,
+    };
+
+    dispatch(SearchCorporateUsersAPI(navigate, Data));
     setEditUser({
       ...editUser,
       CorporateName: {
@@ -302,23 +342,23 @@ const EditUser = () => {
 
   const columns = [
     {
-      title: <label className="bottom-table-header">Corporate Name</label>,
-      dataIndex: "CorporateName",
+      title: <label className='bottom-table-header'>Corporate Name</label>,
+      dataIndex: "corporateName",
       key: "CorporateName",
       width: "190px",
       align: "left",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Login ID</label>,
-      dataIndex: "loginID",
-      key: "loginID",
+      title: <label className='bottom-table-header'>Login ID</label>,
+      dataIndex: "email",
+      key: "email",
       align: "left",
       width: "270px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">User Name</label>,
+      title: <label className='bottom-table-header'>User Name</label>,
       dataIndex: "name",
       key: "name",
       width: "190px",
@@ -326,7 +366,7 @@ const EditUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Status</label>,
+      title: <label className='bottom-table-header'>Status</label>,
       dataIndex: "userStatusID",
       key: "userStatusID",
       ellipsis: true,
@@ -334,14 +374,14 @@ const EditUser = () => {
       render: (text, record) => {
         return (
           <>
-            <i className="icon-check edit-user-enabled"></i>
+            <i className='icon-check edit-user-enabled'></i>
             {/* <i className="icon-lock edit-user-enabled"></i> */}
           </>
         );
       },
     },
     {
-      title: <label className="bottom-table-header">Edit</label>,
+      title: <label className='bottom-table-header'>Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
@@ -349,10 +389,9 @@ const EditUser = () => {
       render: (text, record) => {
         return (
           <label
-            className="edit-update-column"
-            onClick={() => setEditModalSecurity(true)}
-          >
-            <i className="icon-edit edit-user-icon-color" />
+            className='edit-update-column'
+            onClick={() => setEditModalSecurity(true)}>
+            <i className='icon-edit edit-user-icon-color' />
           </label>
         );
       },
@@ -362,10 +401,10 @@ const EditUser = () => {
   const paginationConfig = {
     itemRender: (_, type, originalElement) => {
       if (type === "prev") {
-        return <a className="Previous-pagination">Previous</a>;
+        return <a className='Previous-pagination'>Previous</a>;
       }
       if (type === "next") {
-        return <a className="Previous-pagination">Next</a>;
+        return <a className='Previous-pagination'>Next</a>;
       }
       return originalElement;
     },
@@ -389,10 +428,6 @@ const EditUser = () => {
     };
     console.log("data is: ", data);
   };
-
-  useEffect(() => {
-    dispatch(GetAllUserStatusAPI(navigate));
-  }, []);
 
   useEffect(() => {
     if (GetAllUserStatus !== null) {
@@ -423,54 +458,54 @@ const EditUser = () => {
 
   return (
     <>
-      <section className="edit-user-container">
+      <section className='edit-user-container'>
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="edit-user-label">Edit Corporate User</div>
+            <div className='edit-user-label'>Edit Corporate User</div>
           </Col>
         </Row>
-        <Row className="mt-3">
+        <Row className='mt-3'>
           <Col lg={12} md={12} sm={12}>
-            <Paper className="span-edit-user">
-              <Row className="mt-3">
-                <Col lg={2} md={2} sm={12} className="pe-0">
+            <Paper className='span-edit-user'>
+              <Row className='mt-3'>
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="CorporateName"
-                    className="text-fields-Corporate-edituser"
-                    labelClass="d-none"
-                    placeholder="Corporate Name"
+                    name='CorporateName'
+                    className='text-fields-Corporate-edituser'
+                    labelClass='d-none'
+                    placeholder='Corporate Name'
                     maxLength={100}
                     value={editUser.CorporateName.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="LoginID"
-                    className="text-fields-Corporate-edituser"
-                    labelClass="d-none"
+                    name='LoginID'
+                    className='text-fields-Corporate-edituser'
+                    labelClass='d-none'
                     maxLength={100}
-                    placeholder="Login ID"
+                    placeholder='Login ID'
                     value={editUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="Name"
-                    labelClass="d-none"
+                    name='Name'
+                    labelClass='d-none'
                     maxLength={100}
-                    className="text-fields-Corporate-edituser"
-                    placeholder="Name"
+                    className='text-fields-Corporate-edituser'
+                    placeholder='Name'
                     value={editUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="dropdown pe-0">
+                <Col lg={2} md={2} sm={12} className='dropdown pe-0'>
                   <Select
-                    name="statusID"
-                    className="edit-Corporate-user-select-status"
-                    placeholder="Status"
+                    name='statusID'
+                    className='edit-Corporate-user-select-status'
+                    placeholder='Status'
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}
@@ -479,27 +514,27 @@ const EditUser = () => {
 
                 <Col lg={4} md={12} sm={12}>
                   <Button
-                    icon={<i className="icon-search icon-search-space"></i>}
-                    text="Search"
-                    className="search-Corporate-Edit-User-btn"
+                    icon={<i className='icon-search icon-search-space'></i>}
+                    text='Search'
+                    className='search-Corporate-Edit-User-btn'
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className="icon-refresh icon-reset-space"></i>}
-                    text="Reset"
+                    icon={<i className='icon-refresh icon-reset-space'></i>}
+                    text='Reset'
                     onClick={resetHandler}
-                    className="reset-Corporate-Edit-User-btn"
+                    className='reset-Corporate-Edit-User-btn'
                   />
 
                   <Button
-                    icon={<i className="icon-download icon-reset-space"></i>}
-                    text="Export"
-                    className="export-Corporate-Edit-User-btn"
+                    icon={<i className='icon-download icon-reset-space'></i>}
+                    text='Export'
+                    className='export-Corporate-Edit-User-btn'
                   />
                 </Col>
               </Row>
 
-              <Row className="mt-4">
+              <Row className='mt-4'>
                 <Col lg={12} md={12} sm={12}>
                   <span>
                     <Row>
@@ -507,8 +542,7 @@ const EditUser = () => {
                         lg={12}
                         md={12}
                         sm={12}
-                        className="d-flex gap-1 align-items-center"
-                      >
+                        className='d-flex gap-1 align-items-center'>
                         <span className={"corporate-show-text-above-table"}>
                           Show
                         </span>
@@ -517,7 +551,7 @@ const EditUser = () => {
                           options={options}
                           value={dropdownvalue}
                           onChange={handleChangeDropDown}
-                          className="select-Bank-field-edit"
+                          className='select-Bank-field-edit'
                         />
 
                         <span className={"corporate-show-text-above-table"}>
@@ -528,9 +562,10 @@ const EditUser = () => {
                   </span>
                   <Table
                     column={columns}
-                    rows={dataSource}
-                    className="Edituser-table"
+                    rows={corporateUserTableData}
+                    className='Edituser-table'
                     pagination={paginationConfig}
+                    scroll={{ y: 350 }}
                   />
                 </Col>
               </Row>
@@ -542,10 +577,10 @@ const EditUser = () => {
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
-        size="lg"
+        size='lg'
         className={"modaldialog modal-Update"}
-        modalHeaderClassName="d-none"
-        modalFooterClassName="modal-update-footer"
+        modalHeaderClassName='d-none'
+        modalFooterClassName='modal-update-footer'
         onHide={closeUpdateModal}
         ModalBody={
           <Fragment>
@@ -553,7 +588,7 @@ const EditUser = () => {
               <Fragment>
                 <Row>
                   <Col lg={12} md={12} sm={12}>
-                    <p className="update-modal-heading">
+                    <p className='update-modal-heading'>
                       Are you sure want to update?
                     </p>
                   </Col>
@@ -569,16 +604,15 @@ const EditUser = () => {
                 lg={12}
                 md={12}
                 sm={12}
-                className="d-flex justify-content-center"
-              >
+                className='d-flex justify-content-center'>
                 <Button
                   icon={
                     <>
                       <span>Proceed</span>
-                      <i className="icon-arrow-right"></i>
+                      <i className='icon-arrow-right'></i>
                     </>
                   }
-                  className="Update-Proceed-btn"
+                  className='Update-Proceed-btn'
                 />
               </Col>
             </Row>

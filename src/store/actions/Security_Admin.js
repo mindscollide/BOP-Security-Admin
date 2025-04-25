@@ -8,7 +8,8 @@ import {
   RejectUserRequest,
   getAllUsersListApi,
   SearchBankUsers,
-  SearchCorporateUsers,
+  SearchCorporateUsersRM,
+  SearchBankUsersRM,
 } from "../../commen/apis/Api_config";
 import {
   securityAdminApi,
@@ -650,18 +651,21 @@ const SearchCorporateUsersAPI = (navigate, data) => {
   return (dispatch) => {
     dispatch(SearchCorporateUsersInit());
     let form = new FormData();
-    form.append("RequestMethod", SearchCorporateUsers.RequestMethod);
+    form.append("RequestMethod", SearchCorporateUsersRM.RequestMethod);
     form.append("RequestData", JSON.stringify(data));
     axios({
       method: "POST",
-      url: systemAdminApi,
+      url: securityAdminApi,
       data: form,
       headers: {
         _token: token,
       },
     })
       .then(async (response) => {
+        console.log("response", response);  
         if (response.data.responseCode === 417) {
+        console.log("response", response);  
+
           await dispatch(RefreshToken(navigate));
           dispatch(SearchCorporateUsersAPI(navigate, data));
         } else if (response.data.responseCode === 200) {
@@ -733,11 +737,11 @@ const SearchBankUsersAPI = (navigate, data) => {
   return (dispatch) => {
     dispatch(SearchBankUsersInit());
     let form = new FormData();
-    form.append("RequestMethod", SearchBankUsers.RequestMethod);
+    form.append("RequestMethod", SearchBankUsersRM.RequestMethod);
     form.append("RequestData", JSON.stringify(data));
     axios({
       method: "POST",
-      url: systemAdminApi,
+      url: securityAdminApi,
       data: form,
       headers: {
         _token: token,

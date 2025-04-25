@@ -34,11 +34,11 @@ const getAllUsersListApi = {
 };
 
 //Search Corporate Users
-const SearchCorporateUsers = {
+const SearchCorporateUsersRM = {
   RequestMethod: "ServiceManager.SearchCorporateUsers",
 };
 //Search Bank Users
-const SearchBankUsers = {
+const SearchBankUsersRM = {
   RequestMethod: "ServiceManager.SearchBankUsers",
 };
 
@@ -61,8 +61,8 @@ export {
   GetNewCorporateUserRequests,
   RejectUserRequest,
   getAllUsersListApi,
-  SearchCorporateUsers,
-  SearchBankUsers,
+  SearchCorporateUsersRM,
+  SearchBankUsersRM,
   GetAllUserStatus,
   RoleList,
 };

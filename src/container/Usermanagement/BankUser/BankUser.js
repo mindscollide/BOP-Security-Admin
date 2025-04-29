@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -14,23 +14,25 @@ import Select from "react-select";
 
 import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./BankUser.css";
-import {
-  bankModalEditStateSchema,
-  searchEditBankUserSchema,
-} from "../../../utils/schemas";
+import { searchEditBankUserSchema } from "../../../utils/schemas";
 import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal";
 import {
+  GetAllBranchesAPI,
   GetAllUserStatusAPI,
-  RoleListAPI,
+  GetBankUserRolesAPI,
 } from "../../../store/actions/Auth_Actions";
-import { SearchBankUsersAPI } from "../../../store/actions/Security_Admin";
+import {
+  SearchBankUsersAPI,
+  UpdateBankUserAPI,
+} from "../../../store/actions/Security_Admin";
 
 const BankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { securityReducer } = useSelector((state) => state);
+
   //Search all corporate Users
   const SearchBankUsers = useSelector(
     (state) => state.securityReducer.SearchBankUsersData
@@ -38,21 +40,32 @@ const BankUser = () => {
 
   const [editBankUserUpdate, setBankUserUpdate] = useState(null);
 
-  console.log(editBankUserUpdate, "SearchBankUsersSearchBankUsers");
+  const [editBankUserRole, setEditBankUserRole] = useState({
+    value: 0,
+    label: "",
+  });
 
+  const [editBankUserStatus, setEditBankUserStatus] = useState({
+    value: 0,
+    label: "",
+  });
+
+  const [editBankUserBranch, setEditBankUserBranch] = useState({
+    value: 0,
+    label: "",
+  });
+  console.log(editBankUserBranch, "editBankUserBrancheditBankUserBranch");
   // Get all user status selector
   const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
 
   //Role List
-  const RoleList = useSelector((state) => state.auth.RoleList);
+  const RoleList = useSelector((state) => state.auth.GetBankUserRoles);
+
+  // Branch List
+  const BranchList = useSelector((state) => state.auth.GetAllBranches);
 
   // state for edit bank user
   const [BankEditUser, setBankEditUser] = useState(searchEditBankUserSchema);
-
-  // state for Modal Edit Bank User
-  const [modalEditState, setModalEditState] = useState(
-    bankModalEditStateSchema
-  );
 
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
@@ -71,6 +84,10 @@ const BankUser = () => {
     value: 0,
     label: "",
   });
+
+  // state for select Status
+  const [branchOptions, setBranchOptions] = useState([]);
+  console.log("branchOptions", branchOptions);
 
   const [dropdownvalue, setDropdownvalue] = useState({
     value: 50,
@@ -91,9 +108,13 @@ const BankUser = () => {
       Email: "",
       RoleID: 0,
       PageNumber: 1,
+      StatusID: 0,
       Length: 10,
     };
     dispatch(SearchBankUsersAPI(navigate, Data));
+    dispatch(GetAllUserStatusAPI(navigate));
+    dispatch(GetBankUserRolesAPI(navigate));
+    dispatch(GetAllBranchesAPI(navigate));
   }, []);
 
   useEffect(() => {
@@ -103,74 +124,35 @@ const BankUser = () => {
 
         setBankUserTableData(bankUsers);
       } catch (error) {}
+    } else {
+      setBankUserTableData([]);
     }
   }, [SearchBankUsers]);
-  const onchangeModalTextFieldsHandler = (e) => {
-    let name = e.target.name;
-    let value = e.target.value;
+  // const onchangeModalTextFieldsHandler = (e) => {
+  //   let name = e.target.name;
+  //   let value = e.target.value;
 
-    if (name === "Email" && value !== "") {
-      if (value !== "") {
-        setModalEditState({
-          ...modalEditState,
-          Email: {
-            value: value.trimStart(),
-            errorMessage: "",
-            errorStatus: false,
-          },
-        });
-      }
-    } else if (name === "Email" && value === "") {
-      setModalEditState({
-        ...modalEditState,
-        Email: {
-          value: "",
-          errorMessage: "",
-          errorStatus: true,
-        },
-      });
-    }
-
-    if (name === "FirstName" && value !== "") {
-      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
-      console.log("valueCheckvalueCheck", valueCheck);
-      if (valueCheck !== "") {
-        setModalEditState({
-          ...modalEditState,
-          FirstName: {
-            value: valueCheck.trimStart(),
-            errorMessage: "",
-            errorStatus: false,
-          },
-        });
-      }
-    } else if (name === "FirstName" && value === "") {
-      setModalEditState({
-        ...modalEditState,
-        FirstName: { value: "", errorMessage: "", errorStatus: false },
-      });
-    }
-
-    if (name === "LastName" && value !== "") {
-      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
-      console.log("valueCheckvalueCheck", valueCheck);
-      if (valueCheck !== "") {
-        setModalEditState({
-          ...modalEditState,
-          LastName: {
-            value: valueCheck.trimStart(),
-            errorMessage: "",
-            errorStatus: false,
-          },
-        });
-      }
-    } else if (name === "LastName" && value === "") {
-      setModalEditState({
-        ...modalEditState,
-        LastName: { value: "", errorMessage: "", errorStatus: false },
-      });
-    }
-  };
+  //   if (name === "Email" && value !== "") {
+  //     if (value !== "") {
+  //       setModalEditState({
+  //         ...modalEditState,
+  //         Email: {
+  //           value: value.trimStart(),
+  //           errorMessage: "",
+  //           errorStatus: false,
+  //         },
+  //       });
+  //     }
+  //   } else if (name === "Email" && value === "") {
+  //     setModalEditState({
+  //       ...modalEditState,
+  //       Email: {
+  //         value: "",
+  //         errorMessage: "",
+  //         errorStatus: true,
+  //       },
+  //     });
+  //   }
 
   //edit user security admin validate handler
   const editUserValidateHandler = (e) => {
@@ -224,12 +206,12 @@ const BankUser = () => {
     }
 
     if (name === "LoginID" && value !== "") {
-      let valueCheck = value.replace(/[^\d]/g, "");
-      if (valueCheck !== "") {
+      // let valueCheck = value.replace(/[^\d]/g, "");
+      if (value !== "") {
         setBankEditUser({
           ...BankEditUser,
           LoginID: {
-            value: valueCheck.trimStart(),
+            value: value.trimStart(),
             errorMessage: "",
             errorStatus: false,
           },
@@ -264,45 +246,11 @@ const BankUser = () => {
 
   const handleSelectStatus = async (selectedStatus) => {
     setStatusID(selectedStatus);
-
-    setBankEditUser((prevState) => ({
-      ...prevState,
-      statusID: { ...prevState.statusID, value: selectedStatus.value },
-    }));
   };
 
   //handle select RoleID
   const handleSelectRole = async (selectedRole) => {
     setRoleID(selectedRole);
-
-    setBankEditUser((prevState) => ({
-      ...prevState,
-      roleID: { ...prevState.roleID, value: selectedRole.value },
-    }));
-  };
-
-  //Handle Select Role for Edit Modal
-  const handleEditModalRole = (option) => {
-    console.log("Role Option is:", option);
-
-    setModalEditState({
-      ...modalEditState,
-      selectRole: {
-        label: option.label,
-        value: option.value,
-      },
-    });
-  };
-
-  const handleEditModalStatus = (option) => {
-    console.log("Staus Option is:", option);
-    setModalEditState({
-      ...modalEditState,
-      selectStatus: {
-        label: option.label,
-        value: option.value,
-      },
-    });
   };
 
   //reset handler for edit user
@@ -312,13 +260,21 @@ const BankUser = () => {
 
   // show error message When user hit activate btn
   const resetHandlerYes = () => {
+    let Data = {
+      Name: "",
+      EmployeeID: "",
+      Email: "",
+      RoleID: 0,
+      StatusID: 0,
+      PageNumber: 1,
+      Length: 10,
+    };
+    dispatch(SearchBankUsersAPI(navigate, Data));
     setBankEditUser({
       ...BankEditUser,
       EmployeeID: { value: "", errorMessage: "", errorStatus: false },
       LoginID: { value: "", errorMessage: "", errorStatus: false },
       Name: { value: "", errorMessage: "", errorStatus: false },
-      Role: { value: "", errorMessage: "", errorStatus: false },
-      statusID: { value: "", errorMessage: "", errorStatus: false },
     });
     setStatusID({
       value: 0,
@@ -328,15 +284,6 @@ const BankUser = () => {
       value: 0,
       label: "",
     });
-    let Data = {
-      Name: "",
-      EmployeeID: "",
-      Email: "",
-      RoleID: 0,
-      PageNumber: 1,
-      Length: 10,
-    };
-    dispatch(SearchBankUsersAPI(navigate, Data));
   };
 
   //onClose modal
@@ -344,15 +291,74 @@ const BankUser = () => {
     setUpdateModal(false);
   };
 
+  const handleCloseEditBankUserModal = useCallback(() => {
+    setEditModalSecurity(false);
+    setEditBankUserStatus({
+      value: 0,
+      label: "",
+    });
+    setEditBankUserRole({
+      value: 0,
+      label: "",
+    });
+    setEditBankUserBranch({
+      value: 0,
+      label: "",
+    });
+  }, []);
+
   const handleClickEdit = (record) => {
-    setEditModalSecurity(true);
-    setBankUserUpdate(record);
-    // setModalEditState
+    console.log("recordrecordrecord", record);
+    try {
+      setEditModalSecurity(true);
+      if (statusOptions.length > 0) {
+        let findStatusObj = statusOptions.find(
+          (statusData, index) => statusData.statusID === record.userStatusID
+        );
+        if (findStatusObj !== undefined) {
+          setEditBankUserStatus({
+            value: findStatusObj.statusID,
+            label: findStatusObj.statusName,
+          });
+        }
+        console.log(findStatusObj, "findStatusObj");
+      }
+
+      if (roleOptions.length > 0) {
+        let findRoleObj = roleOptions.find(
+          (roleData, index) => roleData.roleID === record.userRoleID
+        );
+        if (findRoleObj !== undefined) {
+          setEditBankUserRole({
+            value: findRoleObj.roleID,
+            label: findRoleObj.roleName,
+          });
+        }
+        console.log(findRoleObj, "findRoleObj");
+      }
+
+      if (branchOptions.length > 0 && record.branch !== null) {
+        let findBranchObj = branchOptions.find(
+          (branchData, index) => branchData.branchID === record.branch.branchID
+        );
+        if (findBranchObj !== undefined) {
+          setEditBankUserBranch({
+            value: findBranchObj.branchID,
+            label: findBranchObj.branchName,
+          });
+        }
+        console.log(findBranchObj, "findBranchObj");
+      }
+
+      setBankUserUpdate(record);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const columns = [
     {
-      title: <label className='bottom-table-header'>Employee ID</label>,
+      title: <label className="bottom-table-header">Employee ID</label>,
       dataIndex: "employeeID",
       key: "employeeID",
       align: "left",
@@ -360,7 +366,7 @@ const BankUser = () => {
       width: "100px",
     },
     {
-      title: <label className='bottom-table-header'>LoginID</label>,
+      title: <label className="bottom-table-header">LoginID</label>,
       dataIndex: "email",
       key: "loginId",
       align: "left",
@@ -368,7 +374,7 @@ const BankUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Empolyee Name</label>,
+      title: <label className="bottom-table-header">Empolyee Name</label>,
       dataIndex: "firstName",
       key: "name",
       width: "190px",
@@ -376,7 +382,7 @@ const BankUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Role</label>,
+      title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
       align: "left",
@@ -388,13 +394,15 @@ const BankUser = () => {
             (role, index) => role.roleID === record.userRoleID
           );
           console.log(roleNameFind, "roleNameFind");
-          return roleNameFind.roleName;
+          if (roleNameFind !== undefined) {
+            return roleNameFind.roleName;
+          }
         }
         return text;
       },
     },
     {
-      title: <label className='bottom-table-header'>Branch</label>,
+      title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "BranchName",
       key: "BranchName",
       width: "110px",
@@ -407,7 +415,7 @@ const BankUser = () => {
       },
     },
     {
-      title: <label className='bottom-table-header'>Status</label>,
+      title: <label className="bottom-table-header">Status</label>,
       dataIndex: "userStatusID",
       key: "userStatusID",
       ellipsis: true,
@@ -417,14 +425,15 @@ const BankUser = () => {
           let StatusNameFind = statusOptions.find(
             (role, index) => role.statusID === record.userStatusID
           );
-          console.log(StatusNameFind, "roleNameFind");
-          return StatusNameFind.statusName;
+          if (StatusNameFind !== undefined) {
+            return StatusNameFind.statusName;
+          }
         }
         return text;
       },
     },
     {
-      title: <label className='bottom-table-header'>Edit</label>,
+      title: <label className="bottom-table-header">Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
@@ -432,24 +441,22 @@ const BankUser = () => {
       render: (text, record) => {
         return (
           <label
-            className='edit-update-column'
+            className="edit-update-column"
             onClick={() => handleClickEdit(record)}
-            // onClick={() => handleClickEdit setEditModalSecurity(true)}
           >
-            <i className='icon-edit edit-user-icon-color' />
+            <i className="icon-edit edit-user-icon-color" />
           </label>
         );
       },
     },
   ];
-
   const paginationBankConfig = {
     itemRender: (_, type, originalElement) => {
       if (type === "prev") {
-        return <href className='Previous-pagination'>Previous</href>;
+        return <href className="Previous-pagination">Previous</href>;
       }
       if (type === "next") {
-        return <href className='Previous-pagination'>Next</href>;
+        return <href className="Previous-pagination">Next</href>;
       }
       return originalElement;
     },
@@ -468,9 +475,10 @@ const BankUser = () => {
   const handleSearch = () => {
     let Data = {
       Name: BankEditUser.Name.value,
-      EmployeeID: BankEditUser.EmployeeID.valu,
+      EmployeeID: BankEditUser.EmployeeID.value,
       Email: BankEditUser.LoginID.value,
-      RoleID: roleID.roleID,
+      RoleID: roleID.value,
+      StatusID: statusID.value,
       PageNumber: 1,
       Length: 10,
     };
@@ -480,18 +488,15 @@ const BankUser = () => {
   const handleProceed = () => {
     console.log("Proceed clicked");
     const data = {
-      SelectRole: modalEditState.selectRole.value,
-      selectStatus: modalEditState.selectStatus.value.value,
+      StatusID: editBankUserStatus.value,
+      UserID: editBankUserUpdate.userID,
+      RoleID: editBankUserRole.value,
+      BranchID: editBankUserRole.value === 9 ? editBankUserBranch.value : 0,
     };
 
     console.log("data to store is: ", data);
-    // dispatch();
+    dispatch(UpdateBankUserAPI(navigate, data, setUpdateModal));
   };
-
-  useEffect(() => {
-    dispatch(GetAllUserStatusAPI(navigate));
-    dispatch(RoleListAPI(navigate));
-  }, []);
 
   useEffect(() => {
     if (GetAllUserStatus !== null) {
@@ -499,7 +504,7 @@ const BankUser = () => {
         let newUserStatusData = GetAllUserStatus.status.map((status) => {
           return {
             ...status,
-            value: { value: status.statusID },
+            value: status.statusID,
             label: status.statusName,
           };
         });
@@ -518,49 +523,62 @@ const BankUser = () => {
         setRoleOptions(newRolesData);
       } catch (error) {}
     }
-  }, [GetAllUserStatus, RoleList]);
+
+    if (BranchList !== null) {
+      try {
+        let newBranchData = BranchList.branches.map((branch) => {
+          return {
+            ...branch,
+            value: branch.branchID,
+            label: branch.branchName,
+          };
+        });
+        setBranchOptions(newBranchData);
+      } catch (error) {}
+    }
+  }, [GetAllUserStatus, RoleList, BranchList]);
 
   return (
     <>
-      <section className='edit-user-container'>
+      <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className='edit-user-label'>Edit Bank User</div>
+            <div className="edit-user-label">Edit Bank User</div>
           </Col>
         </Row>
-        <Row className='mt-3'>
+        <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
-            <Paper className='span-edit-user'>
-              <Row className='mt-3'>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+            <Paper className="span-edit-user">
+              <Row className="mt-3">
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='EmployeeID'
-                    className='text-fields-edituser'
-                    labelClass='d-none'
-                    placeholder='Employee ID'
+                    name="EmployeeID"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
+                    placeholder="Employee ID"
                     maxLength={100}
                     value={BankEditUser.EmployeeID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='LoginID'
-                    className='text-fields-edituser'
-                    labelClass='d-none'
+                    name="LoginID"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
                     maxLength={100}
-                    placeholder='Login ID'
+                    placeholder="Login ID"
                     value={BankEditUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='Name'
-                    labelClass='d-none'
+                    name="Name"
+                    labelClass="d-none"
                     maxLength={100}
-                    className='text-fields-edituser'
-                    placeholder='Employee Name'
+                    className="text-fields-edituser"
+                    placeholder="Employee Name"
                     value={BankEditUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
@@ -569,20 +587,20 @@ const BankUser = () => {
                   <Select
                     isSearchable
                     options={roleOptions}
-                    placeholder='Select Role'
-                    className='edit-user-select-status'
+                    placeholder="Select Role"
+                    className="edit-user-select-status"
                     value={roleID.value !== 0 ? roleID : null}
                     onChange={handleSelectRole}
                   />
                 </Col>
               </Row>
 
-              <Row className='mt-3'>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+              <Row className="mt-3">
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <Select
-                    className='edit-user-select-status'
+                    className="edit-user-select-status"
                     isSearchable
-                    placeholder='Select Status'
+                    placeholder="Select Status"
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}
@@ -591,27 +609,27 @@ const BankUser = () => {
 
                 <Col lg={9} md={9} sm={12}>
                   <Button
-                    icon={<i className='icon-search icon-search-space'></i>}
-                    text='Search'
-                    className='search-Bank-Edit-User-btn'
+                    icon={<i className="icon-search icon-search-space"></i>}
+                    text="Search"
+                    className="search-Bank-Edit-User-btn"
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className='icon-refresh icon-reset-space'></i>}
-                    text='Reset'
+                    icon={<i className="icon-refresh icon-reset-space"></i>}
+                    text="Reset"
                     onClick={resetHandler}
-                    className='reset-Bank-Edit-User-btn'
+                    className="reset-Bank-Edit-User-btn"
                   />
 
                   <Button
-                    icon={<i className='icon-download icon-reset-space'></i>}
-                    text='Export'
-                    className='export-Bank-Edit-User-btn'
+                    icon={<i className="icon-download icon-reset-space"></i>}
+                    text="Export"
+                    className="export-Bank-Edit-User-btn"
                   />
                 </Col>
               </Row>
 
-              <Row className='mt-4'>
+              <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
                   <span>
                     <Row>
@@ -619,7 +637,8 @@ const BankUser = () => {
                         lg={12}
                         md={12}
                         sm={12}
-                        className='d-flex gap-1 align-items-center'>
+                        className="d-flex gap-1 align-items-center"
+                      >
                         <span className={"Bank-show-text-above-table"}>
                           Show
                         </span>
@@ -628,7 +647,7 @@ const BankUser = () => {
                           options={options}
                           value={dropdownvalue}
                           onChange={handleChangeDropDown}
-                          className='select-Bank-field-edit'
+                          className="select-Bank-field-edit"
                         />
 
                         <span className={"Bank-show-text-above-table"}>
@@ -640,7 +659,7 @@ const BankUser = () => {
                   <Table
                     column={columns}
                     rows={bankUserTableData}
-                    className='Edituser-table'
+                    className="Edituser-table"
                     pagination={paginationBankConfig}
                     scroll={{ y: 350, x: true }}
                   />
@@ -653,15 +672,15 @@ const BankUser = () => {
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
-        size='lg'
+        size="lg"
         className={"modaldialog modal-Update"}
-        modalHeaderClassName='d-none'
-        modalFooterClassName='modal-update-footer'
+        modalHeaderClassName="d-none"
+        modalFooterClassName="modal-update-footer"
         onHide={closeUpdateModal}
         ModalBody={
           <Row>
             <Col lg={12} md={12} sm={12}>
-              <p className='update-modal-heading'>
+              <p className="update-modal-heading">
                 Are you sure want to update?
               </p>
             </Col>
@@ -673,15 +692,16 @@ const BankUser = () => {
               lg={12}
               md={12}
               sm={12}
-              className='d-flex justify-content-center'>
+              className="d-flex justify-content-center"
+            >
               <Button
                 icon={
                   <>
                     <span>Proceed</span>
-                    <i className='icon-arrow-right'></i>
+                    <i className="icon-arrow-right"></i>
                   </>
                 }
-                className='Update-Proceed-btn'
+                className="Update-Proceed-btn"
                 onClick={handleProceed}
               />
             </Col>
@@ -695,6 +715,15 @@ const BankUser = () => {
           setModalEdit={setEditModalSecurity}
           Roles={roleOptions}
           StatusList={statusOptions}
+          branchOptions={branchOptions}
+          editBankUserStatus={editBankUserStatus}
+          setEditBankUserStatus={setEditBankUserStatus}
+          editBankUserBranch={editBankUserBranch}
+          setEditBankUserBranch={setEditBankUserBranch}
+          editBankUserRole={editBankUserRole}
+          setEditBankUserRole={setEditBankUserRole}
+          UpdateBtnHandle={UpdateBtnHandle}
+          handleDiscard={handleCloseEditBankUserModal}
         />
       ) : null}
       <ActivateConfirmationModal onConfirm={resetHandlerYes} />

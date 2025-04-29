@@ -10,8 +10,10 @@ const initialState = {
   Token: "",
   Refresh: "",
   SessionExpeireResponseMessage: "",
-  allUserStatusData: [],
+  allUserStatusData: null,
   RoleList: null,
+  GetBankUserRoles: null,
+  GetAllBranches: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -93,6 +95,52 @@ const authReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         RoleList: [],
+        ResponseMessage: action.message,
+      };
+
+    //GetBankUserRoles Reducer
+    case actions.GET_BANK_USER_ROLES_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_BANK_USER_ROLES_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        GetBankUserRoles: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_BANK_USER_ROLES_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        GetBankUserRoles: null,
+        ResponseMessage: action.message,
+      };
+
+    //GetAllBranches Reducer
+    case actions.GET_ALL_BRANCHES_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.GET_ALL_BRANCHES_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        GetAllBranches: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.GET_ALL_BRANCHES_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        GetAllBranches: null,
         ResponseMessage: action.message,
       };
 

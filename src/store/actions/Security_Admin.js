@@ -10,6 +10,8 @@ import {
   SearchBankUsers,
   SearchCorporateUsersRM,
   SearchBankUsersRM,
+  UpdateBankUser,
+  UpdateCorporateUser,
 } from "../../commen/apis/Api_config";
 import {
   securityAdminApi,
@@ -662,9 +664,9 @@ const SearchCorporateUsersAPI = (navigate, data) => {
       },
     })
       .then(async (response) => {
-        console.log("response", response);  
+        console.log("response", response);
         if (response.data.responseCode === 417) {
-        console.log("response", response);  
+          console.log("response", response);
 
           await dispatch(RefreshToken(navigate));
           dispatch(SearchCorporateUsersAPI(navigate, data));
@@ -793,6 +795,210 @@ const SearchBankUsersAPI = (navigate, data) => {
   };
 };
 
+//Update Bank Users
+const UpdateBankUserInit = () => {
+  return {
+    type: actions.SEARCH_BANK_USERS_INIT,
+  };
+};
+
+const UpdateBankUserSuccess = (response, message) => {
+  return {
+    type: actions.SEARCH_BANK_USERS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const UpdateBankUserFail = (message) => {
+  return {
+    type: actions.SEARCH_BANK_USERS_FAIL,
+    message: message,
+  };
+};
+
+const UpdateBankUserAPI = (navigate, data, setUpdateModal) => {
+  let token = localStorage.getItem("token");
+  return (dispatch) => {
+    dispatch(UpdateBankUserInit());
+    let form = new FormData();
+    form.append("RequestMethod", UpdateBankUser.RequestMethod);
+    form.append("RequestData", JSON.stringify(data));
+    axios({
+      method: "POST",
+      url: securityAdminApi,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(UpdateBankUserAPI(navigate, data, setUpdateModal));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "SecurityAdmin_SecurityAdminManager_UpdateBankUser_01".toLowerCase()
+            ) {
+              dispatch(
+                UpdateBankUserSuccess(
+                  response.data.responseResult,
+                  "User Updated"
+                )
+              );
+              setUpdateModal(false);
+              let data = {
+                Name: "",
+                EmployeeID: "",
+                Email: "",
+                RoleID: 0,
+                PageNumber: 1,
+                StatusID: 0,
+                Length: 10,
+              };
+              dispatch(SearchBankUsersAPI(navigate, data));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_UpdateBankUser_02".toLowerCase()
+                )
+            ) {
+              dispatch(UpdateBankUserFail("User Not Found"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_UpdateBankUser_03".toLowerCase()
+                )
+            ) {
+              dispatch(UpdateBankUserFail("User Status Not Updated"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_UpdateBankUser_04".toLowerCase()
+                )
+            ) {
+              dispatch(UpdateBankUserFail("User Role Not Updated"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_UpdateBankUser_05".toLowerCase()
+                )
+            ) {
+              dispatch(UpdateBankUserFail("Exception"));
+            }
+          } else {
+            dispatch(UpdateBankUserFail("Something went wrong"));
+          }
+        } else {
+          dispatch(UpdateBankUserFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(UpdateBankUserFail("something went wrong"));
+      });
+  };
+};
+
+//Update Corporate Users
+const UpdateCorporateUserInit = () => {
+  return {
+    type: actions.SEARCH_BANK_USERS_INIT,
+  };
+};
+
+const UpdateCorporateUserSuccess = (response, message) => {
+  return {
+    type: actions.SEARCH_BANK_USERS_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const UpdateCorporateUserFail = (message) => {
+  return {
+    type: actions.SEARCH_BANK_USERS_FAIL,
+    message: message,
+  };
+};
+
+const UpdateCorporateUserAPI = (navigate, data, setUpdateModal) => {
+  let token = localStorage.getItem("token");
+  return (dispatch) => {
+    dispatch(UpdateCorporateUserInit());
+    let form = new FormData();
+    form.append("RequestMethod", UpdateCorporateUser.RequestMethod);
+    form.append("RequestData", JSON.stringify(data));
+    axios({
+      method: "POST",
+      url: securityAdminApi,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(UpdateCorporateUserAPI(navigate, data, setUpdateModal));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "SecurityAdmin_SecurityAdminManager_UpdateCorporateUser_01".toLowerCase()
+            ) {
+              dispatch(
+                UpdateCorporateUserSuccess(
+                  response.data.responseResult,
+                  "User Status Updated"
+                )
+              );
+              setUpdateModal(false);
+              let Data = {
+                Name: "",
+                CompanyName: "",
+                Email: "",
+                StatusID: 0,
+                PageNumber: 1,
+                Length: 10,
+              };
+
+              dispatch(SearchCorporateUsersAPI(navigate, Data));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_UpdateCorporateUser_02".toLowerCase()
+                )
+            ) {
+              dispatch(UpdateCorporateUserFail("User Not Updated"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "SecurityAdmin_SecurityAdminManager_UpdateCorporateUser_03".toLowerCase()
+                )
+            ) {
+              dispatch(UpdateCorporateUserFail("Exception"));
+            }
+          } else {
+            dispatch(UpdateCorporateUserFail("Something went wrong"));
+          }
+        } else {
+          dispatch(UpdateCorporateUserFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(UpdateCorporateUserFail("something went wrong"));
+      });
+  };
+};
+
 export {
   saveBankUserApi,
   saveCorporateUserApi,
@@ -802,4 +1008,6 @@ export {
   getAllUsersListMainAPI,
   SearchBankUsersAPI,
   SearchCorporateUsersAPI,
+  UpdateBankUserAPI,
+  UpdateCorporateUserAPI,
 };

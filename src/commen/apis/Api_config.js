@@ -51,6 +51,25 @@ const RoleList = {
   RequestMethod: "ServiceManager.RoleList",
 };
 
+const GetBankUserRoles = {
+  RequestMethod: "ServiceManager.GetBankUserRoles",
+};
+
+//Get all Branches
+const GetAllBranches = {
+  RequestMethod: "ServiceManager.GetAllBranches",
+};
+
+//Update Bank User
+const UpdateBankUser = {
+  RequestMethod: "ServiceManager.UpdateBankUser",
+};
+
+//Update Corporate User
+const UpdateCorporateUser = {
+  RequestMethod: "ServiceManager.UpdateCorporateUser",
+};
+
 export {
   authenticationRefreshToken,
   authenticationLogIn,
@@ -65,4 +84,8 @@ export {
   SearchBankUsersRM,
   GetAllUserStatus,
   RoleList,
+  GetBankUserRoles,
+  GetAllBranches,
+  UpdateBankUser,
+  UpdateCorporateUser,
 };

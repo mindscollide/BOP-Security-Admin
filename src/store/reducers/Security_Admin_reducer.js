@@ -11,6 +11,8 @@ const initialState = {
   SearchBankUsersData: null,
   SaveBankUserData: null,
   SaveCorporateUserData: null,
+  UpdateBankUser: null,
+  UpdateCorporateUser: null,
   Loading: false,
 };
 
@@ -31,7 +33,7 @@ const securityReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
-        SaveBankUserData: "",
+        SaveBankUserData: null,
         ResponseMessage: action.message,
       };
 
@@ -82,7 +84,7 @@ const securityReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
-        saveCorporateUserData: "",
+        saveCorporateUserData: null,
         ResponseMessage: action.message,
       };
 
@@ -101,7 +103,7 @@ const securityReducer = (state = initialState, action) => {
       return {
         ...state,
         Loading: false,
-        rejectUserRequest: "",
+        rejectUserRequest: null,
         ResponseMessage: action.message,
       };
 
@@ -157,6 +159,7 @@ const securityReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         SearchBankUsersData: action.response,
+        ResponseMessage: action.message,
       };
     case actions.SEARCH_BANK_USERS_FAIL:
       return {
@@ -166,6 +169,47 @@ const securityReducer = (state = initialState, action) => {
         ResponseMessage: action.message,
       };
 
+    //Update Bank User Reducer
+    case actions.UPDATE_BANK_USER_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+    case actions.UPDATE_BANK_USER_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        UpdateBankUser: action.response,
+        ResponseMessage: action.message,
+      };
+    case actions.UPDATE_BANK_USER_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        UpdateBankUser: null,
+        ResponseMessage: action.message,
+      };
+
+    //Update Corporate User Reducer
+    case actions.UPDATE_CORPORATE_USER_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+    case actions.UPDATE_CORPORATE_USER_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        UpdateCorporateUser: action.response,
+        ResponseMessage: action.message,
+      };
+    case actions.UPDATE_CORPORATE_USER_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        UpdateCorporateUser: null,
+        ResponseMessage: action.message,
+      };
     default:
       return { ...state };
   }

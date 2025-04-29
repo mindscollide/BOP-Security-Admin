@@ -7,31 +7,25 @@ import "./EditCorporateModal.css";
 
 const EditCorporateModal = ({
   modalEdit,
-  modalEditState,
-  // setModalEditState,
+  editCorporateUserUpdate,
   setModalEdit,
-  // Role,
   StatusData,
-  UpdateButtonOnClick,
-  // SelectRoleChangeHandler,
-  SelectStatusChangeHandler,
-  onChangeTextFieldHandler,
+  editCorporateUserStatus,
+  setEditCorporateUserStatus,
+  UpdateBtnHandle,
+  handleDiscard,
 }) => {
-  // for close modal handler
-  const closeEditModal = async () => {
-    setModalEdit(false);
-  };
-
+  console.log("editCorporateUserUpdate", editCorporateUserUpdate);
   return (
     <Fragment>
       <Modal
         show={modalEdit}
-        setShow={setModalEdit}
+        setShow={handleDiscard}
         className="modaldialog modal-Corporate-Edit-styles"
         modalHeaderClassName={"header-Edit-Modal-close-btn"}
         modalFooterClassName="modal-footer-edit"
         size="lg"
-        onHide={closeEditModal}
+        onHide={handleDiscard}
         ModalBody={
           <Fragment>
             {modalEdit ? (
@@ -59,10 +53,10 @@ const EditCorporateModal = ({
                   <Col lg={12} md={12} sm={12}>
                     <TextField
                       name="Email"
-                      value={modalEditState.Email.value}
-                      placeholder="mindscollide.aamir@hbl.com"
+                      value={editCorporateUserUpdate.email}
+                      // placeholder="mindscollide.aamir@hbl.com"
+                      // onChange={onChangeTextFieldHandler}
                       label={<small className="email-heading">Email</small>}
-                      onChange={onChangeTextFieldHandler}
                       className="textfield-edit-modal"
                       disable={true}
                     />
@@ -73,15 +67,13 @@ const EditCorporateModal = ({
                   <Col lg={12} md={12} sm={12}>
                     <label className="select-labels">Select Status</label>
                     <Select
-                      value={
-                        modalEditState.selectStatus.value !== null
-                          ? modalEditState.selectStatus
-                          : null
-                      }
+                      value={editCorporateUserStatus}
                       placeholder="Select Status"
                       className="select-status"
                       options={StatusData}
-                      onChange={SelectStatusChangeHandler}
+                      onChange={(selectedVal) => {
+                        setEditCorporateUserStatus(selectedVal);
+                      }}
                     />
                   </Col>
                 </Row>
@@ -97,13 +89,13 @@ const EditCorporateModal = ({
                   icon={<i className="icon-refresh icon-right"></i>}
                   text="Update"
                   className="update-btn-editModal"
-                  onClick={UpdateButtonOnClick}
+                  onClick={UpdateBtnHandle}
                 />
                 <Button
                   icon={<i className="icon-close icon-right"></i>}
                   text="Discard"
                   className="discard-btn-editModal"
-                  onClick={closeEditModal}
+                  onClick={handleDiscard}
                 />
               </Col>
             </Row>

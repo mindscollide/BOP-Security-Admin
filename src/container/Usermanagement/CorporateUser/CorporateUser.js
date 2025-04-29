@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -20,7 +20,10 @@ import {
   searchEditCorporateUserSchema,
 } from "../../../utils/schemas";
 import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
-import { SearchCorporateUsersAPI } from "../../../store/actions/Security_Admin";
+import {
+  SearchCorporateUsersAPI,
+  UpdateCorporateUserAPI,
+} from "../../../store/actions/Security_Admin";
 const EditUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,15 +33,18 @@ const EditUser = () => {
   const SearchCorporateUsersData = useSelector(
     (state) => state.securityReducer.SearchCorporateUsersData
   );
-  console.log(
-    SearchCorporateUsersData,
-    "securityReducersecurityReducersecurityReducer"
-  );
   // Get all user status selector
   const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
 
   // state for edit corporate user
   const [editUser, setEditUser] = useState(searchEditCorporateUserSchema);
+
+  const [editCorporateUserUpdate, seCorporateUserUpdate] = useState(null);
+
+  const [editCorporateUserStatus, setEditCorporateUserStatus] = useState({
+    value: 0,
+    label: "",
+  });
 
   // state for Modal edit corporate user
   const [modalEditState, setModalEditState] = useState(
@@ -75,6 +81,7 @@ const EditUser = () => {
       Name: "",
       CompanyName: "",
       Email: "",
+      StatusID: 0,
       PageNumber: 1,
       Length: 10,
     };
@@ -89,8 +96,11 @@ const EditUser = () => {
           SearchCorporateUsersData;
         setCorporateUserTableData(corporateUsers);
       } catch (error) {}
+    } else {
+      setCorporateUserTableData([]);
     }
   }, [SearchCorporateUsersData]);
+
   const onchangeModalTextFieldsHandler = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -192,7 +202,7 @@ const EditUser = () => {
       if (value !== "") {
         setEditUser({
           ...editUser,
-          email: {
+          LoginID: {
             value: value.trimStart(),
             errorMessage: "",
             errorStatus: false,
@@ -202,7 +212,7 @@ const EditUser = () => {
     } else if (name === "email" && value === "") {
       setEditUser({
         ...editUser,
-        email: {
+        LoginID: {
           value: "",
           errorMessage: "",
           errorStatus: true,
@@ -251,22 +261,6 @@ const EditUser = () => {
 
   const handleSelectStatus = async (selectedStatus) => {
     setStatusID(selectedStatus);
-
-    setEditUser((prevState) => ({
-      ...prevState,
-      statusID: { ...prevState.statusID, value: selectedStatus.value },
-    }));
-  };
-
-  const handleEditModalStatus = (option) => {
-    console.log("Staus Option is:", option);
-    setModalEditState({
-      ...modalEditState,
-      selectStatus: {
-        label: option.label,
-        value: option.value,
-      },
-    });
   };
 
   //reset handler for edit user
@@ -298,17 +292,11 @@ const EditUser = () => {
       Name: {
         value: "",
       },
-
-      statusID: {
-        value: 0,
-      },
     });
-    // setEditSelectRoleValue([]);
     setStatusID({
       value: 0,
       label: "",
     });
-    // setEditSelectStatusValue([]);
   };
 
   //onClose modal
@@ -316,33 +304,37 @@ const EditUser = () => {
     setUpdateModal(false);
   };
 
-  const dataSource = [
-    {
-      key: "1",
-      CorporateName: "AfrozAhmed",
-      loginID: "Asadnaqvi12@gmail.com",
-      // loginID: "123456789012345678901234567890",
-      name: "Asad",
-    },
-    {
-      key: "2",
-      CorporateName: "AfrozAhmed",
-      loginID: "Aunnaqvi33@gmail.com",
-      // loginID: "1234567890123456789012345678901",
+  const handleCloseEditCorporateUserModal = useCallback(() => {
+    setEditModalSecurity(false);
+    setEditCorporateUserStatus({
+      value: 0,
+      label: "",
+    });
+  }, []);
 
-      name: "Aun",
-    },
-    {
-      key: "3",
-      CorporateName: "AfrozAhmed",
-      loginID: "Aunnaqvi33@gmail.com",
-      name: "Aun",
-    },
-  ];
+  const handleClickEdit = (record) => {
+    console.log("recordrecordrecord", record);
+    setEditModalSecurity(true);
+    if (statusOptions.length > 0) {
+      let findStatusObj = statusOptions.find(
+        (statusData, index) => statusData.statusID === record.statusId
+      );
+
+      console.log("findStatusObj", findStatusObj);
+      if (findStatusObj !== undefined) {
+        setEditCorporateUserStatus({
+          value: findStatusObj.statusID,
+          label: findStatusObj.statusName,
+        });
+      }
+      console.log(findStatusObj, "findStatusObj");
+    }
+    seCorporateUserUpdate(record);
+  };
 
   const columns = [
     {
-      title: <label className='bottom-table-header'>Corporate Name</label>,
+      title: <label className="bottom-table-header">Corporate Name</label>,
       dataIndex: "corporateName",
       key: "CorporateName",
       width: "190px",
@@ -350,7 +342,7 @@ const EditUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Login ID</label>,
+      title: <label className="bottom-table-header">Login ID</label>,
       dataIndex: "email",
       key: "email",
       align: "left",
@@ -358,7 +350,7 @@ const EditUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>User Name</label>,
+      title: <label className="bottom-table-header">User Name</label>,
       dataIndex: "name",
       key: "name",
       width: "190px",
@@ -366,22 +358,26 @@ const EditUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Status</label>,
-      dataIndex: "userStatusID",
-      key: "userStatusID",
+      title: <label className="bottom-table-header">Status</label>,
+      dataIndex: "statusId",
+      key: "statusId",
       ellipsis: true,
       align: "center",
       render: (text, record) => {
-        return (
-          <>
-            <i className='icon-check edit-user-enabled'></i>
-            {/* <i className="icon-lock edit-user-enabled"></i> */}
-          </>
-        );
+        if (statusOptions.length > 0) {
+          let StatusNameFind = statusOptions.find(
+            (role, index) => role.statusID === record.statusId
+          );
+          console.log(StatusNameFind, "roleNameFind");
+          if (StatusNameFind !== undefined) {
+            return StatusNameFind.statusName;
+          }
+        }
+        return text;
       },
     },
     {
-      title: <label className='bottom-table-header'>Edit</label>,
+      title: <label className="bottom-table-header">Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
@@ -389,9 +385,12 @@ const EditUser = () => {
       render: (text, record) => {
         return (
           <label
-            className='edit-update-column'
-            onClick={() => setEditModalSecurity(true)}>
-            <i className='icon-edit edit-user-icon-color' />
+            className="edit-update-column"
+            onClick={() => {
+              handleClickEdit(record);
+            }}
+          >
+            <i className="icon-edit edit-user-icon-color" />
           </label>
         );
       },
@@ -401,10 +400,10 @@ const EditUser = () => {
   const paginationConfig = {
     itemRender: (_, type, originalElement) => {
       if (type === "prev") {
-        return <a className='Previous-pagination'>Previous</a>;
+        return <href className="Previous-pagination">Previous</href>;
       }
       if (type === "next") {
-        return <a className='Previous-pagination'>Next</a>;
+        return <href className="Previous-pagination">Next</href>;
       }
       return originalElement;
     },
@@ -420,13 +419,27 @@ const EditUser = () => {
   };
 
   const handleSearch = () => {
-    let data = {
-      CorporateName: editUser.CorporateName.value,
-      loginId: editUser.LoginID.value,
-      name: editUser.Name.value,
-      userStatusID: statusID.statusID,
+    let Data = {
+      Name: editUser.Name.value,
+      CompanyName: editUser.CorporateName.value,
+      Email: editUser.LoginID.value,
+      StatusID: statusID.statusID,
+      PageNumber: 1,
+      Length: 10,
     };
-    console.log("data is: ", data);
+
+    console.log("data is: ", Data);
+    dispatch(SearchCorporateUsersAPI(navigate, Data));
+  };
+
+  const handleProceed = () => {
+    const data = {
+      StatusID: editCorporateUserStatus.value,
+      UserID: editCorporateUserUpdate.userID,
+    };
+
+    console.log("data to store is: ", data);
+    dispatch(UpdateCorporateUserAPI(navigate, data, setUpdateModal));
   };
 
   useEffect(() => {
@@ -435,7 +448,7 @@ const EditUser = () => {
         let newUserStatusData = GetAllUserStatus.status.map((status) => {
           return {
             ...status,
-            value: { value: status.statusID },
+            value: status.statusID,
             label: status.statusName,
           };
         });
@@ -444,68 +457,56 @@ const EditUser = () => {
     }
   }, [GetAllUserStatus]);
 
-  useEffect(() => {
-    if (editModalSecurity === false) {
-      setModalEditState({
-        ...modalEditState,
-        selectStatus: {
-          label: null,
-          value: null,
-        },
-      });
-    }
-  }, [editModalSecurity]);
-
   return (
     <>
-      <section className='edit-user-container'>
+      <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className='edit-user-label'>Edit Corporate User</div>
+            <div className="edit-user-label">Edit Corporate User</div>
           </Col>
         </Row>
-        <Row className='mt-3'>
+        <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
-            <Paper className='span-edit-user'>
-              <Row className='mt-3'>
-                <Col lg={2} md={2} sm={12} className='pe-0'>
+            <Paper className="span-edit-user">
+              <Row className="mt-3">
+                <Col lg={2} md={2} sm={12} className="pe-0">
                   <TextField
-                    name='CorporateName'
-                    className='text-fields-Corporate-edituser'
-                    labelClass='d-none'
-                    placeholder='Corporate Name'
+                    name="CorporateName"
+                    className="text-fields-Corporate-edituser"
+                    labelClass="d-none"
+                    placeholder="Corporate Name"
                     maxLength={100}
                     value={editUser.CorporateName.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className='pe-0'>
+                <Col lg={2} md={2} sm={12} className="pe-0">
                   <TextField
-                    name='LoginID'
-                    className='text-fields-Corporate-edituser'
-                    labelClass='d-none'
+                    name="email"
+                    className="text-fields-Corporate-edituser"
+                    labelClass="d-none"
                     maxLength={100}
-                    placeholder='Login ID'
+                    placeholder="Login ID"
                     value={editUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className='pe-0'>
+                <Col lg={2} md={2} sm={12} className="pe-0">
                   <TextField
-                    name='Name'
-                    labelClass='d-none'
+                    name="Name"
+                    labelClass="d-none"
                     maxLength={100}
-                    className='text-fields-Corporate-edituser'
-                    placeholder='Name'
+                    className="text-fields-Corporate-edituser"
+                    placeholder="Name"
                     value={editUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className='dropdown pe-0'>
+                <Col lg={2} md={2} sm={12} className="dropdown pe-0">
                   <Select
-                    name='statusID'
-                    className='edit-Corporate-user-select-status'
-                    placeholder='Status'
+                    name="statusID"
+                    className="edit-Corporate-user-select-status"
+                    placeholder="Status"
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}
@@ -514,27 +515,27 @@ const EditUser = () => {
 
                 <Col lg={4} md={12} sm={12}>
                   <Button
-                    icon={<i className='icon-search icon-search-space'></i>}
-                    text='Search'
-                    className='search-Corporate-Edit-User-btn'
+                    icon={<i className="icon-search icon-search-space"></i>}
+                    text="Search"
+                    className="search-Corporate-Edit-User-btn"
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className='icon-refresh icon-reset-space'></i>}
-                    text='Reset'
+                    icon={<i className="icon-refresh icon-reset-space"></i>}
+                    text="Reset"
                     onClick={resetHandler}
-                    className='reset-Corporate-Edit-User-btn'
+                    className="reset-Corporate-Edit-User-btn"
                   />
 
                   <Button
-                    icon={<i className='icon-download icon-reset-space'></i>}
-                    text='Export'
-                    className='export-Corporate-Edit-User-btn'
+                    icon={<i className="icon-download icon-reset-space"></i>}
+                    text="Export"
+                    className="export-Corporate-Edit-User-btn"
                   />
                 </Col>
               </Row>
 
-              <Row className='mt-4'>
+              <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
                   <span>
                     <Row>
@@ -542,7 +543,8 @@ const EditUser = () => {
                         lg={12}
                         md={12}
                         sm={12}
-                        className='d-flex gap-1 align-items-center'>
+                        className="d-flex gap-1 align-items-center"
+                      >
                         <span className={"corporate-show-text-above-table"}>
                           Show
                         </span>
@@ -551,7 +553,7 @@ const EditUser = () => {
                           options={options}
                           value={dropdownvalue}
                           onChange={handleChangeDropDown}
-                          className='select-Bank-field-edit'
+                          className="select-Bank-field-edit"
                         />
 
                         <span className={"corporate-show-text-above-table"}>
@@ -563,7 +565,7 @@ const EditUser = () => {
                   <Table
                     column={columns}
                     rows={corporateUserTableData}
-                    className='Edituser-table'
+                    className="Edituser-table"
                     pagination={paginationConfig}
                     scroll={{ y: 350 }}
                   />
@@ -577,10 +579,10 @@ const EditUser = () => {
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
-        size='lg'
+        size="lg"
         className={"modaldialog modal-Update"}
-        modalHeaderClassName='d-none'
-        modalFooterClassName='modal-update-footer'
+        modalHeaderClassName="d-none"
+        modalFooterClassName="modal-update-footer"
         onHide={closeUpdateModal}
         ModalBody={
           <Fragment>
@@ -588,7 +590,7 @@ const EditUser = () => {
               <Fragment>
                 <Row>
                   <Col lg={12} md={12} sm={12}>
-                    <p className='update-modal-heading'>
+                    <p className="update-modal-heading">
                       Are you sure want to update?
                     </p>
                   </Col>
@@ -604,15 +606,17 @@ const EditUser = () => {
                 lg={12}
                 md={12}
                 sm={12}
-                className='d-flex justify-content-center'>
+                className="d-flex justify-content-center"
+              >
                 <Button
                   icon={
                     <>
                       <span>Proceed</span>
-                      <i className='icon-arrow-right'></i>
+                      <i className="icon-arrow-right"></i>
                     </>
                   }
-                  className='Update-Proceed-btn'
+                  className="Update-Proceed-btn"
+                  onClick={handleProceed}
                 />
               </Col>
             </Row>
@@ -623,14 +627,14 @@ const EditUser = () => {
       {editModalSecurity ? (
         <EditCorporateModal
           modalEdit={editModalSecurity}
-          modalEditState={modalEditState}
-          setModalEditState={setModalEditState}
+          editCorporateUserUpdate={editCorporateUserUpdate}
           setModalEdit={setEditModalSecurity}
-          SelectStatusChangeHandler={handleEditModalStatus}
-          // Role={roleOptions}
           StatusData={statusOptions}
-          UpdateButtonOnClick={UpdateBtnHandle}
-          onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
+          editCorporateUserStatus={editCorporateUserStatus}
+          setEditCorporateUserStatus={setEditCorporateUserStatus}
+          UpdateBtnHandle={UpdateBtnHandle}
+          handleDiscard={handleCloseEditCorporateUserModal}
+          // onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />
       ) : null}
       {securityReducer.Loading && <Loader />}

@@ -15,10 +15,7 @@ import EditCorporateModal from "../../Pages/Modals/Edit-Corporate-User-Modal/Edi
 import "./CorporateUser.css";
 import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal";
-import {
-  corportateModalEditState,
-  searchEditCorporateUserSchema,
-} from "../../../utils/schemas";
+import { searchEditCorporateUserSchema } from "../../../utils/schemas";
 import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
 import {
   SearchCorporateUsersAPI,
@@ -45,11 +42,6 @@ const EditUser = () => {
     value: 0,
     label: "",
   });
-
-  // state for Modal edit corporate user
-  const [modalEditState, setModalEditState] = useState(
-    corportateModalEditState
-  );
 
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
@@ -101,72 +93,72 @@ const EditUser = () => {
     }
   }, [SearchCorporateUsersData]);
 
-  const onchangeModalTextFieldsHandler = (e) => {
-    let name = e.target.name;
-    let value = e.target.value;
+  // const onchangeModalTextFieldsHandler = (e) => {
+  //   let name = e.target.name;
+  //   let value = e.target.value;
 
-    if (name === "Email" && value !== "") {
-      if (value !== "") {
-        setModalEditState({
-          ...modalEditState,
-          Email: {
-            value: value.trimStart(),
-            errorMessage: "",
-            errorStatus: false,
-          },
-        });
-      }
-    } else if (name === "Email" && value === "") {
-      setModalEditState({
-        ...modalEditState,
-        Email: {
-          value: "",
-          errorMessage: "",
-          errorStatus: true,
-        },
-      });
-    }
+  //   if (name === "Email" && value !== "") {
+  //     if (value !== "") {
+  //       setModalEditState({
+  //         ...modalEditState,
+  //         Email: {
+  //           value: value.trimStart(),
+  //           errorMessage: "",
+  //           errorStatus: false,
+  //         },
+  //       });
+  //     }
+  //   } else if (name === "Email" && value === "") {
+  //     setModalEditState({
+  //       ...modalEditState,
+  //       Email: {
+  //         value: "",
+  //         errorMessage: "",
+  //         errorStatus: true,
+  //       },
+  //     });
+  //   }
 
-    if (name === "FirstName" && value !== "") {
-      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
-      console.log("valueCheckvalueCheck", valueCheck);
-      if (valueCheck !== "") {
-        setModalEditState({
-          ...modalEditState,
-          FirstName: {
-            value: valueCheck.trimStart(),
-            errorMessage: "",
-            errorStatus: false,
-          },
-        });
-      }
-    } else if (name === "FirstName" && value === "") {
-      setModalEditState({
-        ...modalEditState,
-        FirstName: { value: "", errorMessage: "", errorStatus: false },
-      });
-    }
+  //   if (name === "FirstName" && value !== "") {
+  //     let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+  //     console.log("valueCheckvalueCheck", valueCheck);
+  //     if (valueCheck !== "") {
+  //       setModalEditState({
+  //         ...modalEditState,
+  //         FirstName: {
+  //           value: valueCheck.trimStart(),
+  //           errorMessage: "",
+  //           errorStatus: false,
+  //         },
+  //       });
+  //     }
+  //   } else if (name === "FirstName" && value === "") {
+  //     setModalEditState({
+  //       ...modalEditState,
+  //       FirstName: { value: "", errorMessage: "", errorStatus: false },
+  //     });
+  //   }
 
-    if (name === "LastName" && value !== "") {
-      let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
-      console.log("valueCheckvalueCheck", valueCheck);
-      if (valueCheck !== "") {
-        setModalEditState({
-          ...modalEditState,
-          LastName: {
-            value: valueCheck.trimStart(),
-            errorMessage: "",
-            errorStatus: false,
-          },
-        });
-      }
-    } else if (name === "LastName" && value === "") {
-      setModalEditState({
-        ...modalEditState,
-        LastName: { value: "", errorMessage: "", errorStatus: false },
-      });
-    }
-  };
+  //   if (name === "LastName" && value !== "") {
+  //     let valueCheck = value.replace(/[^a-zA-Z ]/g, "");
+  //     console.log("valueCheckvalueCheck", valueCheck);
+  //     if (valueCheck !== "") {
+  //       setModalEditState({
+  //         ...modalEditState,
+  //         LastName: {
+  //           value: valueCheck.trimStart(),
+  //           errorMessage: "",
+  //           errorStatus: false,
+  //         },
+  //       });
+  //     }
+  //   } else if (name === "LastName" && value === "") {
+  //     setModalEditState({
+  //       ...modalEditState,
+  //       LastName: { value: "", errorMessage: "", errorStatus: false },
+  //     });
+  //   }
+  // };
 
   //edit user security admin validate handler
   const editUserValidateHandler = (e) => {

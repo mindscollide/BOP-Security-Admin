@@ -7,16 +7,13 @@ import {
   GetNewCorporateUserRequests,
   RejectUserRequest,
   getAllUsersListApi,
-  SearchBankUsers,
+  // SearchBankUsers,
   SearchCorporateUsersRM,
   SearchBankUsersRM,
   UpdateBankUser,
   UpdateCorporateUser,
 } from "../../commen/apis/Api_config";
-import {
-  securityAdminApi,
-  systemAdminApi,
-} from "../../commen/apis/Api_ends_points";
+import { securityAdminApi } from "../../commen/apis/Api_ends_points";
 import { RefreshToken } from "./Auth_Actions";
 
 const saveBankInit = () => {

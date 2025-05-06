@@ -15,7 +15,7 @@ export const useMqtt = () => useContext(MqttContext);
 export const MqttProvider = ({ subscribeID, dispatch, children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const clientRef = useRef(null);
-  const [lastMessages, setLastMessage] = useState([]);
+  const [lastMessages, setLastMessage] = useState(null);
 
   const connectToMqtt = () => {
     if (!subscribeID) {
@@ -35,7 +35,7 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
     clientRef.current.onMessageArrived = (message) => {
       console.log("Message arrived:", JSON.parse(message.payloadString));
       let data = JSON.parse(message.payloadString);
-      setLastMessage([data, ...lastMessages]);
+      setLastMessage(data);
     };
 
     const options = {
@@ -67,6 +67,7 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
     return () => {
       if (clientRef.current?.isConnected()) {
         clientRef.current.disconnect();
+        setLastMessage(null);
       }
     };
   }, [subscribeID]);

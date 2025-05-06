@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <Suspense>
-      <MqttProvider subscribeID={"BOP_SYSTEMSECURITY"} >
+      <MqttProvider subscribeID={"BOP_SECURITYADMIN"} >
         <App />
       </MqttProvider>
     </Suspense>

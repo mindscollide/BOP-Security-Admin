@@ -232,7 +232,7 @@ const SecurityLogin = () => {
       </Col>
       {LoadingAuthReducerState && <Loader />}
       <Notification setOpen={setOpen} open={open.open} message={open.message} />
-      {auth.Loading ? <Loader /> : null}
+      {auth.Loading && <Loader />}
     </Fragment>
   );
 };

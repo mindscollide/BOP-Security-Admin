@@ -69,6 +69,13 @@ const UpdateBankUser = {
 const UpdateCorporateUser = {
   RequestMethod: "ServiceManager.UpdateCorporateUser",
 };
+const GetUserSettings = {
+  RequestMethod: "ServiceManager.GetUserSettings",
+};
+
+const UpdateUserSettings = {
+  RequestMethod: "ServiceManager.UpdateUserSettings",
+};
 
 export {
   authenticationRefreshToken,
@@ -88,4 +95,6 @@ export {
   GetAllBranches,
   UpdateBankUser,
   UpdateCorporateUser,
+  GetUserSettings,
+  UpdateUserSettings,
 };

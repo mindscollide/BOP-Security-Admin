@@ -389,18 +389,6 @@ const EditUser = () => {
     },
   ];
 
-  const paginationConfig = {
-    itemRender: (_, type, originalElement) => {
-      if (type === "prev") {
-        return <href className="Previous-pagination">Previous</href>;
-      }
-      if (type === "next") {
-        return <href className="Previous-pagination">Next</href>;
-      }
-      return originalElement;
-    },
-  };
-
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);
     setUpdateModal(true);
@@ -558,7 +546,6 @@ const EditUser = () => {
                     column={columns}
                     rows={corporateUserTableData}
                     className="Edituser-table"
-                    pagination={paginationConfig}
                     scroll={{ y: 350 }}
                   />
                 </Col>

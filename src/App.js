@@ -11,13 +11,16 @@ import "@fontsource/roboto/900.css";
 import Header from "./components/layout/Header/Header";
 import Sidebar from "./components/layout/Sidebar/Sidebar";
 import Userreport from "./container/Reports/Userreport";
+import { useContext, useEffect } from "react";
+import { mqttConnection } from "./commen/functions/mqttConnection";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes/Routes";
+import { useMqtt } from "./context/MQTTContext";
 function App() {
-  return (
-    <>
-      <Sidebar />
-      <Header />
-    </>
-  );
+  const { isConnected, lastMessages } = useMqtt();
+  console.log(lastMessages, isConnected, "lastMessageslastMessages");
+  console.log("App component rendered", isConnected);
+  return <RouterProvider router={router} />;
 }
 
 export default App;

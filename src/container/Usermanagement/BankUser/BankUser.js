@@ -450,18 +450,7 @@ const BankUser = () => {
       },
     },
   ];
-  const paginationBankConfig = {
-    itemRender: (_, type, originalElement) => {
-      if (type === "prev") {
-        return <href className="Previous-pagination">Previous</href>;
-      }
-      if (type === "next") {
-        return <href className="Previous-pagination">Next</href>;
-      }
-      return originalElement;
-    },
-    // other pagination settings like current, pageSize, etc.
-  };
+  
 
   const handleChangeDropDown = (value) => {
     setDropdownvalue(value);
@@ -660,7 +649,6 @@ const BankUser = () => {
                     column={columns}
                     rows={bankUserTableData}
                     className="Edituser-table"
-                    pagination={paginationBankConfig}
                     scroll={{ y: 350, x: true }}
                   />
                 </Col>

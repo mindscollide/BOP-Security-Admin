@@ -2,9 +2,7 @@ import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
-import { router } from "./routes/Routes";
 import store from "./store/store";
 import reportWebVitals from "./reportWebVitals";
 import { MqttProvider } from "./context/MQTTContext";
@@ -13,7 +11,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <Suspense>
-      <MqttProvider subscribeID={"BOP_SECURITYADMIN"} >
+      <MqttProvider subscribeID={"BOP_SECURITYADMIN"}>
         <App />
       </MqttProvider>
     </Suspense>

@@ -16,12 +16,14 @@ import {
   getNewBankUserRequestApi,
   saveBankUserApi,
 } from "../../../store/actions/Security_Admin";
+import { useMqtt } from "../../../context/MQTTContext";
 
 const PendingApprovalBank = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
+  const { bankPendingApproval } = useMqtt();
 
   //Global State
   const { securityReducer } = useSelector((state) => state);
@@ -82,10 +84,17 @@ const PendingApprovalBank = () => {
     }
   }, [GetNewBankUserRequests]);
 
+  useEffect(() => {
+    if (bankPendingApproval !== null) {
+      console.log("bankPendingApproval", bankPendingApproval);
+      setTableData([...tableData, bankPendingApproval.user]);
+    }
+  }, [bankPendingApproval]);
+
   // column of create user
   const columns = [
     {
-      title: <label className="bottom-table-header">Email</label>,
+      title: <label className='bottom-table-header'>Email</label>,
       dataIndex: "email",
       key: "email",
       width: "380px",
@@ -94,7 +103,7 @@ const PendingApprovalBank = () => {
     },
 
     {
-      title: <label className="bottom-table-header">Name</label>,
+      title: <label className='bottom-table-header'>Name</label>,
       dataIndex: "firstname",
       key: "firstname",
       width: "280px",
@@ -102,24 +111,24 @@ const PendingApprovalBank = () => {
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Role</label>,
-      dataIndex: "fK_UserRoleID",
+      title: <label className='bottom-table-header'>Role</label>,
+      dataIndex: "role",
       key: "fK_UserRoleID",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Branch</label>,
+      title: <label className='bottom-table-header'>Branch</label>,
       dataIndex: "branchName",
       key: "branchName",
       ellipsis: true,
       render: (text, record) => {
         return (
-          <label>{record.branchName !== "" ? record.branchName : "-"}</label>
+          <label className="d-flex justify-content-center">{record.branchName !== "" ? record.branchName : "-"}</label>
         );
       },
     },
     {
-      title: <label className="bottom-table-header">Accept</label>,
+      title: <label className='bottom-table-header'>Accept</label>,
       dataIndex: "accept",
       key: "accept",
       ellipsis: true,
@@ -130,15 +139,14 @@ const PendingApprovalBank = () => {
             onClick={() => {
               // console.log("record", record);
               openAcceptModal(record.userRegistrationRequestID);
-            }}
-          >
-            <i className="icon-check icon-accept-column"></i>
+            }}>
+            <i className='icon-check icon-accept-column'></i>
           </label>
         );
       },
     },
     {
-      title: <label className="bottom-table-header">Reject</label>,
+      title: <label className='bottom-table-header'>Reject</label>,
       dataIndex: "reject",
       key: "reject",
       ellipsis: true,
@@ -146,7 +154,7 @@ const PendingApprovalBank = () => {
       render: (text, record) => {
         return (
           <label onClick={() => openRejectModal(record)}>
-            <i className="icon-close icon-close-column"></i>
+            <i className='icon-close icon-close-column'></i>
           </label>
         );
       },
@@ -155,23 +163,24 @@ const PendingApprovalBank = () => {
 
   return (
     <>
-      <section className="create-user-container">
+      <section className='create-user-container'>
         <Row>
-          <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
-            <label className="Pending-Approval-label">
+          <Col lg={12} md={12} sm={12} className='d-flex justify-content-start'>
+            <label className='Pending-Approval-label'>
               Pending Approval Bank
             </label>
           </Col>
         </Row>
 
-        <Row className="mt-3">
-          <Paper className="span-table">
-            <Col lg={12} md={12} sm={12} className="mt-3">
+        <Row className='mt-3'>
+          <Paper className='span-table'>
+            <Col lg={12} md={12} sm={12} className='mt-3'>
               <Table
                 column={columns}
                 rows={tableData}
-                className="Createuser-table"
+                className='Createuser-table'
                 pagination={false}
+                scroll={{y: 600}}
               />
             </Col>
           </Paper>

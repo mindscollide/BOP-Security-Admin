@@ -9,7 +9,9 @@ import {
   SearchReducer,
   downloadReducer,
   securityModalReducer,
+  SettingsReducer,
 } from "./reducers";
+
 import { configureStore } from "@reduxjs/toolkit";
 import * as actions from "./action_types";
 
@@ -20,6 +22,7 @@ const AppReducer = combineReducers({
   SearchReducer: SearchReducer,
   downloadReducer: downloadReducer,
   securityModalReducer: securityModalReducer,
+  settingsReducer: SettingsReducer,
 });
 
 const rootReducer = (state, action) => {

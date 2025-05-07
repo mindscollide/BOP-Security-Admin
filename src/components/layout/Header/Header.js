@@ -31,19 +31,16 @@ const Header = () => {
             </Navbar.Brand>
             <Dropdown>
               <Dropdown.Toggle className="dropdown-toggle-header2">
-                <p className="user-name-header2">{localStorage.getItem("userName")}</p>
+                <p className="user-name-header2">
+                  {localStorage.getItem("userName")}
+                </p>
                 <i className="icon-arrow-down"></i>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown_menu-Header2">
-                <Dropdown.Item>
+                <Dropdown.Item onClick={onClickSetting}>
                   <Nav.Link>
                     <i className="icon-settings me-1"></i>
-                    <label
-                      className="dropdown-select-labels"
-                      onClick={onClickSetting}
-                    >
-                      Setting
-                    </label>
+                    <label className="dropdown-select-labels">Setting</label>
                   </Nav.Link>
                 </Dropdown.Item>
 

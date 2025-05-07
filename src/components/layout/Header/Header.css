@@ -44,6 +44,7 @@
 .dropdown_menu-Header2.dropdown-menu {
   border: none !important;
   margin-top: 15px !important;
+  z-index: 100;
 }
 
 @media (max-width: 1024px) and (min-width: 769px) {

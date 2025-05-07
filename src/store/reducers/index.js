@@ -4,3 +4,4 @@ export { default as CorporateReducer } from "./CorporateReducer";
 export { default as SearchReducer } from "./SearchCorporateUserReducer";
 export { default as downloadReducer } from "./Download-Reducer";
 export { default as securityModalReducer } from "./Security_Admin_Modal_reducer";
+export { default as SettingsReducer } from "./SettingsReducer";

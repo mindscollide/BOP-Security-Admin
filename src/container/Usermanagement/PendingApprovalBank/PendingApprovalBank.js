@@ -23,7 +23,6 @@ const PendingApprovalBank = () => {
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const { bankPendingApproval } = useMqtt();
 
   //Global State
   const { securityReducer } = useSelector((state) => state);
@@ -84,12 +83,7 @@ const PendingApprovalBank = () => {
     }
   }, [GetNewBankUserRequests]);
 
-  useEffect(() => {
-    if (bankPendingApproval !== null) {
-      console.log("bankPendingApproval", bankPendingApproval);
-      setTableData([...tableData, bankPendingApproval.user]);
-    }
-  }, [bankPendingApproval]);
+
 
   // column of create user
   const columns = [

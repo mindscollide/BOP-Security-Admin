@@ -5,13 +5,14 @@ const CustomTable = ({
   column,
   rows,
   className,
-  pagination,
+  pagination = false,
   loading,
   id,
   labelTitle,
   expandable,
   onChange,
   locale,
+  tableRef,
   scroll
 }) => {
   console.log("CustomTable", className);
@@ -29,7 +30,10 @@ const CustomTable = ({
         pagination={pagination}
         expandable={expandable}
         locale={locale}
+        ref={tableRef}
         scroll={scroll}
+
+        tableLayout="fixed"
       />
     </>
   );

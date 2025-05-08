@@ -37,7 +37,7 @@ const saveBankFail = (message) => {
   };
 };
 
-const saveBankUserApi = (navigate, Data) => {
+const saveBankUserApi = (navigate, Data,setAcceptModal) => {
   let token = localStorage.getItem("token");
   return (dispatch) => {
     dispatch(saveBankInit());
@@ -55,7 +55,7 @@ const saveBankUserApi = (navigate, Data) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(saveBankUserApi(navigate, Data));
+          dispatch(saveBankUserApi(navigate, Data,setAcceptModal));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -68,7 +68,7 @@ const saveBankUserApi = (navigate, Data) => {
               dispatch(
                 saveBankSuccess(response.data.responseResult, "user created")
               );
-              dispatch(getNewBankUserRequestApi(navigate));
+              setAcceptModal(false)
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -458,7 +458,7 @@ const rejectUserRequestFail = (message) => {
   };
 };
 
-const rejectUserRequestApi = (navigate, Data) => {
+const rejectUserRequestApi = (navigate, Data,setModalReject) => {
   const token = localStorage.getItem("token");
   return (dispatch) => {
     dispatch(rejectUserRequestInit());
@@ -476,7 +476,7 @@ const rejectUserRequestApi = (navigate, Data) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(rejectUserRequestApi(navigate, Data));
+          dispatch(rejectUserRequestApi(navigate, Data,setModalReject));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -492,6 +492,7 @@ const rejectUserRequestApi = (navigate, Data) => {
                   "Successful"
                 )
               );
+              setModalReject(false);
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

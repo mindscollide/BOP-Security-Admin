@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -22,7 +16,6 @@ import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
 import "./BankUser.css";
 import { searchEditBankUserSchema } from "../../../utils/schemas";
 import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
-import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal";
 import {
   GetAllBranchesAPI,
   GetAllUserStatusAPI,
@@ -33,6 +26,7 @@ import {
   UpdateBankUserAPI,
 } from "../../../store/actions/Security_Admin";
 import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
+import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 
 const BankUser = () => {
   const navigate = useNavigate();
@@ -112,6 +106,14 @@ const BankUser = () => {
   ];
 
   const [bankUserTableData, setBankUserTableData] = useState([]);
+
+  //state for save and cancel button
+  const confirmationModal = useSelector(
+    (state) => state.securityModalReducer.confirmationModal
+  );
+  const [modalState, setModalState] = useState(0);
+
+  console.log("confirmationModal", confirmationModal);
 
   //Custome hook for Scrolling (1)
   const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
@@ -305,6 +307,7 @@ const BankUser = () => {
   //reset handler for edit user
   const resetHandler = () => {
     dispatch(ConfirmationModalSecurityAdmin(true));
+    setModalState(2);
   };
 
   // show error message When user hit activate btn
@@ -313,30 +316,34 @@ const BankUser = () => {
     setRecordLength(0);
     setSRow(0);
     setBankUserTableData([]);
-    let Data = {
-      Name: "",
-      EmployeeID: "",
-      Email: "",
-      RoleID: 0,
-      StatusID: 0,
-      sRow: 0,
-      Length: 10,
-    };
-    dispatch(SearchBankUsersAPI(navigate, Data));
-    setBankEditUser({
-      ...BankEditUser,
-      EmployeeID: { value: "", errorMessage: "", errorStatus: false },
-      LoginID: { value: "", errorMessage: "", errorStatus: false },
-      Name: { value: "", errorMessage: "", errorStatus: false },
-    });
-    setStatusID({
-      value: 0,
-      label: "",
-    });
-    setRoleID({
-      value: 0,
-      label: "",
-    });
+    if (modalState === 2) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
+      let Data = {
+        Name: "",
+        EmployeeID: "",
+        Email: "",
+        RoleID: 0,
+        StatusID: 0,
+        sRow: 0,
+        Length: 10,
+      };
+      dispatch(SearchBankUsersAPI(navigate, Data));
+      setBankEditUser({
+        ...BankEditUser,
+        EmployeeID: { value: "", errorMessage: "", errorStatus: false },
+        LoginID: { value: "", errorMessage: "", errorStatus: false },
+        Name: { value: "", errorMessage: "", errorStatus: false },
+      });
+      setStatusID({
+        value: 0,
+        label: "",
+      });
+      setRoleID({
+        value: 0,
+        label: "",
+      });
+    }
   };
 
   //onClose modal
@@ -359,6 +366,17 @@ const BankUser = () => {
       label: "",
     });
   }, []);
+
+  //Table columns for customer List
+  const handleNoButton = useCallback(() => {
+    if (modalState === 1) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
+    } else if (modalState === 2) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
+    }
+  }, [modalState]);
 
   const handleClickEdit = (record) => {
     console.log("recordrecordrecord", record);
@@ -770,7 +788,12 @@ const BankUser = () => {
           handleDiscard={handleCloseEditBankUserModal}
         />
       ) : null}
-      <ActivateConfirmationModal onConfirm={resetHandlerYes} />
+      {confirmationModal === true && (
+        <ActivateConfirmationModal
+          handleYesButton={resetHandlerYes}
+          handleNoButton={handleNoButton}
+        />
+      )}
       {securityReducer.Loading && <Loader />}
     </>
   );

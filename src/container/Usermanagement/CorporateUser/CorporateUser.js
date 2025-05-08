@@ -13,8 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import EditCorporateModal from "../../Pages/Modals/Edit-Corporate-User-Modal/EditCorporateModal";
 import "./CorporateUser.css";
-import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
-import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal";
+// import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
 import { searchEditCorporateUserSchema } from "../../../utils/schemas";
 import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
 import {
@@ -22,6 +21,8 @@ import {
   UpdateCorporateUserAPI,
 } from "../../../store/actions/Security_Admin";
 import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
+import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
+import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
 const EditUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -61,6 +62,11 @@ const EditUser = () => {
     value: 50,
     label: "50",
   });
+  //state for save and cancel button
+  const confirmationModal = useSelector(
+    (state) => state.securityModalReducer.confirmationModal
+  );
+  const [modalState, setModalState] = useState(0);
 
   const options = [
     { value: 50, label: "50" },
@@ -70,24 +76,6 @@ const EditUser = () => {
   //row length on scroll
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);
-
-  // //Custome hook for Scrolling (1)
-  // const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
-  //   console.log("🚀 Table reached bottom");
-  //   // Load more data here if needed
-  //   if (recordsLength !== corporateUserTableData.length) {
-  //     let Data = {
-  //       Name: BankEditUser.Name.value,
-  //       EmployeeID: BankEditUser.EmployeeID.value,
-  //       Email: BankEditUser.LoginID.value,
-  //       RoleID: roleID.value,
-  //       StatusID: statusID.value,
-  //       sRow: sRow,
-  //       Length: 10,
-  //     };
-  //     dispatch(SearchCorporateUsersAPI(navigate, Data));
-  //   }
-  // });
 
   //initial APIs calling
   useEffect(() => {
@@ -104,6 +92,7 @@ const EditUser = () => {
     dispatch(SearchCorporateUsersAPI(navigate, Data));
   }, []);
 
+  //Custome hook for Scrolling (1)
   const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
     console.log("🚀 Table reached bottom");
     // Load more data here if needed
@@ -140,11 +129,14 @@ const EditUser = () => {
           setRecordLength(totalRecords);
         }
       } catch (error) {}
-    } else {
+    } else if (SearchCorporateUsersData === null) {
       if (!hasReachedBottom) {
-        setCorporateUserTableData([]);
         setHasReachedBottom(false);
-        setCorporateUserTableData([...corporateUserTableData]);
+        setCorporateUserTableData([]);
+        setRecordLength(0);
+        setSRow(0);
+
+        // setCorporateUserTableData([...corporateUserTableData]);
       }
     }
   }, [SearchCorporateUsersData]);
@@ -306,7 +298,16 @@ const EditUser = () => {
       });
     }
   };
-
+  //Table columns for customer List
+  const handleNoButton = useCallback(() => {
+    if (modalState === 1) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
+    } else if (modalState === 2) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
+    }
+  }, [modalState]);
   const handleSelectStatus = async (selectedStatus) => {
     setStatusID(selectedStatus);
   };
@@ -314,38 +315,48 @@ const EditUser = () => {
   //reset handler for edit user
   const resetHandler = () => {
     dispatch(ConfirmationModalSecurityAdmin(true));
+    setModalState(2);
   };
 
-  //reset handler for edit user
+  //reset handler for edit user (3)
   const resetHandlerYes = () => {
-    let Data = {
-      Name: "",
-      CompanyName: "",
-      Email: "",
-      StatusID: "",
-      sRow: 0,
-      Length: 10,
-    };
+    setHasReachedBottom(false);
+    setRecordLength(0);
+    setSRow(0);
+    setCorporateUserTableData([]);
+    if (modalState === 2) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
 
-    dispatch(SearchCorporateUsersAPI(navigate, Data));
-    setEditUser({
-      ...editUser,
-      CorporateName: {
-        value: "",
-      },
+      let Data = {
+        Name: "",
+        CompanyName: "",
+        Email: "",
+        StatusID: 0,
+        sRow: 0,
+        Length: 10,
+      };
 
-      LoginID: {
-        value: "",
-      },
+      dispatch(SearchCorporateUsersAPI(navigate, Data));
+      setEditUser({
+        ...editUser,
+        CorporateName: {
+          value: "",
+        },
 
-      Name: {
-        value: "",
-      },
-    });
-    setStatusID({
-      value: 0,
-      label: "",
-    });
+        LoginID: {
+          value: "",
+        },
+
+        Name: {
+          value: "",
+        },
+      });
+      setStatusID({
+        value: 0,
+        label: "",
+      });
+    }
   };
 
   //onClose modal
@@ -455,10 +466,12 @@ const EditUser = () => {
     setDropdownvalue(value);
   };
 
+  //handling scroll while search (2)
   const handleSearch = () => {
     setSRow(0);
     setRecordLength(0);
     setHasReachedBottom(false);
+    setCorporateUserTableData([]);
     let Data = {
       Name: editUser.Name.value,
       CompanyName: editUser.CorporateName.value,
@@ -662,6 +675,12 @@ const EditUser = () => {
           </Fragment>
         }
       />
+      {confirmationModal === true && (
+        <ActivateConfirmationModal
+          handleYesButton={resetHandlerYes}
+          handleNoButton={handleNoButton}
+        />
+      )}
 
       {editModalSecurity ? (
         <EditCorporateModal
@@ -677,7 +696,6 @@ const EditUser = () => {
         />
       ) : null}
       {securityReducer.Loading && <Loader />}
-      <ActivateConfirmationModal onConfirm={resetHandlerYes} />
     </>
   );
 };

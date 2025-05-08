@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Col, Row } from "react-bootstrap";
 import { TextField, Button, Paper, Loader } from "../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,9 +7,9 @@ import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
 import "./Userreport.css";
 import moment from "moment";
-import ActivateConfirmationModal from "../../helpers/Modals/ActivateConfirmationModal";
 import { ConfirmationModalSecurityAdmin } from "../../store/actions/Security_Admin_Modal";
 import { GetAllUserStatusAPI } from "../../store/actions/Auth_Actions";
+import ActivateConfirmationModal from "../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 
 const Userreport = () => {
   const navigate = useNavigate();
@@ -42,6 +42,11 @@ const Userreport = () => {
     onChange: (date) => console.log(date.format()),
   });
 
+  //state for save and cancel button
+  const confirmationModal = useSelector(
+    (state) => state.securityModalReducer.confirmationModal
+  );
+  const [modalState, setModalState] = useState(0);
   // state for select Role
   // const [selectRoleValueReport, setSelectRoleValueReport] = useState([]);
 
@@ -178,7 +183,16 @@ const Userreport = () => {
       },
     });
   };
-
+  //Table columns for customer List
+  const handleNoButton = useCallback(() => {
+    if (modalState === 1) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
+    } else if (modalState === 2) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
+    }
+  }, [modalState]);
   //reset handler for edit user
   const resetHandler = () => {
     dispatch(ConfirmationModalSecurityAdmin(true));
@@ -394,6 +408,12 @@ const Userreport = () => {
         </Row>
       </section>
       <ActivateConfirmationModal onConfirm={resetHandlerYes} />
+      {confirmationModal === true && (
+        <ActivateConfirmationModal
+          handleYesButton={resetHandlerYes}
+          handleNoButton={handleNoButton}
+        />
+      )}
     </>
   );
 };

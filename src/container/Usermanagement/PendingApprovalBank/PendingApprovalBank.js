@@ -74,8 +74,7 @@ const PendingApprovalBank = () => {
       // console.log("selectedRequestId", selectedRequestId);
       try {
         let registrationID = { UserRegistrationRequestID: selectedRequestId };
-        dispatch(saveBankUserApi(navigate, registrationID));
-        setAcceptModal(false);
+        dispatch(saveBankUserApi(navigate, registrationID,setAcceptModal));
       } catch (error) {
         console.log("error", error);
       }
@@ -127,8 +126,20 @@ const PendingApprovalBank = () => {
   useEffect(() => {
     if (bankUserCreated !== null) {
       try {
-        // const {} =
-        // let findisExist =
+        const { user } = bankUserCreated;
+        let findisExist = tableData.find(
+          (rowData, index) =>
+            rowData.userRegistrationRequestID === user.userRegistrationRequestID
+        );
+        if (findisExist !== undefined) {
+          setTableData((prevData) => {
+            return prevData.filter(
+              (tableData, index) =>
+                tableData.userRegistrationRequestID !==
+                user.userRegistrationRequestID
+            );
+          });
+        }
       } catch (error) {}
     }
   }, [bankUserCreated]);
@@ -136,6 +147,20 @@ const PendingApprovalBank = () => {
   useEffect(() => {
     if (bankUserRejected !== null) {
       try {
+        const { userRegistrationRequestID } = bankUserRejected;
+        let findisExist = tableData.find(
+          (rowData, index) =>
+            rowData.userRegistrationRequestID === userRegistrationRequestID
+        );
+        if (findisExist !== undefined) {
+          setTableData((prevData) => {
+            return prevData.filter(
+              (tableData, index) =>
+                tableData.userRegistrationRequestID !==
+              userRegistrationRequestID
+            );
+          });
+        }
       } catch (error) {}
     }
   }, [bankUserRejected]);

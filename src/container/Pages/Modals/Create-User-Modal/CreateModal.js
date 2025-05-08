@@ -73,8 +73,7 @@ const CreateModal = ({
         UserRegistrationRequestID: rejectUserData,
       };
       // console.log(Data, "rejectUserDatarejectUserDatarejectUserData");
-      dispatch(rejectUserRequestApi(navigate, Data));
-      setModalReject(false);
+      dispatch(rejectUserRequestApi(navigate, Data,));
     } else {
       setErrorShow(true);
     }

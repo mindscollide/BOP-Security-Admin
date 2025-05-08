@@ -97,22 +97,55 @@ const EditUser = () => {
       CompanyName: "",
       Email: "",
       StatusID: 0,
-      PageNumber: 1,
+      sRow: 0,
       Length: 10,
     };
 
     dispatch(SearchCorporateUsersAPI(navigate, Data));
   }, []);
 
+  const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
+    console.log("🚀 Table reached bottom");
+    // Load more data here if needed
+    if (recordsLength !== corporateUserTableData.length) {
+      let Data = {
+        Name: "",
+        CompanyName: "",
+        Email: "",
+        StatusID: 0,
+        sRow: sRow,
+        Length: 10,
+      };
+      dispatch(SearchCorporateUsersAPI(navigate, Data));
+    }
+  });
+
   useEffect(() => {
     if (SearchCorporateUsersData !== null) {
       try {
-        const { corporateUsers, totalRecords, pageNumbers } =
-          SearchCorporateUsersData;
-        setCorporateUserTableData(corporateUsers);
+        const { corporateUsers, totalRecords } = SearchCorporateUsersData;
+        if (hasReachedBottom) {
+          setHasReachedBottom(false);
+          setCorporateUserTableData([
+            ...corporateUserTableData,
+            ...corporateUsers,
+          ]);
+          let sRows = corporateUserTableData.length + corporateUsers.length;
+          setSRow(sRows);
+          setRecordLength(totalRecords);
+        } else {
+          setHasReachedBottom(false);
+          setCorporateUserTableData(corporateUsers);
+          setSRow(corporateUsers.length);
+          setRecordLength(totalRecords);
+        }
       } catch (error) {}
     } else {
-      setCorporateUserTableData([]);
+      if (!hasReachedBottom) {
+        setCorporateUserTableData([]);
+        setHasReachedBottom(false);
+        setCorporateUserTableData([...corporateUserTableData]);
+      }
     }
   }, [SearchCorporateUsersData]);
 
@@ -289,7 +322,8 @@ const EditUser = () => {
       Name: "",
       CompanyName: "",
       Email: "",
-      PageNumber: 1,
+      StatusID: "",
+      sRow: 0,
       Length: 10,
     };
 
@@ -422,12 +456,15 @@ const EditUser = () => {
   };
 
   const handleSearch = () => {
+    setSRow(0);
+    setRecordLength(0);
+    setHasReachedBottom(false);
     let Data = {
       Name: editUser.Name.value,
       CompanyName: editUser.CorporateName.value,
       Email: editUser.LoginID.value,
       StatusID: statusID.statusID,
-      PageNumber: 1,
+      sRow: 0,
       Length: 10,
     };
 

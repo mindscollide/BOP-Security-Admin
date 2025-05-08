@@ -23,7 +23,8 @@ const PendingApprovalBank = () => {
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-
+  const { bankUserRequested } = useMqtt();
+  console.log(bankUserRequested, "bankUserRequestedbankUserRequested");
   //Global State
   const { securityReducer } = useSelector((state) => state);
   //Checking snakbar state
@@ -46,6 +47,7 @@ const PendingApprovalBank = () => {
 
     setAcceptModal(true);
   };
+
   const handleAccept = () => {
     if (selectedRequestId) {
       // console.log("selectedRequestId", selectedRequestId);
@@ -65,7 +67,11 @@ const PendingApprovalBank = () => {
   };
 
   useEffect(() => {
-    dispatch(getNewBankUserRequestApi(navigate));
+    let Data = {
+      sRow: 0,
+      Length: 10,
+    };
+    dispatch(getNewBankUserRequestApi(navigate, Data));
   }, []);
 
   useEffect(() => {
@@ -78,12 +84,22 @@ const PendingApprovalBank = () => {
       } catch (error) {
         console.log("Error", error);
       }
-    } else if (GetNewBankUserRequests === null) {
-      setTableData("");
     }
   }, [GetNewBankUserRequests]);
 
+  useEffect(() => {
+    if (bankUserRequested !== null) {
+      console.log(bankUserRequested, "bankUserRequested");
+      try {
+        let user = bankUserRequested?.user;
+        console.log(user, "bankUserRequested");
 
+        setTableData([user, ...tableData]);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [bankUserRequested]);
 
   // column of create user
   const columns = [
@@ -117,7 +133,9 @@ const PendingApprovalBank = () => {
       ellipsis: true,
       render: (text, record) => {
         return (
-          <label className="d-flex justify-content-center">{record.branchName !== "" ? record.branchName : "-"}</label>
+          <label className='d-flex justify-content-center'>
+            {record.branchName !== "" ? record.branchName : "-"}
+          </label>
         );
       },
     },
@@ -174,7 +192,7 @@ const PendingApprovalBank = () => {
                 rows={tableData}
                 className='Createuser-table'
                 pagination={false}
-                scroll={{y: 600}}
+                scroll={{ y: 600 }}
               />
             </Col>
           </Paper>

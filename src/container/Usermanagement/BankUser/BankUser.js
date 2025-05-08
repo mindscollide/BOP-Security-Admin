@@ -438,7 +438,7 @@ const BankUser = () => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
-      align: "left",
+      align: "center",
       width: "190px",
       ellipsis: true,
       render: (text, record) => {
@@ -459,7 +459,7 @@ const BankUser = () => {
       dataIndex: "BranchName",
       key: "BranchName",
       width: "110px",
-      align: "left",
+      align: "center",
       ellipsis: true,
       render: (text, record) => {
         if (record.branch !== null) {

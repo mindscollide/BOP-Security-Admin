@@ -56,96 +56,95 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
     clientRef.current.onMessageArrived = (message) => {
       console.log("Message arrived:", JSON.parse(message.payloadString));
       let data = JSON.parse(message.payloadString);
-      if (data.action.toLowerCase().includes("SystemAdmin".toLowerCase())) {
-        console.log("Message arrived:", JSON.parse(message.payloadString));
 
-        switch (data.payload.message) {
-          case "BANK_USER_REQUEST":
-            console.log("Message arrived:", data);
-            // When System Admin create a bank user
-            setBankUserRequested(data.payload);
-            break;
-          case "CORPORATE_USER_REQUEST":
-            console.log("Message arrived:", data);
+      console.log("Message arrived:", JSON.parse(message.payloadString));
 
-            // When System Admin create a corporate user
-            setCorporateUserRequested(data.payload);
-            break;
-          case "BANK_USER_CREATED":
-            console.log("Message arrived:", data);
+      switch (data.payload.message) {
+        case "BANK_USER_REQUEST":
+          console.log("Message arrived:", data);
+          // When System Admin create a bank user
+          setBankUserRequested(data.payload);
+          break;
+        case "CORPORATE_USER_REQUEST":
+          console.log("Message arrived:", data);
 
-            // When Security Admin Accepted a Bank User Request
-            setBankUserCreated(data.payload);
-            break;
-          case "CORPORATE_USER_CREATED":
-            console.log("Message arrived:", data);
+          // When System Admin create a corporate user
+          setCorporateUserRequested(data.payload);
+          break;
+        case "BANK_USER_CREATED":
+          console.log("Message arrived:", data);
 
-            // When Security Admin Accepted a Corporate User Request
-            setCorporateUserCreated(data.payload);
-            break;
-          case "CORP_USER_REQUEST_REJECTED":
-            console.log("Message arrived:", data);
+          // When Security Admin Accepted a Bank User Request
+          setBankUserCreated(data.payload);
+          break;
+        case "CORPORATE_USER_CREATED":
+          console.log("Message arrived:", data);
 
-            // When Security Admin Rejected a Corporate User Request
-            setCorporateUserRejected(data.payload);
-            break;
-          case "BANK_USER_REQUEST_REJECTED":
-            console.log("Message arrived:", data);
+          // When Security Admin Accepted a Corporate User Request
+          setCorporateUserCreated(data.payload);
+          break;
+        case "CORP_USER_REQUEST_REJECTED":
+          console.log("Message arrived:", data);
 
-            // When Security Admin Rejected a Bank User Request
-            setBankUserRejected(data.payload);
-            break;
-          case "CORP_USER_ROLE_STATUS_CHANGE":
-            console.log("Message arrived:", data);
+          // When Security Admin Rejected a Corporate User Request
+          setCorporateUserRejected(data.payload);
+          break;
+        case "BANK_USER_REQUEST_REJECTED":
+          console.log("Message arrived:", data);
 
-            // When Security Admin Change a Corporate User Role
-            setCorporateUserRoleStatusChange(data.payload);
-            break;
-          case "BANK_USER_ROLE_STATUS_CHANGE":
-            console.log("Message arrived:", data);
+          // When Security Admin Rejected a Bank User Request
+          setBankUserRejected(data.payload);
+          break;
+        case "CORP_USER_ROLE_STATUS_CHANGE":
+          console.log("Message arrived:", data);
 
-            // When Security Admin Change a Bank User Role
-            setBankUserRoleStatusChange(data.payload);
-            break;
-          case "BRANCH_CREATED":
-            console.log("Message arrived:", data);
+          // When Security Admin Change a Corporate User Role
+          setCorporateUserRoleStatusChange(data.payload);
+          break;
+        case "BANK_USER_ROLE_STATUS_CHANGE":
+          console.log("Message arrived:", data);
 
-            // When System  Admin Created a Branch
-            setBranchCreated(data.payload);
-            break;
-          case "BRANCH_UPDATED":
-            console.log("Message arrived:", data);
+          // When Security Admin Change a Bank User Role
+          setBankUserRoleStatusChange(data.payload);
+          break;
+        case "BRANCH_CREATED":
+          console.log("Message arrived:", data);
 
-            // When System  Admin Updated a Branch
-            setBranchUpdated(data.payload);
-            break;
-          case "CORPORATE_CREATED":
-            console.log("Message arrived:", data);
+          // When System  Admin Created a Branch
+          setBranchCreated(data.payload);
+          break;
+        case "BRANCH_UPDATED":
+          console.log("Message arrived:", data);
 
-            // When System  Admin Created a Corporate
-            setCorporateCreated(data.payload);
-            break;
-          case "CORPORATE_UPDATED":
-            console.log("Message arrived:", data);
+          // When System  Admin Updated a Branch
+          setBranchUpdated(data.payload);
+          break;
+        case "CORPORATE_CREATED":
+          console.log("Message arrived:", data);
 
-            // When System  Admin Updated a Corporate
-            setCorporateUpdated(data.payload);
-            break;
-          case "BANK_USER_UPDATED":
-            console.log("Message arrived:", data);
+          // When System  Admin Created a Corporate
+          setCorporateCreated(data.payload);
+          break;
+        case "CORPORATE_UPDATED":
+          console.log("Message arrived:", data);
 
-            // When System  Admin Updated a Bank User
-            setBankUserUpdated(data.payload);
-            break;
-          case "CORPORATE_USER_UPDATED":
-            console.log("Message arrived:", data);
+          // When System  Admin Updated a Corporate
+          setCorporateUpdated(data.payload);
+          break;
+        case "BANK_USER_UPDATED":
+          console.log("Message arrived:", data);
 
-            // When System  Admin Updated a Corporate User
-            setCorporateUserUpdated(data.payload);
-            break;
-          default:
-            break;
-        }
+          // When System  Admin Updated a Bank User
+          setBankUserUpdated(data.payload);
+          break;
+        case "CORPORATE_USER_UPDATED":
+          console.log("Message arrived:", data);
+
+          // When System  Admin Updated a Corporate User
+          setCorporateUserUpdated(data.payload);
+          break;
+        default:
+          break;
       }
     };
 

@@ -194,7 +194,7 @@ const saveCorporateUserApi = (navigate, Data) => {
                   "user created"
                 )
               );
-              dispatch(getNewCorporateUserRequestApi(navigate));
+              // dispatch(getNewCorporateUserRequestApi(navigate));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -373,12 +373,13 @@ const getNewCorporateUserRequestFail = (message) => {
   };
 };
 
-const getNewCorporateUserRequestApi = (navigate) => {
+const getNewCorporateUserRequestApi = (navigate, Data) => {
   let token = localStorage.getItem("token");
   return (dispatch) => {
     dispatch(getNewCorporateUserRequestInit());
     let form = new FormData();
     form.append("RequestMethod", GetNewCorporateUserRequests.RequestMethod);
+    form.append("RequestData", JSON.stringify(Data));
     axios({
       method: "post",
       url: securityAdminApi,
@@ -390,7 +391,7 @@ const getNewCorporateUserRequestApi = (navigate) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(getNewCorporateUserRequestApi(navigate));
+          dispatch(getNewCorporateUserRequestApi(navigate, Data));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -491,8 +492,6 @@ const rejectUserRequestApi = (navigate, Data) => {
                   "Successful"
                 )
               );
-              dispatch(getNewBankUserRequestApi(navigate));
-              dispatch(getNewCorporateUserRequestApi(navigate));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

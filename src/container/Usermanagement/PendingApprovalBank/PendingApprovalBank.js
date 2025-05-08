@@ -23,8 +23,11 @@ const PendingApprovalBank = () => {
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const { bankUserRequested } = useMqtt();
-  console.log(bankUserRequested, "bankUserRequestedbankUserRequested");
+  const { bankUserRequested, bankUserCreated, bankUserRejected } = useMqtt();
+  console.log(
+    { bankUserRequested, bankUserCreated, bankUserRejected },
+    "bankUserRequestedbankUserRequested"
+  );
   //Global State
   const { securityReducer } = useSelector((state) => state);
   //Checking snakbar state
@@ -87,13 +90,30 @@ const PendingApprovalBank = () => {
     }
   }, [GetNewBankUserRequests]);
 
+  // Remove from list
+  useEffect(() => {
+    if (bankUserCreated !== null) {
+      try {
+        // const {} =
+        // let findisExist =
+      } catch (error) {}
+    }
+  }, [bankUserCreated]);
+  // Remove From List
+  useEffect(() => {
+    if (bankUserRejected !== null) {
+      try {
+      } catch (error) {}
+    }
+  }, [bankUserRejected]);
+
   useEffect(() => {
     if (bankUserRequested !== null) {
       console.log(bankUserRequested, "bankUserRequested");
       try {
         let user = bankUserRequested?.user;
         console.log(user, "bankUserRequested");
-
+        // if()
         setTableData([user, ...tableData]);
       } catch (error) {
         console.log(error);

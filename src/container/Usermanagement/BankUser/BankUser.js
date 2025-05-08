@@ -74,7 +74,9 @@ const BankUser = () => {
   const BranchList = useSelector((state) => state.auth.GetAllBranches);
 
   // state for edit bank user
-  const [BankEditUser, setBankEditUser] = useState(searchEditBankUserSchema);
+  const [BankEditUser, setBankEditUser] = useState({
+    ...searchEditBankUserSchema,
+  });
 
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
@@ -111,6 +113,7 @@ const BankUser = () => {
 
   const [bankUserTableData, setBankUserTableData] = useState([]);
 
+  //Custome hook for Scrolling (1)
   const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
     console.log("🚀 Table reached bottom");
     // Load more data here if needed
@@ -121,20 +124,22 @@ const BankUser = () => {
         Email: BankEditUser.LoginID.value,
         RoleID: roleID.value,
         StatusID: statusID.value,
-        PageNumber: sRow,
+        sRow: sRow,
         Length: 10,
       };
       dispatch(SearchBankUsersAPI(navigate, Data));
     }
   });
+
+  //inial APIs calling
   useEffect(() => {
     let Data = {
       Name: "",
       EmployeeID: "",
       Email: "",
       RoleID: 0,
-      PageNumber: 1,
       StatusID: 0,
+      sRow: 0,
       Length: 10,
     };
     dispatch(SearchBankUsersAPI(navigate, Data));
@@ -143,25 +148,33 @@ const BankUser = () => {
     dispatch(GetAllBranchesAPI(navigate));
   }, []);
   console.log(hasReachedBottom, "hasReachedBottom");
+
+  //handelled states for scrolling here (4)
   useEffect(() => {
     if (SearchBankUsers !== null) {
       try {
-        const { bankUsers, pageNumbers, totalRecords } = SearchBankUsers;
+        const { bankUsers, totalRecords } = SearchBankUsers;
         if (hasReachedBottom) {
           setHasReachedBottom(false);
-          setBankUserTableData([...bankUserTableData, bankUsers]);
+          setBankUserTableData([...bankUserTableData, ...bankUsers]);
           let sRows = bankUserTableData.length + bankUsers.length;
           setSRow(sRows);
-          setRecordLength(bankUserTableData.length + bankUsers.length);
+          setRecordLength(totalRecords);
         } else {
           setBankUserTableData(bankUsers);
           setSRow(bankUsers.length);
           setRecordLength(totalRecords);
         }
       } catch (error) {}
-    } else {
-      setBankUserTableData([...bankUserTableData]);
-      setHasReachedBottom(false);
+    } else if (SearchBankUsers === null) {
+      if (!hasReachedBottom) {
+        setHasReachedBottom(false);
+        setBankUserTableData([]);
+        setRecordLength(0);
+        setSRow(0);
+      }
+      // setBankUserTableData([...bankUserTableData]);
+      // setHasReachedBottom(false);
     }
   }, [SearchBankUsers]);
   // const onchangeModalTextFieldsHandler = (e) => {
@@ -296,13 +309,17 @@ const BankUser = () => {
 
   // show error message When user hit activate btn
   const resetHandlerYes = () => {
+    setHasReachedBottom(false);
+    setRecordLength(0);
+    setSRow(0);
+    setBankUserTableData([]);
     let Data = {
       Name: "",
       EmployeeID: "",
       Email: "",
       RoleID: 0,
       StatusID: 0,
-      PageNumber: 1,
+      sRow: 0,
       Length: 10,
     };
     dispatch(SearchBankUsersAPI(navigate, Data));
@@ -394,7 +411,7 @@ const BankUser = () => {
 
   const columns = [
     {
-      title: <label className='bottom-table-header'>Employee ID</label>,
+      title: <label className="bottom-table-header">Employee ID</label>,
       dataIndex: "employeeID",
       key: "employeeID",
       align: "left",
@@ -402,7 +419,7 @@ const BankUser = () => {
       width: "100px",
     },
     {
-      title: <label className='bottom-table-header'>LoginID</label>,
+      title: <label className="bottom-table-header">LoginID</label>,
       dataIndex: "email",
       key: "loginId",
       align: "left",
@@ -410,7 +427,7 @@ const BankUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Empolyee Name</label>,
+      title: <label className="bottom-table-header">Empolyee Name</label>,
       dataIndex: "firstName",
       key: "name",
       width: "190px",
@@ -418,7 +435,7 @@ const BankUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Role</label>,
+      title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
       align: "left",
@@ -438,7 +455,7 @@ const BankUser = () => {
       },
     },
     {
-      title: <label className='bottom-table-header'>Branch</label>,
+      title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "BranchName",
       key: "BranchName",
       width: "110px",
@@ -451,7 +468,7 @@ const BankUser = () => {
       },
     },
     {
-      title: <label className='bottom-table-header'>Status</label>,
+      title: <label className="bottom-table-header">Status</label>,
       dataIndex: "userStatusID",
       key: "userStatusID",
       ellipsis: true,
@@ -469,7 +486,7 @@ const BankUser = () => {
       },
     },
     {
-      title: <label className='bottom-table-header'>Edit</label>,
+      title: <label className="bottom-table-header">Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
@@ -477,9 +494,10 @@ const BankUser = () => {
       render: (text, record) => {
         return (
           <label
-            className='edit-update-column'
-            onClick={() => handleClickEdit(record)}>
-            <i className='icon-edit edit-user-icon-color' />
+            className="edit-update-column"
+            onClick={() => handleClickEdit(record)}
+          >
+            <i className="icon-edit edit-user-icon-color" />
           </label>
         );
       },
@@ -494,15 +512,19 @@ const BankUser = () => {
     setEditModalSecurity(false);
     setUpdateModal(true);
   };
-
+  //handelled states for scrolling here (2)
   const handleSearch = () => {
+    setSRow(0);
+    setHasReachedBottom(false);
+    setBankUserTableData([]);
+    setRecordLength(0);
     let Data = {
       Name: BankEditUser.Name.value,
       EmployeeID: BankEditUser.EmployeeID.value,
       Email: BankEditUser.LoginID.value,
       RoleID: roleID.value,
       StatusID: statusID.value,
-      PageNumber: 1,
+      sRow: 0,
       Length: 10,
     };
     dispatch(SearchBankUsersAPI(navigate, Data));
@@ -563,45 +585,45 @@ const BankUser = () => {
 
   return (
     <>
-      <section className='edit-user-container'>
+      <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className='edit-user-label'>Edit Bank User</div>
+            <div className="edit-user-label">Edit Bank User</div>
           </Col>
         </Row>
-        <Row className='mt-3'>
+        <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
-            <Paper className='span-edit-user'>
-              <Row className='mt-3'>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+            <Paper className="span-edit-user">
+              <Row className="mt-3">
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='EmployeeID'
-                    className='text-fields-edituser'
-                    labelClass='d-none'
-                    placeholder='Employee ID'
+                    name="EmployeeID"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
+                    placeholder="Employee ID"
                     maxLength={100}
                     value={BankEditUser.EmployeeID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='LoginID'
-                    className='text-fields-edituser'
-                    labelClass='d-none'
+                    name="LoginID"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
                     maxLength={100}
-                    placeholder='Login ID'
+                    placeholder="Login ID"
                     value={BankEditUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='Name'
-                    labelClass='d-none'
+                    name="Name"
+                    labelClass="d-none"
                     maxLength={100}
-                    className='text-fields-edituser'
-                    placeholder='Employee Name'
+                    className="text-fields-edituser"
+                    placeholder="Employee Name"
                     value={BankEditUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
@@ -610,20 +632,20 @@ const BankUser = () => {
                   <Select
                     isSearchable
                     options={roleOptions}
-                    placeholder='Select Role'
-                    className='edit-user-select-status'
+                    placeholder="Select Role"
+                    className="edit-user-select-status"
                     value={roleID.value !== 0 ? roleID : null}
                     onChange={handleSelectRole}
                   />
                 </Col>
               </Row>
 
-              <Row className='mt-3'>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+              <Row className="mt-3">
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <Select
-                    className='edit-user-select-status'
+                    className="edit-user-select-status"
                     isSearchable
-                    placeholder='Select Status'
+                    placeholder="Select Status"
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}
@@ -632,27 +654,27 @@ const BankUser = () => {
 
                 <Col lg={9} md={9} sm={12}>
                   <Button
-                    icon={<i className='icon-search icon-search-space'></i>}
-                    text='Search'
-                    className='search-Bank-Edit-User-btn'
+                    icon={<i className="icon-search icon-search-space"></i>}
+                    text="Search"
+                    className="search-Bank-Edit-User-btn"
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className='icon-refresh icon-reset-space'></i>}
-                    text='Reset'
+                    icon={<i className="icon-refresh icon-reset-space"></i>}
+                    text="Reset"
                     onClick={resetHandler}
-                    className='reset-Bank-Edit-User-btn'
+                    className="reset-Bank-Edit-User-btn"
                   />
 
                   <Button
-                    icon={<i className='icon-download icon-reset-space'></i>}
-                    text='Export'
-                    className='export-Bank-Edit-User-btn'
+                    icon={<i className="icon-download icon-reset-space"></i>}
+                    text="Export"
+                    className="export-Bank-Edit-User-btn"
                   />
                 </Col>
               </Row>
 
-              <Row className='mt-4'>
+              <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
                   <span>
                     <Row>
@@ -660,7 +682,8 @@ const BankUser = () => {
                         lg={12}
                         md={12}
                         sm={12}
-                        className='d-flex gap-1 align-items-center'>
+                        className="d-flex gap-1 align-items-center"
+                      >
                         <span className={"Bank-show-text-above-table"}>
                           Show
                         </span>
@@ -669,7 +692,7 @@ const BankUser = () => {
                           options={options}
                           value={dropdownvalue}
                           onChange={handleChangeDropDown}
-                          className='select-Bank-field-edit'
+                          className="select-Bank-field-edit"
                         />
 
                         <span className={"Bank-show-text-above-table"}>
@@ -681,8 +704,8 @@ const BankUser = () => {
                   <Table
                     column={columns}
                     rows={bankUserTableData}
-                    className='Edituser-table'
-                    scroll={{ y: 350, x: true }}
+                    className="Edituser-table"
+                    scroll={{ y: 250, x: "auto" }}
                   />
                 </Col>
               </Row>
@@ -693,15 +716,15 @@ const BankUser = () => {
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
-        size='lg'
+        size="lg"
         className={"modaldialog modal-Update"}
-        modalHeaderClassName='d-none'
-        modalFooterClassName='modal-update-footer'
+        modalHeaderClassName="d-none"
+        modalFooterClassName="modal-update-footer"
         onHide={closeUpdateModal}
         ModalBody={
           <Row>
             <Col lg={12} md={12} sm={12}>
-              <p className='update-modal-heading'>
+              <p className="update-modal-heading">
                 Are you sure want to update?
               </p>
             </Col>
@@ -713,15 +736,16 @@ const BankUser = () => {
               lg={12}
               md={12}
               sm={12}
-              className='d-flex justify-content-center'>
+              className="d-flex justify-content-center"
+            >
               <Button
                 icon={
                   <>
                     <span>Proceed</span>
-                    <i className='icon-arrow-right'></i>
+                    <i className="icon-arrow-right"></i>
                   </>
                 }
-                className='Update-Proceed-btn'
+                className="Update-Proceed-btn"
                 onClick={handleProceed}
               />
             </Col>

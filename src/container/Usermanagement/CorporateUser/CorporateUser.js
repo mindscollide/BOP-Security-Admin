@@ -21,6 +21,7 @@ import {
   SearchCorporateUsersAPI,
   UpdateCorporateUserAPI,
 } from "../../../store/actions/Security_Admin";
+import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
 const EditUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -66,7 +67,29 @@ const EditUser = () => {
     { value: 100, label: "100" },
     { value: 150, label: "150" },
   ];
+  //row length on scroll
+  const [sRow, setSRow] = useState(0);
+  const [recordsLength, setRecordLength] = useState(0);
 
+  // //Custome hook for Scrolling (1)
+  // const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
+  //   console.log("🚀 Table reached bottom");
+  //   // Load more data here if needed
+  //   if (recordsLength !== corporateUserTableData.length) {
+  //     let Data = {
+  //       Name: BankEditUser.Name.value,
+  //       EmployeeID: BankEditUser.EmployeeID.value,
+  //       Email: BankEditUser.LoginID.value,
+  //       RoleID: roleID.value,
+  //       StatusID: statusID.value,
+  //       sRow: sRow,
+  //       Length: 10,
+  //     };
+  //     dispatch(SearchCorporateUsersAPI(navigate, Data));
+  //   }
+  // });
+
+  //initial APIs calling
   useEffect(() => {
     dispatch(GetAllUserStatusAPI(navigate));
     let Data = {

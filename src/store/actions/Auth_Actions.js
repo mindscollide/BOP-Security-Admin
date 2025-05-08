@@ -415,6 +415,8 @@ const loginSecurityAdminAPI = (navigate, data) => {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));
             }
+          } else {
+            dispatch(loginSecurityAdminFailed("Something went wrong"));
           }
         } else {
           console.log("loginSecurityAdmin", response);

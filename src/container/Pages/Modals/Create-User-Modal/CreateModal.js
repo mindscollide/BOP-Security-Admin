@@ -73,7 +73,7 @@ const CreateModal = ({
         UserRegistrationRequestID: rejectUserData,
       };
       // console.log(Data, "rejectUserDatarejectUserDatarejectUserData");
-      dispatch(rejectUserRequestApi(navigate, Data,));
+      dispatch(rejectUserRequestApi(navigate, Data, setModalReject));
     } else {
       setErrorShow(true);
     }
@@ -83,10 +83,10 @@ const CreateModal = ({
       <Modal
         show={modalReject}
         setShow={setModalReject}
-        className="modaldialog modal-Reject-styles"
+        className='modaldialog modal-Reject-styles'
         modalHeaderClassName={"header-Reject-Modal-close-btn"}
-        modalFooterClassName="modal-Reject-footer"
-        size="lg"
+        modalFooterClassName='modal-Reject-footer'
+        size='lg'
         onHide={closeRejectModal}
         ModalBody={
           <Fragment>
@@ -97,20 +97,18 @@ const CreateModal = ({
                     lg={12}
                     md={12}
                     sm={12}
-                    className="d-flex justify-content-center"
-                  >
-                    <label className="edit-Reject-label">Reject User</label>
+                    className='d-flex justify-content-center'>
+                    <label className='edit-Reject-label'>Reject User</label>
                   </Col>
                 </Row>
 
-                <Row className="mt-3">
+                <Row className='mt-3'>
                   <Col
                     lg={12}
                     md={12}
                     sm={12}
-                    className="d-flex justify-content-center"
-                  >
-                    <p className="paragraph-accepting">
+                    className='d-flex justify-content-center'>
+                    <p className='paragraph-accepting'>
                       Are you sure you want to do this action?
                     </p>
                   </Col>
@@ -159,19 +157,19 @@ const CreateModal = ({
         }
         ModalFooter={
           <Fragment>
-            <Row className="mb-3">
-              <Col lg={12} md={12} sm={12} className="footer-create-btn-col">
+            <Row className='mb-3'>
+              <Col lg={12} md={12} sm={12} className='footer-create-btn-col'>
                 <Button
-                  icon={<i className="icon-refresh icon-right"></i>}
-                  text="Yes"
-                  className="update-btn"
+                  icon={<i className='icon-refresh icon-right'></i>}
+                  text='Yes'
+                  className='update-btn'
                   onClick={handleRejectUserRequest}
                 />
 
                 <Button
-                  icon={<i className="icon-close icon-right"></i>}
-                  text="No"
-                  className="discard-btn"
+                  icon={<i className='icon-close icon-right'></i>}
+                  text='No'
+                  className='discard-btn'
                   onClick={closeRejectModal}
                 />
               </Col>

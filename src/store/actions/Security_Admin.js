@@ -37,7 +37,7 @@ const saveBankFail = (message) => {
   };
 };
 
-const saveBankUserApi = (navigate, Data,setAcceptModal) => {
+const saveBankUserApi = (navigate, Data, setAcceptModal) => {
   let token = localStorage.getItem("token");
   return (dispatch) => {
     dispatch(saveBankInit());
@@ -55,7 +55,7 @@ const saveBankUserApi = (navigate, Data,setAcceptModal) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(saveBankUserApi(navigate, Data,setAcceptModal));
+          dispatch(saveBankUserApi(navigate, Data, setAcceptModal));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -68,7 +68,7 @@ const saveBankUserApi = (navigate, Data,setAcceptModal) => {
               dispatch(
                 saveBankSuccess(response.data.responseResult, "user created")
               );
-              setAcceptModal(false)
+              setAcceptModal(false);
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -458,7 +458,7 @@ const rejectUserRequestFail = (message) => {
   };
 };
 
-const rejectUserRequestApi = (navigate, Data,setModalReject) => {
+const rejectUserRequestApi = (navigate, Data, setModalReject) => {
   const token = localStorage.getItem("token");
   return (dispatch) => {
     dispatch(rejectUserRequestInit());
@@ -476,7 +476,7 @@ const rejectUserRequestApi = (navigate, Data,setModalReject) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(rejectUserRequestApi(navigate, Data,setModalReject));
+          dispatch(rejectUserRequestApi(navigate, Data, setModalReject));
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (

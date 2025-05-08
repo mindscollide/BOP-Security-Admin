@@ -121,7 +121,7 @@ const BankUser = () => {
         Email: BankEditUser.LoginID.value,
         RoleID: roleID.value,
         StatusID: statusID.value,
-        PageNumber: sRow,
+        sRow: sRow,
         Length: 10,
       };
       dispatch(SearchBankUsersAPI(navigate, Data));
@@ -133,7 +133,7 @@ const BankUser = () => {
       EmployeeID: "",
       Email: "",
       RoleID: 0,
-      PageNumber: 1,
+      sRow: 0,
       StatusID: 0,
       Length: 10,
     };
@@ -146,13 +146,13 @@ const BankUser = () => {
   useEffect(() => {
     if (SearchBankUsers !== null) {
       try {
-        const { bankUsers, pageNumbers, totalRecords } = SearchBankUsers;
+        const { bankUsers, totalRecords } = SearchBankUsers;
         if (hasReachedBottom) {
           setHasReachedBottom(false);
-          setBankUserTableData([...bankUserTableData, bankUsers]);
+          setBankUserTableData([...bankUserTableData, ...bankUsers]);
           let sRows = bankUserTableData.length + bankUsers.length;
           setSRow(sRows);
-          setRecordLength(bankUserTableData.length + bankUsers.length);
+          setRecordLength(totalRecords);
         } else {
           setBankUserTableData(bankUsers);
           setSRow(bankUsers.length);
@@ -302,7 +302,7 @@ const BankUser = () => {
       Email: "",
       RoleID: 0,
       StatusID: 0,
-      PageNumber: 1,
+      sRow: 0,
       Length: 10,
     };
     dispatch(SearchBankUsersAPI(navigate, Data));
@@ -421,7 +421,7 @@ const BankUser = () => {
       title: <label className='bottom-table-header'>Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
-      align: "left",
+      align: "center",
       width: "190px",
       ellipsis: true,
       render: (text, record) => {
@@ -442,7 +442,7 @@ const BankUser = () => {
       dataIndex: "BranchName",
       key: "BranchName",
       width: "110px",
-      align: "left",
+      align: "center",
       ellipsis: true,
       render: (text, record) => {
         if (record.branch !== null) {
@@ -502,7 +502,7 @@ const BankUser = () => {
       Email: BankEditUser.LoginID.value,
       RoleID: roleID.value,
       StatusID: statusID.value,
-      PageNumber: 1,
+      sRow: 0,
       Length: 10,
     };
     dispatch(SearchBankUsersAPI(navigate, Data));

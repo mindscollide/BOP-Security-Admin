@@ -287,12 +287,13 @@ const getNewBankUserRequestFail = (message) => {
   };
 };
 
-const getNewBankUserRequestApi = (navigate) => {
+const getNewBankUserRequestApi = (navigate, Data) => {
   let token = localStorage.getItem("token");
   return async (dispatch) => {
     dispatch(getNewBankUserRequestInit());
     let form = new FormData();
     form.append("RequestMethod", GetNewBankUserRequests.RequestMethod);
+    form.append("RequestData", JSON.stringify(Data));
     axios({
       method: "post",
       url: securityAdminApi,
@@ -304,7 +305,7 @@ const getNewBankUserRequestApi = (navigate) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(getNewBankUserRequestApi(navigate));
+          dispatch(getNewBankUserRequestApi(navigate, Data));
         } else if (response.data.responseCode === 200) {
           console.log("response", response);
           if (response.data.responseResult.isExecuted === true) {

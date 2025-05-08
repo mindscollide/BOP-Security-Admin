@@ -16,8 +16,8 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/Routes";
 import { useMqtt } from "./context/MQTTContext";
 function App() {
-  const { isConnected, lastMessages } = useMqtt();
-  console.log(lastMessages, isConnected, "lastMessageslastMessages");
+  const { isConnected, bankUserRequested } = useMqtt();
+  console.log(bankUserRequested, isConnected, "lastMessageslastMessages");
   console.log("App component rendered", isConnected);
   return <RouterProvider router={router} />;
 }

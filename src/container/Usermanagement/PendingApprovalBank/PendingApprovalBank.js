@@ -17,6 +17,7 @@ import {
   saveBankUserApi,
 } from "../../../store/actions/Security_Admin";
 import { useMqtt } from "../../../context/MQTTContext";
+import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
 
 const PendingApprovalBank = () => {
   const navigate = useNavigate();
@@ -42,6 +43,23 @@ const PendingApprovalBank = () => {
 
   //modal for accept user in create
   const [acceptModal, setAcceptModal] = useState(false);
+  //row length on scroll
+  const [sRow, setSRow] = useState(0);
+  const [recordsLength, setRecordLength] = useState(0);
+  const [modalState, setModalState] = useState(0);
+
+  //Custome hook for Scrolling (1)
+  const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
+    console.log("🚀 Table reached bottom");
+    // Load more data here if needed
+    if (recordsLength !== tableData.length) {
+      let Data = {
+        sRow: sRow,
+        Length: 10,
+      };
+      dispatch(getNewBankUserRequestApi(navigate, Data));
+    }
+  });
 
   //open modal accept
   const openAcceptModal = async (requestId) => {
@@ -80,12 +98,27 @@ const PendingApprovalBank = () => {
   useEffect(() => {
     if (GetNewBankUserRequests !== null) {
       try {
-        const { userRequestList } = GetNewBankUserRequests;
-        if (userRequestList.length > 0) {
-          setTableData(GetNewBankUserRequests.userRequestList);
+        const { userRequestList, totalRecords } = GetNewBankUserRequests;
+        if (hasReachedBottom) {
+          setHasReachedBottom(false);
+          setRecordLength(totalRecords);
+          setTableData([...tableData, ...userRequestList]);
+          setSRow(tableData.length + userRequestList.length);
+        } else {
+          setHasReachedBottom(false);
+          setTableData(userRequestList);
+          setRecordLength(totalRecords);
+          setSRow(userRequestList.length);
         }
       } catch (error) {
         console.log("Error", error);
+      }
+    } else if (GetNewBankUserRequests === null) {
+      if (!hasReachedBottom) {
+        setHasReachedBottom(false);
+        setTableData([]);
+        setRecordLength(0);
+        setSRow(0);
       }
     }
   }, [GetNewBankUserRequests]);
@@ -124,7 +157,7 @@ const PendingApprovalBank = () => {
   // column of create user
   const columns = [
     {
-      title: <label className='bottom-table-header'>Email</label>,
+      title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
       width: "380px",
@@ -133,7 +166,7 @@ const PendingApprovalBank = () => {
     },
 
     {
-      title: <label className='bottom-table-header'>Name</label>,
+      title: <label className="bottom-table-header">Name</label>,
       dataIndex: "firstname",
       key: "firstname",
       width: "280px",
@@ -141,26 +174,26 @@ const PendingApprovalBank = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Role</label>,
+      title: <label className="bottom-table-header">Role</label>,
       dataIndex: "role",
       key: "fK_UserRoleID",
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Branch</label>,
+      title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "branchName",
       key: "branchName",
       ellipsis: true,
       render: (text, record) => {
         return (
-          <label className='d-flex justify-content-center'>
+          <label className="d-flex justify-content-center">
             {record.branchName !== "" ? record.branchName : "-"}
           </label>
         );
       },
     },
     {
-      title: <label className='bottom-table-header'>Accept</label>,
+      title: <label className="bottom-table-header">Accept</label>,
       dataIndex: "accept",
       key: "accept",
       ellipsis: true,
@@ -171,14 +204,15 @@ const PendingApprovalBank = () => {
             onClick={() => {
               // console.log("record", record);
               openAcceptModal(record.userRegistrationRequestID);
-            }}>
-            <i className='icon-check icon-accept-column'></i>
+            }}
+          >
+            <i className="icon-check icon-accept-column"></i>
           </label>
         );
       },
     },
     {
-      title: <label className='bottom-table-header'>Reject</label>,
+      title: <label className="bottom-table-header">Reject</label>,
       dataIndex: "reject",
       key: "reject",
       ellipsis: true,
@@ -186,7 +220,7 @@ const PendingApprovalBank = () => {
       render: (text, record) => {
         return (
           <label onClick={() => openRejectModal(record)}>
-            <i className='icon-close icon-close-column'></i>
+            <i className="icon-close icon-close-column"></i>
           </label>
         );
       },
@@ -195,24 +229,24 @@ const PendingApprovalBank = () => {
 
   return (
     <>
-      <section className='create-user-container'>
+      <section className="create-user-container">
         <Row>
-          <Col lg={12} md={12} sm={12} className='d-flex justify-content-start'>
-            <label className='Pending-Approval-label'>
+          <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
+            <label className="Pending-Approval-label">
               Pending Approval Bank
             </label>
           </Col>
         </Row>
 
-        <Row className='mt-3'>
-          <Paper className='span-table'>
-            <Col lg={12} md={12} sm={12} className='mt-3'>
+        <Row className="mt-3">
+          <Paper className="span-table">
+            <Col lg={12} md={12} sm={12} className="mt-3">
               <Table
                 column={columns}
                 rows={tableData}
-                className='Createuser-table'
+                className="Createuser-table"
                 pagination={false}
-                scroll={{ y: 600 }}
+                scroll={{ y: 400, x: "scroll" }}
               />
             </Col>
           </Paper>

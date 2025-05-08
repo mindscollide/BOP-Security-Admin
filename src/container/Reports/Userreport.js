@@ -193,45 +193,53 @@ const Userreport = () => {
       setModalState(0);
     }
   }, [modalState]);
+
   //reset handler for edit user
   const resetHandler = () => {
     dispatch(ConfirmationModalSecurityAdmin(true));
+    setModalState(2);
   };
 
   //reset handler
   const resetHandlerYes = () => {
-    setUserReport({
-      ...userReport,
-      loginID: {
-        value: "",
-      },
-      name: {
-        value: "",
-      },
-      startDate: {
-        value: 0,
-      },
-      endDate: {
-        value: "",
-      },
-      roleID: {
-        value: 0,
-      },
-    });
-    setStartDateProps({
-      ...startDateProps,
-      value: "",
-    });
+    if (modalState === 2) {
+      dispatch(ConfirmationModalSecurityAdmin(false));
+      setModalState(0);
 
-    setEndDateProps({
-      ...endDateProps,
-      value: "",
-    });
+      setUserReport({
+        ...userReport,
+        loginID: {
+          value: "",
+        },
+        name: {
+          value: "",
+        },
+        startDate: {
+          value: 0,
+        },
+        endDate: {
+          value: "",
+        },
+        roleID: {
+          value: 0,
+        },
+      });
+      setStartDateProps({
+        ...startDateProps,
+        value: "",
+      });
 
-    setStatusID({
-      value: 0,
-      label: "",
-    });
+      setEndDateProps({
+        ...endDateProps,
+        value: "",
+      });
+
+      setStatusID({
+        value: 0,
+        label: "",
+      });
+    }
+
     // setReportStatusValue([]);
     // setSelectRoleValueReport([]);
   };

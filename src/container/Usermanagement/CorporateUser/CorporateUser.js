@@ -619,7 +619,7 @@ const EditUser = () => {
                     column={columns}
                     rows={corporateUserTableData}
                     className="Edituser-table"
-                    scroll={{ y: 350 }}
+                    scroll={{ y: 300 }}
                   />
                 </Col>
               </Row>

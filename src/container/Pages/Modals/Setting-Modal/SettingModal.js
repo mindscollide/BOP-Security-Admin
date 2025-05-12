@@ -12,7 +12,6 @@ import { Checkbox, Switch } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
-  // GetMarketTimeSettingsAPI,
   GetUserSettingsAPI,
   // GetUserSettingsAPI,
   UpdateUserSettingsAPI,
@@ -72,14 +71,7 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
     (state) => state.settingsReducer.GetUserSettings
   );
 
-  // const GetMarketTimeSettings = useSelector(
-  //   (state) => state.settingsReducer.GetMarketTimeSettings
-  // );
-
-  // console.log("GetMarketTimeSettings", GetMarketTimeSettings);
-
   useEffect(() => {
-    // dispatch(GetMarketTimeSettingsAPI(navigate));
     dispatch(GetUserSettingsAPI(navigate));
   }, []);
 
@@ -284,86 +276,8 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                     </Col>
                   </Row>
                 </div>
-
-                {/* <Row className="mt-3">
-                  <Col lg={12} md={12} sm={12}>
-                    <p className="change-password-text">Change Password</p>
-                  </Col>
-                </Row>
-
-                <Row className="mt-1">
-                  <Col lg={4} md={4} sm={12}>
-                    <span className="change-password-label">
-                      Enter New Password *
-                    </span>
-                  </Col>
-                  <Col lg={8} md={8} sm={12}>
-                    <TextField
-                      name="Password"
-                      labelClass="d-none"
-                      autoComplete={"off"}
-                    />
-                  </Col>
-                </Row>
-
-                <Row className="mt-3">
-                  <Col lg={4} md={4} sm={12}>
-                    <span className="change-password-label">
-                      Confirm New Password *
-                    </span>
-                  </Col>
-                  <Col lg={8} md={8} sm={12}>
-                    <TextField
-                      name="ConfirmNewPassword"
-                      autoComplete={"off"}
-                      labelClass="d-none"
-                    />
-                  </Col>
-                </Row> */}
               </>
-            ) : // ) : marketTiming ? (
-            //   <>
-            //     <Row className="mt-4">
-            //       <Col>
-            //         <p className="change-password-text">Mon - Thur</p>
-            //       </Col>
-            //     </Row>
-            //     <Row>
-            //       <Col lg={8} md={8} sm={8}>
-            //         <Row>
-            //           <Col lg={6} md={6} sm={6}>
-            //             <label className="two-factor-text">Start Time</label>
-            //             <TextField labelClass="d-none" />
-            //           </Col>
-            //           <Col lg={6} md={6} sm={6}>
-            //             <label className="two-factor-text">End Time</label>
-            //             <TextField labelClass="d-none" />
-            //           </Col>
-            //         </Row>
-            //       </Col>
-            //     </Row>
-
-            //     <Row className="mt-3">
-            //       <Col>
-            //         <p className="change-password-text">Friday</p>
-            //       </Col>
-            //     </Row>
-            //     <Row>
-            //       <Col lg={8} md={8} sm={8}>
-            //         <Row>
-            //           <Col lg={6} md={6} sm={6}>
-            //             <label className="two-factor-text">Start Time</label>
-            //             <TextField labelClass="d-none" />
-            //           </Col>
-            //           <Col lg={6} md={6} sm={6}>
-            //             <label className="two-factor-text">End Time</label>
-            //             <TextField labelClass="d-none" />
-            //           </Col>
-            //         </Row>
-            //       </Col>
-            //     </Row>
-            //   </>
-            null}
+            ) : null}
           </>
         }
         ModalFooter={

@@ -1,22 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import {
-  Table,
-  Paper,
-  Loader,
-  Notification,
-} from "../../../components/elements";
-import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
-import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "./PendingApprovalCorporate.css";
+import { useMqtt } from "../../../../context/MQTTContext";
 import {
   getNewCorporateUserRequestApi,
   saveCorporateUserApi,
-} from "../../../store/actions/Security_Admin";
-import { useMqtt } from "../../../context/MQTTContext";
-import { tab } from "@testing-library/user-event/dist/tab";
+} from "../../../../store/actions/Security_Admin";
+import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
+import {
+  Loader,
+  Notification,
+  Paper,
+  Table,
+} from "../../../../components/elements";
+import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
+import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
+import "./PendingApprovalCorporate.css";
+// import {
+//   Table,
+//   Paper,
+//   Loader,
+//   Notification,
+// } from "../../../../components/elements";
+// import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
+// import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
+// import { useDispatch, useSelector } from "react-redux";
+// import { useNavigate } from "react-router-dom";
+// import "./PendingApprovalCorporate.css";
+// import {
+//   getNewCorporateUserRequestApi,
+//   saveCorporateUserApi,
+// } from "../../../../store/actions/Security_Admin";
+// import { useMqtt } from "../../../../context/MQTTContext";
+// // import { tab } from "@testing-library/user-event/dist/tab";
+// import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 
 const PendingApprovalCorporate = () => {
   const navigate = useNavigate();
@@ -32,7 +50,9 @@ const PendingApprovalCorporate = () => {
   const { securityReducer } = useSelector((state) => state);
   //Checking snakbar state
   const [open, setOpen] = useState(false);
-
+  //row length on scroll
+  const [sRow, setSRow] = useState(0);
+  const [recordsLength, setRecordLength] = useState(0);
   const GetNewCorporateUserRequests = useSelector(
     (state) => state.securityReducer.GetNewCorporateUserRequestsData
   );
@@ -84,20 +104,45 @@ const PendingApprovalCorporate = () => {
     dispatch(getNewCorporateUserRequestApi(navigate, Data));
   }, []);
 
+  //custom hook for scrolling (lazy loading)
+  const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
+    console.log("🚀 Table reached bottom");
+    // Load more data here if needed
+    if (recordsLength !== tableData.length) {
+      let Data = {
+        sRow: sRow,
+        Length: 10,
+      };
+      dispatch(getNewCorporateUserRequestApi(navigate, Data));
+    }
+  });
+
   useEffect(() => {
     if (GetNewCorporateUserRequests !== null) {
       try {
-        const { userRequestList } = GetNewCorporateUserRequests;
-        if (userRequestList.length > 0) {
-          setTableData(GetNewCorporateUserRequests.userRequestList);
+        const { userRequestList, totalRecords } = GetNewCorporateUserRequests;
+        if (hasReachedBottom) {
+          setHasReachedBottom(false);
+          setRecordLength(totalRecords);
+          setTableData([...tableData, ...userRequestList]);
+          setSRow(tableData.length + userRequestList.length);
+        } else {
+          setHasReachedBottom(false);
+          setTableData(userRequestList);
+          setRecordLength(totalRecords);
+          setSRow(userRequestList.length);
         }
-      } catch (error) {
-        console.log("error", error);
-      }
+      } catch (error) {}
     } else if (GetNewCorporateUserRequests === null) {
-      setTableData("");
+      if (!hasReachedBottom) {
+        setHasReachedBottom(false);
+        setTableData([]);
+        setRecordLength(0);
+        setSRow(0);
+      }
     }
   }, [GetNewCorporateUserRequests]);
+
   // Remove from list
   useEffect(() => {
     if (corproateUserCreated !== null) {
@@ -160,7 +205,7 @@ const PendingApprovalCorporate = () => {
   // column of create user
   const columnsCreate = [
     {
-      title: <label className='bottom-table-header'>Corporate Name</label>,
+      title: <label className="bottom-table-header">Corporate Name</label>,
       dataIndex: "corporateName",
       key: "corporateName",
       width: "300px",
@@ -168,20 +213,20 @@ const PendingApprovalCorporate = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Email</label>,
+      title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
       width: "380px",
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Name</label>,
+      title: <label className="bottom-table-header">Name</label>,
       dataIndex: "firstname",
       key: "firstname",
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Accept</label>,
+      title: <label className="bottom-table-header">Accept</label>,
       dataIndex: "accept",
       key: "accept",
       ellipsis: true,
@@ -192,14 +237,15 @@ const PendingApprovalCorporate = () => {
             onClick={() => {
               console.log("record", record);
               openAcceptModal(record.userRegistrationRequestID);
-            }}>
-            <i className='icon-check icon-accept-column'></i>
+            }}
+          >
+            <i className="icon-check icon-accept-column"></i>
           </label>
         );
       },
     },
     {
-      title: <label className='bottom-table-header'>Reject</label>,
+      title: <label className="bottom-table-header">Reject</label>,
       dataIndex: "reject",
       key: "reject",
       ellipsis: true,
@@ -207,7 +253,7 @@ const PendingApprovalCorporate = () => {
       render: (text, record) => {
         return (
           <label onClick={() => openRejectModal(record)}>
-            <i className='icon-close icon-close-column'></i>
+            <i className="icon-close icon-close-column"></i>
           </label>
         );
       },
@@ -216,22 +262,23 @@ const PendingApprovalCorporate = () => {
 
   return (
     <>
-      <section className='create-user-container'>
+      <section className="create-user-container">
         <Row>
-          <Col lg={12} md={12} sm={12} className='d-flex justify-content-start'>
-            <label className='Pending-Approval-label'>
+          <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
+            <label className="Pending-Approval-label">
               Pending Approval Corporate
             </label>
           </Col>
         </Row>
 
-        <Row className='mt-3'>
-          <Paper className='span-table'>
-            <Col lg={12} md={12} sm={12} className='mt-3'>
+        <Row className="mt-3">
+          <Paper className="span-table">
+            <Col lg={12} md={12} sm={12} className="mt-3">
               <Table
                 column={columnsCreate}
                 rows={tableData}
-                className='Createuser-table'
+                scroll={{ y: 400 }}
+                className="Createuser-table"
                 pagination={false}
               />
             </Col>

@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import "./BankUser.css";
+
 import {
   TextField,
   Button,
@@ -7,27 +9,25 @@ import {
   Paper,
   Loader,
   Modal,
-} from "../../../components/elements";
+} from "../../../../components/elements";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-
-import EditModal from "../../Pages/Modals/Edit-User-Modal/EditModal";
-import "./BankUser.css";
-import { searchEditBankUserSchema } from "../../../utils/schemas";
-import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
+import EditModal from "../../../Pages/Modals/Edit-User-Modal/EditModal";
+import { searchEditBankUserSchema } from "../../../../utils/schemas";
+import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import {
   GetAllBranchesAPI,
   GetAllUserStatusAPI,
   GetBankUserRolesAPI,
-} from "../../../store/actions/Auth_Actions";
+} from "../../../../store/actions/Auth_Actions";
 import {
   SearchBankUsersAPI,
   UpdateBankUserAPI,
-} from "../../../store/actions/Security_Admin";
-import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
-import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-
+} from "../../../../store/actions/Security_Admin";
+import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
+import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 const BankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

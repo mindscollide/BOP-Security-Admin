@@ -1,23 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import {
-  Table,
-  Paper,
-  Loader,
-  Notification,
-} from "../../../components/elements";
-import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
-import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
 import { useDispatch, useSelector } from "react-redux";
-
 import { useNavigate } from "react-router-dom";
-import "./PendingApprovalBank.css";
+import { useMqtt } from "../../../../context/MQTTContext";
+import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import {
   getNewBankUserRequestApi,
   saveBankUserApi,
-} from "../../../store/actions/Security_Admin";
-import { useMqtt } from "../../../context/MQTTContext";
-import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
+} from "../../../../store/actions/Security_Admin";
+import {
+  Loader,
+  Notification,
+  Paper,
+  Table,
+} from "../../../../components/elements";
+import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
+import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
+// import {
+//   Table,
+//   Paper,
+//   Loader,
+//   Notification,
+// } from "../../../components/elements";
+// import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
+// import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
+// import { useDispatch, useSelector } from "react-redux";
+
+// import { useNavigate } from "react-router-dom";
+// import "./PendingApprovalBank.css";
+// import {
+//   getNewBankUserRequestApi,
+//   saveBankUserApi,
+// } from "../../../store/actions/Security_Admin";
+// import { useMqtt } from "../../../context/MQTTContext";
+// import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
 
 const PendingApprovalBank = () => {
   const navigate = useNavigate();
@@ -74,7 +90,7 @@ const PendingApprovalBank = () => {
       // console.log("selectedRequestId", selectedRequestId);
       try {
         let registrationID = { UserRegistrationRequestID: selectedRequestId };
-        dispatch(saveBankUserApi(navigate, registrationID,setAcceptModal));
+        dispatch(saveBankUserApi(navigate, registrationID, setAcceptModal));
       } catch (error) {
         console.log("error", error);
       }
@@ -157,7 +173,7 @@ const PendingApprovalBank = () => {
             return prevData.filter(
               (tableData, index) =>
                 tableData.userRegistrationRequestID !==
-              userRegistrationRequestID
+                userRegistrationRequestID
             );
           });
         }

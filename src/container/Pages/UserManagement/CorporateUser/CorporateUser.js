@@ -1,4 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
+import "./CorporateUser.css";
 import { Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -7,22 +8,35 @@ import {
   Paper,
   Loader,
   Modal,
-} from "../../../components/elements";
+} from "../../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import EditCorporateModal from "../../Pages/Modals/Edit-Corporate-User-Modal/EditCorporateModal";
-import "./CorporateUser.css";
+// import EditCorporateModal from "../../Pages/Modals/Edit-Corporate-User-Modal/EditCorporateModal";
+import EditCorporateModal from "../../Modals/Edit-Corporate-User-Modal/EditCorporateModal";
 // import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
-import { searchEditCorporateUserSchema } from "../../../utils/schemas";
-import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
+// import { searchEditCorporateUserSchema } from "../../../utils/schemas";
+import { searchEditCorporateUserSchema } from "../../../../utils/schemas";
+// import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
+import { GetAllUserStatusAPI } from "../../../../store/actions/Auth_Actions";
+
 import {
   SearchCorporateUsersAPI,
   UpdateCorporateUserAPI,
-} from "../../../store/actions/Security_Admin";
-import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
-import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
+} from "../../../../store/actions/Security_Admin";
+
+// import {
+//   SearchCorporateUsersAPI,
+//   UpdateCorporateUserAPI,
+// } from "../../../store/actions/Security_Admin";
+import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
+// import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
+// import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
+// import ActivateConfirmationModal from "../../Pages/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
+import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
+import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
+// import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
+
 const EditUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

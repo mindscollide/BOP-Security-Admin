@@ -1,4 +1,4 @@
-/* .AddBranchLabel {
+.AddBranchLabel {
   color: #f26522 !important;
   font-size: 1.25rem !important;
   display: flex !important;
@@ -62,4 +62,4 @@
   font-weight: 500;
   cursor: pointer;
   align-items: center !important;
-} */
+}

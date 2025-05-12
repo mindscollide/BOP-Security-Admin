@@ -12,7 +12,9 @@ import { Checkbox, Switch } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  // GetMarketTimeSettingsAPI,
   GetUserSettingsAPI,
+  // GetUserSettingsAPI,
   UpdateUserSettingsAPI,
 } from "../../../../store/actions/SettingsActions";
 
@@ -22,30 +24,30 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
   const navigate = useNavigate();
   const [settingUser, setSettingUser] = useState(true);
   const [passcodeSetting, setPasscodeSetting] = useState(false);
-  const [marketTiming, setMarketTiming] = useState(false);
-  const [settings, setSettings] = useState({
-    chatPannalOverlap: true,
-    soundOnEveryMessage: true,
-    twoFactorAuthentication: true,
-    newPassword: {
-      value: "",
-    },
-    confirmNewPassword: {
-      value: "",
-    },
-    monToThurStartTime: {
-      value: "",
-    },
-    monToThurEndTime: {
-      value: "",
-    },
-    friStartTime: {
-      value: "",
-    },
-    friEndTime: {
-      value: "",
-    },
-  });
+  // const [marketTiming, setMarketTiming] = useState(false);
+  // const [settings, setSettings] = useState({
+  //   chatPannalOverlap: true,
+  //   soundOnEveryMessage: true,
+  //   twoFactorAuthentication: true,
+  //   newPassword: {
+  //     value: "",
+  //   },
+  //   confirmNewPassword: {
+  //     value: "",
+  //   },
+  //   monToThurStartTime: {
+  //     value: "",
+  //   },
+  //   monToThurEndTime: {
+  //     value: "",
+  //   },
+  //   friStartTime: {
+  //     value: "",
+  //   },
+  //   friEndTime: {
+  //     value: "",
+  //   },
+  // });
 
   const [settingsRecord, setSettingRecords] = useState({
     BD_Enable2FA: false,
@@ -53,16 +55,16 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
     BD_EmailOnEveryMessage: false,
   });
 
-  const [errors, setErrors] = useState({
-    lengthError: true,
-    numberError: true,
-    specialCharError: true,
-    matchError: true,
-  });
+  // const [errors, setErrors] = useState({
+  //   lengthError: true,
+  //   numberError: true,
+  //   specialCharError: true,
+  //   matchError: true,
+  // });
 
   console.log(settingsRecord, "settingsRecordsettingsRecord");
 
-  const LoadingState = useSelector((state) => state);
+  const LoadingState = useSelector((state) => state.settingsReducer.Loading);
 
   console.log("securityReducersecurityReducer", LoadingState);
 
@@ -70,7 +72,14 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
     (state) => state.settingsReducer.GetUserSettings
   );
 
+  // const GetMarketTimeSettings = useSelector(
+  //   (state) => state.settingsReducer.GetMarketTimeSettings
+  // );
+
+  // console.log("GetMarketTimeSettings", GetMarketTimeSettings);
+
   useEffect(() => {
+    // dispatch(GetMarketTimeSettingsAPI(navigate));
     dispatch(GetUserSettingsAPI(navigate));
   }, []);
 
@@ -105,20 +114,20 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
   const onClickSettingUser = () => {
     setSettingUser(true);
     setPasscodeSetting(false);
-    setMarketTiming(false);
+    // setMarketTiming(false);
   };
 
   const onClickPasscodeSetting = () => {
     setSettingUser(false);
     setPasscodeSetting(true);
-    setMarketTiming(false);
+    // setMarketTiming(false);
   };
 
-  const onClickMarketSetting = () => {
-    setSettingUser(false);
-    setPasscodeSetting(false);
-    setMarketTiming(true);
-  };
+  // const onClickMarketSetting = () => {
+  //   setSettingUser(false);
+  //   setPasscodeSetting(false);
+  //   setMarketTiming(true);
+  // };
 
   // Checkbox for Chat Panal Overlap and Sound on every personal message
   const onChangeCheckbox = (e) => {
@@ -209,7 +218,7 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                       : `${"setting-button-disabled"}`
                   }
                 />
-                <Button
+                {/* <Button
                   text="Market Timing"
                   onClick={onClickMarketSetting}
                   className={
@@ -217,7 +226,7 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                       ? `${"setting-button-modal"}`
                       : `${"setting-button-disabled"}`
                   }
-                />
+                /> */}
               </Col>
             </Row>
 
@@ -312,49 +321,49 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                   </Col>
                 </Row> */}
               </>
-            ) : marketTiming ? (
-              <>
-                <Row className="mt-4">
-                  <Col>
-                    <p className="change-password-text">Mon - Thur</p>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col lg={8} md={8} sm={8}>
-                    <Row>
-                      <Col lg={6} md={6} sm={6}>
-                        <label className="two-factor-text">Start Time</label>
-                        <TextField labelClass="d-none" />
-                      </Col>
-                      <Col lg={6} md={6} sm={6}>
-                        <label className="two-factor-text">End Time</label>
-                        <TextField labelClass="d-none" />
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
+            ) : // ) : marketTiming ? (
+            //   <>
+            //     <Row className="mt-4">
+            //       <Col>
+            //         <p className="change-password-text">Mon - Thur</p>
+            //       </Col>
+            //     </Row>
+            //     <Row>
+            //       <Col lg={8} md={8} sm={8}>
+            //         <Row>
+            //           <Col lg={6} md={6} sm={6}>
+            //             <label className="two-factor-text">Start Time</label>
+            //             <TextField labelClass="d-none" />
+            //           </Col>
+            //           <Col lg={6} md={6} sm={6}>
+            //             <label className="two-factor-text">End Time</label>
+            //             <TextField labelClass="d-none" />
+            //           </Col>
+            //         </Row>
+            //       </Col>
+            //     </Row>
 
-                <Row className="mt-3">
-                  <Col>
-                    <p className="change-password-text">Friday</p>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col lg={8} md={8} sm={8}>
-                    <Row>
-                      <Col lg={6} md={6} sm={6}>
-                        <label className="two-factor-text">Start Time</label>
-                        <TextField labelClass="d-none" />
-                      </Col>
-                      <Col lg={6} md={6} sm={6}>
-                        <label className="two-factor-text">End Time</label>
-                        <TextField labelClass="d-none" />
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-              </>
-            ) : null}
+            //     <Row className="mt-3">
+            //       <Col>
+            //         <p className="change-password-text">Friday</p>
+            //       </Col>
+            //     </Row>
+            //     <Row>
+            //       <Col lg={8} md={8} sm={8}>
+            //         <Row>
+            //           <Col lg={6} md={6} sm={6}>
+            //             <label className="two-factor-text">Start Time</label>
+            //             <TextField labelClass="d-none" />
+            //           </Col>
+            //           <Col lg={6} md={6} sm={6}>
+            //             <label className="two-factor-text">End Time</label>
+            //             <TextField labelClass="d-none" />
+            //           </Col>
+            //         </Row>
+            //       </Col>
+            //     </Row>
+            //   </>
+            null}
           </>
         }
         ModalFooter={
@@ -371,7 +380,7 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
           </>
         }
       />
-      {/* {securityReducer.Loading && <Loader />} */}
+      {LoadingState && <Loader />}
     </>
   );
 };

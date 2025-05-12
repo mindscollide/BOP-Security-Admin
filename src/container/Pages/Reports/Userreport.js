@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Col, Row } from "react-bootstrap";
-import { TextField, Button, Paper, Loader } from "../../components/elements";
+// import { TextField, Button, Paper, Loader } from "../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
 import "./Userreport.css";
 import moment from "moment";
-import { ConfirmationModalSecurityAdmin } from "../../store/actions/Security_Admin_Modal";
-import { GetAllUserStatusAPI } from "../../store/actions/Auth_Actions";
-import ActivateConfirmationModal from "../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-
+import ActivateConfirmationModal from "../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
+import { Button, Paper, TextField } from "../../../components/elements";
+import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
+import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
+// import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
+// import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
+// import ActivateConfirmationModal from "../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
+// import ActivateConfirmationModal from "../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 const Userreport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

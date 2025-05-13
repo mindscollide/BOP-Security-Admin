@@ -14,6 +14,7 @@ const initialState = {
   RoleList: null,
   GetBankUserRoles: null,
   GetAllBranches: null,
+  LogOut: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -157,7 +158,25 @@ const authReducer = (state = initialState, action) => {
         ResponseMessage: "",
       };
     }
+    case actions.LOGOUT_INIT:
+      return { ...state, Loading: true };
 
+    case actions.LOGOUT_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        LogOut: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.LOGOUT_FAIL: {
+      return {
+        ...state,
+        Loading: false,
+        LogOut: null,
+        ResponseMessage: action.message,
+      };
+    }
     case actions.SIGN_OUT:
       localStorage.clear();
       return {

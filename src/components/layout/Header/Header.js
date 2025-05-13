@@ -4,7 +4,7 @@ import Navbar from "react-bootstrap/Navbar";
 import BOPLogo from "../../../assets/images/BOPLogo-white.png";
 import SettingModal from "../../../container/Pages/Modals/Setting-Modal/SettingModal";
 import "./Header.css";
-import { signOut } from "../../../store/actions/Auth_Actions";
+import { LogOutAPI, signOut } from "../../../store/actions/Auth_Actions";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
@@ -19,7 +19,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    dispatch(signOut(navigate, message));
+    dispatch(LogOutAPI(navigate));
   };
   return (
     <>

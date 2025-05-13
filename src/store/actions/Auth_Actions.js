@@ -8,6 +8,7 @@ import {
   RoleList,
   GetBankUserRoles,
   GetAllBranches,
+  LogOut,
 } from "../../commen/apis/Api_config";
 import { authenticationAPI } from "../../commen/apis/Api_ends_points";
 
@@ -870,6 +871,82 @@ const GetAllBranchesAPI = (navigate) => {
   };
 };
 
+//Get all branches action
+const LogOutInit = () => {
+  return {
+    type: actions.LOGOUT_INIT,
+  };
+};
+
+const LogOutSuccess = (response, message) => {
+  return {
+    type: actions.LOGOUT_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+
+const LogOutFail = (message) => {
+  return {
+    type: actions.LOGOUT_FAIL,
+    message: message,
+  };
+};
+
+const LogOutAPI = (navigate) => {
+  let token = localStorage.getItem("token");
+  return async (dispatch) => {
+    dispatch(LogOutInit());
+    let form = new FormData();
+    form.append("RequestMethod", LogOut.RequestMethod);
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data?.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(LogOutAPI(navigate));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes("ERM_AuthService_AuthManager_LogOut_01".toLowerCase())
+            ) {
+              dispatch(
+                LogOutSuccess(response.data.responseResult, "Data Available")
+              );
+              dispatch(signOut(navigate, ""));
+            } else if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_AuthManager_LogOut_02".toLowerCase()
+            ) {
+              dispatch(LogOutFail("Data UnAvailable"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes("ERM_AuthService_AuthManager_LogOut_03".toLowerCase())
+            ) {
+              dispatch(LogOutFail("Exception"));
+            }
+          } else {
+            dispatch(LogOutFail("Something went wrong"));
+          }
+        } else {
+          dispatch(LogOutFail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(LogOutFail("something went wrong"));
+      });
+  };
+};
+
 export {
   RefreshToken,
   loginSecurityAdminAPI,
@@ -880,4 +957,5 @@ export {
   RoleListAPI,
   GetBankUserRolesAPI,
   GetAllBranchesAPI,
+  LogOutAPI,
 };

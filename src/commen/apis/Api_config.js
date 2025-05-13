@@ -77,6 +77,10 @@ const UpdateUserSettings = {
   RequestMethod: "ServiceManager.UpdateUserSettings",
 };
 
+const LogOut = {
+  RequestMethod: "ServiceManager.LogOut",
+};
+
 export {
   authenticationRefreshToken,
   authenticationLogIn,
@@ -97,4 +101,5 @@ export {
   UpdateCorporateUser,
   GetUserSettings,
   UpdateUserSettings,
+  LogOut,
 };

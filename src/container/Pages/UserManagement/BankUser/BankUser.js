@@ -246,6 +246,39 @@ const BankUser = () => {
       }
     }
   }, [branchCreated]);
+  useEffect(() => {
+    if (branchUpdated !== null) {
+      if (Array.isArray(branchOptions)) {
+        let findBranchObj = branchOptions.find(
+          (branchData, index) =>
+            branchData.branchID === branchUpdated.branch.branchID
+        );
+        if (findBranchObj !== undefined) {
+          setBranchOptions((prevBranchData) => {
+            return prevBranchData.map((data4, index) => {
+              if (data4.branchID === branchUpdated.branch.branchID) {
+                return {
+                  ...data4,
+                  value: branchUpdated.branch.branchID,
+                  label: branchUpdated.branch.branchName,
+                  branchCode: branchUpdated.branch.branchCode,
+                  branchContact: branchUpdated.branch.branchContact,
+                };
+              }
+              return data4;
+            });
+          });
+
+          if (editBankUserBranch.value === branchUpdated.branch.branchID) {
+            setEditBankUserBranch({
+              value: branchUpdated.branch.branchID,
+              label: branchUpdated.branch.branchName,
+            });
+          }
+        }
+      }
+    }
+  }, [branchUpdated]);
   // const onchangeModalTextFieldsHandler = (e) => {
   //   let name = e.target.name;
   //   let value = e.target.value;

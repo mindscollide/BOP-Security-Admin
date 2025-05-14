@@ -33,7 +33,7 @@ const GetUserSettingsFail = (message) => {
 const GetUserSettingsAPI = (navigate) => {
   console.log("Checkig GetUserSettings");
 
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return async (dispatch) => {
     dispatch(GetUserSettingsInit());
 
@@ -120,7 +120,7 @@ const UpdateUserSettingsFail = (message) => {
 };
 
 const UpdateUserSettingsAPI = (navigate, data, setSettingModalState) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(UpdateUserSettingsInit());
     let form = new FormData();

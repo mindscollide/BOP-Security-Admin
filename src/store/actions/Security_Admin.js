@@ -38,7 +38,7 @@ const saveBankFail = (message) => {
 };
 
 const saveBankUserApi = (navigate, Data, setAcceptModal) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(saveBankInit());
     let form = new FormData();
@@ -161,7 +161,7 @@ const saveCorporateFail = (message) => {
 };
 
 const saveCorporateUserApi = (navigate, Data) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(saveCorporateInit());
     let form = new FormData();
@@ -288,7 +288,7 @@ const getNewBankUserRequestFail = (message) => {
 };
 
 const getNewBankUserRequestApi = (navigate, Data) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return async (dispatch) => {
     dispatch(getNewBankUserRequestInit());
     let form = new FormData();
@@ -374,7 +374,7 @@ const getNewCorporateUserRequestFail = (message) => {
 };
 
 const getNewCorporateUserRequestApi = (navigate, Data) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(getNewCorporateUserRequestInit());
     let form = new FormData();
@@ -459,7 +459,7 @@ const rejectUserRequestFail = (message) => {
 };
 
 const rejectUserRequestApi = (navigate, Data, setModalReject) => {
-  const token = localStorage.getItem("token");
+  const token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(rejectUserRequestInit());
     let form = new FormData();
@@ -553,7 +553,7 @@ const getAllUsersListFail = (message) => {
 };
 
 const getAllUsersListMainAPI = (navigate, Data) => {
-  const token = localStorage.getItem("token");
+  const token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(getAllUsersListInit());
     let form = new FormData();
@@ -647,7 +647,7 @@ const SearchCorporateUsersFail = (message) => {
 };
 
 const SearchCorporateUsersAPI = (navigate, data) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(SearchCorporateUsersInit());
     let form = new FormData();
@@ -733,7 +733,7 @@ const SearchBankUsersFail = (message) => {
 };
 
 const SearchBankUsersAPI = (navigate, data) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(SearchBankUsersInit());
     let form = new FormData();
@@ -796,13 +796,13 @@ const SearchBankUsersAPI = (navigate, data) => {
 //Update Bank Users
 const UpdateBankUserInit = () => {
   return {
-    type: actions.SEARCH_BANK_USERS_INIT,
+    type: actions.UPDATE_BANK_USER_INIT,
   };
 };
 
 const UpdateBankUserSuccess = (response, message) => {
   return {
-    type: actions.SEARCH_BANK_USERS_SUCCESS,
+    type: actions.UPDATE_BANK_USER_SUCCESS,
     response: response,
     message: message,
   };
@@ -810,13 +810,13 @@ const UpdateBankUserSuccess = (response, message) => {
 
 const UpdateBankUserFail = (message) => {
   return {
-    type: actions.SEARCH_BANK_USERS_FAIL,
+    type: actions.UPDATE_BANK_USER_FAIL,
     message: message,
   };
 };
 
 const UpdateBankUserAPI = (navigate, data, setUpdateModal) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(UpdateBankUserInit());
     let form = new FormData();
@@ -847,16 +847,7 @@ const UpdateBankUserAPI = (navigate, data, setUpdateModal) => {
                 )
               );
               setUpdateModal(false);
-              let data = {
-                Name: "",
-                EmployeeID: "",
-                Email: "",
-                RoleID: 0,
-                PageNumber: 1,
-                StatusID: 0,
-                Length: 10,
-              };
-              dispatch(SearchBankUsersAPI(navigate, data));
+     
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -926,7 +917,7 @@ const UpdateCorporateUserFail = (message) => {
 };
 
 const UpdateCorporateUserAPI = (navigate, data, setUpdateModal) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(UpdateCorporateUserInit());
     let form = new FormData();
@@ -957,16 +948,16 @@ const UpdateCorporateUserAPI = (navigate, data, setUpdateModal) => {
                 )
               );
               setUpdateModal(false);
-              let Data = {
-                Name: "",
-                CompanyName: "",
-                Email: "",
-                StatusID: 0,
-                PageNumber: 1,
-                Length: 10,
-              };
+              // let Data = {
+              //   Name: "",
+              //   CompanyName: "",
+              //   Email: "",
+              //   StatusID: 0,
+              //   PageNumber: 1,
+              //   Length: 10,
+              // };
 
-              dispatch(SearchCorporateUsersAPI(navigate, Data));
+              // dispatch(SearchCorporateUsersAPI(navigate, Data));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

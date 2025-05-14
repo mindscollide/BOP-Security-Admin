@@ -51,12 +51,12 @@ const refreshtokenSuccess = (response, message) => {
 // API
 const RefreshToken = (navigate) => {
   console.log("RefreshTokenRefreshToken");
-  let Token = localStorage.getItem("token");
+  let Token = JSON.parse(localStorage.getItem("token"));
   let RefreshToken = localStorage.getItem("refreshToken");
   console.log("RefreshToken", Token, RefreshToken);
   let Data = {
     Token: Token,
-    RefreshToken: RefreshToken,
+    RefreshToken: JSON.parse(RefreshToken),
   };
   console.log("RefreshToken", Data);
   return async (dispatch) => {
@@ -335,10 +335,13 @@ const loginSecurityAdminAPI = (navigate, data) => {
             ) {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminSuccess("LDAP auth Successful"));
-              localStorage.setItem("token", response.data.responseResult.token);
+              localStorage.setItem(
+                "token",
+                JSON.stringify(response.data.responseResult.token)
+              );
               localStorage.setItem(
                 "refreshToken",
-                response.data.responseResult.refreshToken
+                JSON.stringify(response.data.responseResult.refreshToken)
               );
               localStorage.setItem(
                 "userID",
@@ -555,7 +558,7 @@ const GetAllUserStatusFail = (message) => {
 };
 
 const GetAllUserStatusAPI = (navigate) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return async (dispatch) => {
     dispatch(GetAllUserStatusInit());
     let form = new FormData();
@@ -650,7 +653,7 @@ const RoleListFail = (message) => {
 };
 
 const RoleListAPI = (navigate) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return async (dispatch) => {
     dispatch(RoleListInit());
     let form = new FormData();
@@ -660,7 +663,7 @@ const RoleListAPI = (navigate) => {
       url: authenticationAPI,
       data: form,
       headers: {
-        _token: token,
+        _token:token,
       },
     })
       .then(async (response) => {
@@ -730,7 +733,7 @@ const GetBankUserRolesFail = (message) => {
 };
 
 const GetBankUserRolesAPI = (navigate) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return async (dispatch) => {
     dispatch(GetBankUserRolesInit());
     let form = new FormData();
@@ -812,7 +815,7 @@ const GetAllBranchesFail = (message) => {
 };
 
 const GetAllBranchesAPI = (navigate) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return async (dispatch) => {
     dispatch(GetAllBranchesInit());
     let form = new FormData();
@@ -894,7 +897,7 @@ const LogOutFail = (message) => {
 };
 
 const LogOutAPI = (navigate) => {
-  let token = localStorage.getItem("token");
+  let token = JSON.parse(localStorage.getItem("token"));
   return async (dispatch) => {
     dispatch(LogOutInit());
     let form = new FormData();

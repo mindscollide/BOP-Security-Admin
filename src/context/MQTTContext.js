@@ -17,7 +17,6 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const clientRef = useRef(null);
   const retryCountRef = useRef(0); // Tracks number of retries
-  const MAX_RETRIES = 3;
   const randomString = secureRandomString();
   // Related Bank User Request and Created and Rejected
   const [bankUserRequested, setBankUserRequested] = useState(null);
@@ -28,6 +27,7 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
   const [bankUserUpdated, setBankUserUpdated] = useState(null);
   const [branchCreated, setBranchCreated] = useState(null);
   const [branchUpdated, setBranchUpdated] = useState(null);
+  const [bankBulkUpload, setBankBulkUpload] = useState(false);
 
   // Related Corporate User Request and Created and Rejected
   const [corproateUserRequested, setCorporateUserRequested] = useState(null);
@@ -38,16 +38,13 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
   const [corporateCreated, setCorporateCreated] = useState(null);
   const [corproateUpdated, setCorporateUpdated] = useState(null);
   const [corporateUserUpdated, setCorporateUserUpdated] = useState(null);
-
+  const [corporateUserBulkUpload, setCorporateUserBulkUpload] = useState(null);
   const connectToMqtt = () => {
     if (!subscribeID) {
       console.error("No subscribeID provided for MQTT connection.");
       return;
     }
-    if (retryCountRef.current >= MAX_RETRIES) {
-      console.error("MQTT connection failed after maximum retries.");
-      return; // Stop trying after 3 attempts
-    }
+
     let newClientID = `${subscribeID}-${randomString}`;
 
     // Initialize client
@@ -56,16 +53,10 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
     clientRef.current.onConnectionLost = (responseObject) => {
       console.error("MQTT Connection lost:", responseObject.errorMessage);
       setIsConnected(false);
-      retryCountRef.current += 1;
-      if (retryCountRef.current < MAX_RETRIES) {
-        setTimeout(connectToMqtt, 6000); // Retry after 6 seconds
-      } else {
-        console.error("Stopped reconnecting after max retries.");
-      }
+      setTimeout(connectToMqtt, 6000);
     };
 
     clientRef.current.onMessageArrived = (message) => {
-      retryCountRef.current = 0; //
       console.log("Message arrived:", JSON.parse(message.payloadString));
       let data = JSON.parse(message.payloadString);
 
@@ -155,6 +146,10 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
           // When System  Admin Updated a Corporate User
           setCorporateUserUpdated(data.payload);
           break;
+        case "CORPORATE_USER_BULK_REQUEST":
+          setCorporateUserBulkUpload(data.payload);
+
+          break;
         default:
           break;
       }
@@ -164,7 +159,6 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
       onSuccess: () => {
         console.log("Connected to MQTT broker");
         setIsConnected(true);
-        retryCountRef.current = 0; // Reset retries on successful connection
         clientRef.current.subscribe(subscribeID.toString(), {
           onSuccess: () => console.log(`Subscribed to ${subscribeID}`),
           onFailure: (error) =>
@@ -172,14 +166,9 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
         });
       },
       onFailure: (error) => {
-        retryCountRef.current += 1;
         console.error("MQTT connection failed:", error.errorMessage);
         setIsConnected(false);
-        if (retryCountRef.current < MAX_RETRIES) {
-          setTimeout(connectToMqtt, 6000); // Retry after 6 seconds
-        } else {
-          console.error("Stopped retrying after 3 failed attempts.");
-        }
+        setTimeout(connectToMqtt, 6000); // Retry after 6 seconds
       },
       keepAliveInterval: 30,
       reconnect: true,
@@ -196,7 +185,6 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
       if (clientRef.current?.isConnected()) {
         clientRef.current.disconnect();
         // setLastMessage(null);
-        retryCountRef.current = 0;
       }
     };
   }, [subscribeID]);
@@ -220,6 +208,9 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
         corporateCreated,
         corproateUpdated,
         corporateUserUpdated,
+        corporateUserBulkUpload,
+        setCorporateUserBulkUpload,
+        bankBulkUpload,
       }}>
       {children}
     </MqttContext.Provider>

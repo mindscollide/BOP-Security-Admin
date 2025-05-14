@@ -35,6 +35,7 @@ import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 // import ActivateConfirmationModal from "../../Pages/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
+import { useMqtt } from "../../../../context/MQTTContext";
 // import ActivateConfirmationModal from "../../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 
 const EditUser = () => {
@@ -43,6 +44,13 @@ const EditUser = () => {
 
   //Global State
   const { securityReducer } = useSelector((state) => state);
+  const {
+    corporateUserBulkUpload,
+    corporateUserUpdated,
+    setCorporateUserBulkUpload,
+    corporateUserRoleStatusChange,
+  } = useMqtt();
+  console.log(corporateUserBulkUpload, "corporateUserBulkUpload");
   const SearchCorporateUsersData = useSelector(
     (state) => state.securityReducer.SearchCorporateUsersData
   );
@@ -155,6 +163,61 @@ const EditUser = () => {
     }
   }, [SearchCorporateUsersData]);
 
+  useEffect(() => {
+    if (corporateUserBulkUpload !== null) {
+      try {
+        setCorporateUserBulkUpload(null);
+        let Data = {
+          Name: "",
+          CompanyName: "",
+          Email: "",
+          StatusID: 0,
+          sRow: sRow,
+          Length: 10,
+        };
+        dispatch(SearchCorporateUsersAPI(navigate, Data));
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+  }, [corporateUserBulkUpload]);
+  useEffect(() => {
+    if (corporateUserUpdated !== null) {
+      try {
+        const { user } = corporateUserUpdated;
+        setCorporateUserTableData((prevTableData) => {
+          return prevTableData.map((data2, index) => {
+            if (data2.userID === user.userID) {
+              return {
+                ...data2,
+                name: user.name,
+              };
+            }
+            return data2;
+          });
+        });
+      } catch (error) {}
+    }
+  }, [corporateUserUpdated]);
+
+  useEffect(() => {
+    if (corporateUserRoleStatusChange !== null) {
+      try {
+        const { updatedUser } = corporateUserRoleStatusChange;
+        setCorporateUserTableData((prevTableData) => {
+          return prevTableData.map((data2, index) => {
+            if (data2.userID === updatedUser.userID) {
+              return {
+                ...data2,
+                statusId: updatedUser.statusId,
+              };
+            }
+            return data2;
+          });
+        });
+      } catch (error) {}
+    }
+  }, [corporateUserRoleStatusChange]);
   // const onchangeModalTextFieldsHandler = (e) => {
   //   let name = e.target.name;
   //   let value = e.target.value;
@@ -408,7 +471,7 @@ const EditUser = () => {
 
   const columns = [
     {
-      title: <label className="bottom-table-header">Corporate Name</label>,
+      title: <label className='bottom-table-header'>Corporate Name</label>,
       dataIndex: "corporateName",
       key: "CorporateName",
       width: "190px",
@@ -416,7 +479,7 @@ const EditUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Login ID</label>,
+      title: <label className='bottom-table-header'>Login ID</label>,
       dataIndex: "email",
       key: "email",
       align: "left",
@@ -424,7 +487,7 @@ const EditUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">User Name</label>,
+      title: <label className='bottom-table-header'>User Name</label>,
       dataIndex: "name",
       key: "name",
       width: "190px",
@@ -432,7 +495,7 @@ const EditUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Status</label>,
+      title: <label className='bottom-table-header'>Status</label>,
       dataIndex: "statusId",
       key: "statusId",
       ellipsis: true,
@@ -451,7 +514,7 @@ const EditUser = () => {
       },
     },
     {
-      title: <label className="bottom-table-header">Edit</label>,
+      title: <label className='bottom-table-header'>Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
@@ -459,12 +522,11 @@ const EditUser = () => {
       render: (text, record) => {
         return (
           <label
-            className="edit-update-column"
+            className='edit-update-column'
             onClick={() => {
               handleClickEdit(record);
-            }}
-          >
-            <i className="icon-edit edit-user-icon-color" />
+            }}>
+            <i className='icon-edit edit-user-icon-color' />
           </label>
         );
       },
@@ -526,54 +588,54 @@ const EditUser = () => {
 
   return (
     <>
-      <section className="edit-user-container">
+      <section className='edit-user-container'>
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="edit-user-label">Edit Corporate User</div>
+            <div className='edit-user-label'>Edit Corporate User</div>
           </Col>
         </Row>
-        <Row className="mt-3">
+        <Row className='mt-3'>
           <Col lg={12} md={12} sm={12}>
-            <Paper className="span-edit-user">
-              <Row className="mt-3">
-                <Col lg={2} md={2} sm={12} className="pe-0">
+            <Paper className='span-edit-user'>
+              <Row className='mt-3'>
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="CorporateName"
-                    className="text-fields-Corporate-edituser"
-                    labelClass="d-none"
-                    placeholder="Corporate Name"
+                    name='CorporateName'
+                    className='text-fields-Corporate-edituser'
+                    labelClass='d-none'
+                    placeholder='Corporate Name'
                     maxLength={100}
                     value={editUser.CorporateName.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="email"
-                    className="text-fields-Corporate-edituser"
-                    labelClass="d-none"
+                    name='email'
+                    className='text-fields-Corporate-edituser'
+                    labelClass='d-none'
                     maxLength={100}
-                    placeholder="Login ID"
+                    placeholder='Login ID'
                     value={editUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="Name"
-                    labelClass="d-none"
+                    name='Name'
+                    labelClass='d-none'
                     maxLength={100}
-                    className="text-fields-Corporate-edituser"
-                    placeholder="Name"
+                    className='text-fields-Corporate-edituser'
+                    placeholder='Name'
                     value={editUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="dropdown pe-0">
+                <Col lg={2} md={2} sm={12} className='dropdown pe-0'>
                   <Select
-                    name="statusID"
-                    className="edit-Corporate-user-select-status"
-                    placeholder="Status"
+                    name='statusID'
+                    className='edit-Corporate-user-select-status'
+                    placeholder='Status'
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}
@@ -582,27 +644,27 @@ const EditUser = () => {
 
                 <Col lg={4} md={12} sm={12}>
                   <Button
-                    icon={<i className="icon-search icon-search-space"></i>}
-                    text="Search"
-                    className="search-Corporate-Edit-User-btn"
+                    icon={<i className='icon-search icon-search-space'></i>}
+                    text='Search'
+                    className='search-Corporate-Edit-User-btn'
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className="icon-refresh icon-reset-space"></i>}
-                    text="Reset"
+                    icon={<i className='icon-refresh icon-reset-space'></i>}
+                    text='Reset'
                     onClick={resetHandler}
-                    className="reset-Corporate-Edit-User-btn"
+                    className='reset-Corporate-Edit-User-btn'
                   />
 
                   <Button
-                    icon={<i className="icon-download icon-reset-space"></i>}
-                    text="Export"
-                    className="export-Corporate-Edit-User-btn"
+                    icon={<i className='icon-download icon-reset-space'></i>}
+                    text='Export'
+                    className='export-Corporate-Edit-User-btn'
                   />
                 </Col>
               </Row>
 
-              <Row className="mt-4">
+              <Row className='mt-4'>
                 <Col lg={12} md={12} sm={12}>
                   <span>
                     <Row>
@@ -610,8 +672,7 @@ const EditUser = () => {
                         lg={12}
                         md={12}
                         sm={12}
-                        className="d-flex gap-1 align-items-center"
-                      >
+                        className='d-flex gap-1 align-items-center'>
                         <span className={"corporate-show-text-above-table"}>
                           Show
                         </span>
@@ -620,7 +681,7 @@ const EditUser = () => {
                           options={options}
                           value={dropdownvalue}
                           onChange={handleChangeDropDown}
-                          className="select-Bank-field-edit"
+                          className='select-Bank-field-edit'
                         />
 
                         <span className={"corporate-show-text-above-table"}>
@@ -632,7 +693,7 @@ const EditUser = () => {
                   <Table
                     column={columns}
                     rows={corporateUserTableData}
-                    className="Edituser-table"
+                    className='Edituser-table'
                     scroll={{ y: 300 }}
                   />
                 </Col>
@@ -645,10 +706,10 @@ const EditUser = () => {
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
-        size="lg"
+        size='lg'
         className={"modaldialog modal-Update"}
-        modalHeaderClassName="d-none"
-        modalFooterClassName="modal-update-footer"
+        modalHeaderClassName='d-none'
+        modalFooterClassName='modal-update-footer'
         onHide={closeUpdateModal}
         ModalBody={
           <Fragment>
@@ -656,7 +717,7 @@ const EditUser = () => {
               <Fragment>
                 <Row>
                   <Col lg={12} md={12} sm={12}>
-                    <p className="update-modal-heading">
+                    <p className='update-modal-heading'>
                       Are you sure want to update?
                     </p>
                   </Col>
@@ -672,16 +733,15 @@ const EditUser = () => {
                 lg={12}
                 md={12}
                 sm={12}
-                className="d-flex justify-content-center"
-              >
+                className='d-flex justify-content-center'>
                 <Button
                   icon={
                     <>
                       <span>Proceed</span>
-                      <i className="icon-arrow-right"></i>
+                      <i className='icon-arrow-right'></i>
                     </>
                   }
-                  className="Update-Proceed-btn"
+                  className='Update-Proceed-btn'
                   onClick={handleProceed}
                 />
               </Col>

@@ -4,6 +4,7 @@ import Header from "../../../components/layout/Header/Header";
 import Sidebar from "../../../components/layout/Sidebar/Sidebar";
 import { Layout } from "antd";
 import ResponseMessage from "../../../utils/ResponseMessage";
+import "./MainPage.css"
 
 const MainPage = () => {
   const { Sider, Content } = Layout;
@@ -12,7 +13,7 @@ const MainPage = () => {
       <Layout>
         <Header />
         <Layout>
-          <Sider width={250}>
+          <Sider collapsed={false} className="siderClass" width={250}>
             <Sidebar />
           </Sider>
 

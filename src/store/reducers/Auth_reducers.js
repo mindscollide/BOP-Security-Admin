@@ -44,6 +44,31 @@ const authReducer = (state = initialState, action) => {
       };
     }
 
+    case actions.REFRESH_TOKEN_SUCCESS: {
+      localStorage.setItem("token", JSON.stringify(action.response.token));
+      localStorage.setItem(
+        "refreshToken",
+        JSON.stringify(action.response.refreshToken)
+      );
+      return {
+        ...state,
+        Loading: false,
+        Token: action.response.token,
+        Refresh: action.response.refreshToken,
+        SessionExpeireResponseMessage: action.message,
+      };
+    }
+    case actions.REFRESH_TOKEN_FAIL: {
+      return {
+        ...state,
+        UserDetails: null,
+        ResponseMessage: action.message,
+        Loading: false,
+        Token: "",
+        Refresh: "",
+      };
+    }
+
     case actions.SEND_EMAIL_RESET_PASSWORD_INIT:
       return { ...state, Loading: true };
 

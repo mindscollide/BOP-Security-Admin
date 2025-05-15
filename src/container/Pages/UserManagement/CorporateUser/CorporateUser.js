@@ -49,6 +49,7 @@ const EditUser = () => {
     corporateUserUpdated,
     setCorporateUserBulkUpload,
     corporateUserRoleStatusChange,
+    corproateUpdated
   } = useMqtt();
   console.log(corporateUserBulkUpload, "corporateUserBulkUpload");
   const SearchCorporateUsersData = useSelector(
@@ -218,6 +219,25 @@ const EditUser = () => {
       } catch (error) {}
     }
   }, [corporateUserRoleStatusChange]);
+
+  useEffect(() => {
+    if(corproateUpdated !== null) {
+      try {
+        const { corporate } = corproateUpdated;
+        setCorporateUserTableData((prevTableData) => {
+          return prevTableData.map((data2, index) => {
+            if (data2.corporateID === corporate.corporateID) {
+              return {
+                ...data2,
+                corporateName: corporate.corporateName,
+              };
+            }
+            return data2;
+          });
+        });
+      } catch (error) {}
+    }
+  }, [corproateUpdated])
   // const onchangeModalTextFieldsHandler = (e) => {
   //   let name = e.target.name;
   //   let value = e.target.value;

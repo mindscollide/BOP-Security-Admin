@@ -351,6 +351,7 @@ const loginSecurityAdminAPI = (navigate, data) => {
                 "userName",
                 response.data.responseResult.userName
               );
+              localStorage.setItem("defaultOpenKey", "editBankUser");
               navigate("/BOP/Admin/BankUser");
             } else if (
               response.data.responseResult.responseMessage

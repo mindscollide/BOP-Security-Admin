@@ -105,31 +105,32 @@
   color: #fff !important;
   border-radius: 0px !important;
 }
-
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light
-  .ant-menu-item-selected,
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light
-  > .ant-menu
-  .ant-menu-item-selected {
+.menu-items-sidebar_active {
   background-color: #096fed !important;
+  border-radius: 0px !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
   color: #fff !important;
 }
+
 
 :where(.css-dev-only-do-not-override-1e3x2xa).ant-layout .ant-layout-sider {
   background: #4d4946 !important;
 }
 
-.SecurityMenu > ant-menu-submenu-arrow,
-.ant-menu-submenu-arrow {
-  /* right: 10px !important; */
-  transform: rotate(270deg) translateX(2.5px) !important;
-}
+
 
 :where(.css-dev-only-do-not-override-1e3x2xa).ant-menu
   .ant-menu-submenu-open.ant-menu-submenu-inline
   > .ant-menu-submenu-title
   > .ant-menu-submenu-arrow::after {
-  transform: rotate(135deg) translateX(-2.5px) translateY(0px);
+  transform: rotate(-45deg) translateX(-2.5px) translateY(0px);
+}
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu
+  .ant-menu-submenu-open.ant-menu-submenu-inline
+  > .ant-menu-submenu-title
+  > .ant-menu-submenu-arrow::before {
+  transform: rotate(230deg) translateX(-2.5px) translateY(0px);
 }
 
 section.ant-layout.ant-layout-has-sider.css-dev-only-do-not-override-1e3x2xa {

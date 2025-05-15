@@ -181,16 +181,18 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
 
     clientRef.current.connect(options);
   };
-
+  let token = localStorage.getItem("token");
   useEffect(() => {
-    connectToMqtt();
+    if (token !== null) {
+      connectToMqtt();
+    }
     return () => {
       if (clientRef.current?.isConnected()) {
         clientRef.current.disconnect();
         // setLastMessage(null);
       }
     };
-  }, [subscribeID]);
+  }, [token]);
 
   return (
     <MqttContext.Provider

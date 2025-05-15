@@ -302,6 +302,7 @@ const BankUser = () => {
       }
     }
   }, [branchCreated]);
+
   useEffect(() => {
     if (branchUpdated !== null) {
       if (Array.isArray(branchOptions)) {
@@ -585,7 +586,7 @@ const BankUser = () => {
 
   const columns = [
     {
-      title: <label className='bottom-table-header'>Employee ID</label>,
+      title: <label className="bottom-table-header">Employee ID</label>,
       dataIndex: "employeeID",
       key: "employeeID",
       align: "left",
@@ -593,7 +594,7 @@ const BankUser = () => {
       width: "100px",
     },
     {
-      title: <label className='bottom-table-header'>LoginID</label>,
+      title: <label className="bottom-table-header">LoginID</label>,
       dataIndex: "email",
       key: "loginId",
       align: "left",
@@ -601,7 +602,7 @@ const BankUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Empolyee Name</label>,
+      title: <label className="bottom-table-header">Empolyee Name</label>,
       dataIndex: "firstName",
       key: "name",
       width: "190px",
@@ -609,7 +610,7 @@ const BankUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Role</label>,
+      title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
       align: "center",
@@ -629,7 +630,7 @@ const BankUser = () => {
       },
     },
     {
-      title: <label className='bottom-table-header'>Branch</label>,
+      title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "BranchName",
       key: "BranchName",
       width: "110px",
@@ -642,7 +643,7 @@ const BankUser = () => {
       },
     },
     {
-      title: <label className='bottom-table-header'>Status</label>,
+      title: <label className="bottom-table-header">Status</label>,
       dataIndex: "userStatusID",
       key: "userStatusID",
       ellipsis: true,
@@ -660,7 +661,7 @@ const BankUser = () => {
       },
     },
     {
-      title: <label className='bottom-table-header'>Edit</label>,
+      title: <label className="bottom-table-header">Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
@@ -668,9 +669,10 @@ const BankUser = () => {
       render: (text, record) => {
         return (
           <label
-            className='edit-update-column'
-            onClick={() => handleClickEdit(record)}>
-            <i className='icon-edit edit-user-icon-color' />
+            className="edit-update-column"
+            onClick={() => handleClickEdit(record)}
+          >
+            <i className="icon-edit edit-user-icon-color" />
           </label>
         );
       },
@@ -758,45 +760,45 @@ const BankUser = () => {
 
   return (
     <>
-      <section className='edit-user-container'>
+      <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className='edit-user-label'>Edit Bank User</div>
+            <div className="edit-user-label">Edit Bank User</div>
           </Col>
         </Row>
-        <Row className='mt-3'>
+        <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
-            <Paper className='span-edit-user'>
-              <Row className='mt-3'>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+            <Paper className="span-edit-user">
+              <Row className="mt-3">
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='EmployeeID'
-                    className='text-fields-edituser'
-                    labelClass='d-none'
-                    placeholder='Employee ID'
+                    name="EmployeeID"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
+                    placeholder="Employee ID"
                     maxLength={100}
                     value={BankEditUser.EmployeeID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='LoginID'
-                    className='text-fields-edituser'
-                    labelClass='d-none'
+                    name="LoginID"
+                    className="text-fields-edituser"
+                    labelClass="d-none"
                     maxLength={100}
-                    placeholder='Login ID'
+                    placeholder="Login ID"
                     value={BankEditUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
-                    name='Name'
-                    labelClass='d-none'
+                    name="Name"
+                    labelClass="d-none"
                     maxLength={100}
-                    className='text-fields-edituser'
-                    placeholder='Employee Name'
+                    className="text-fields-edituser"
+                    placeholder="Employee Name"
                     value={BankEditUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
@@ -805,20 +807,20 @@ const BankUser = () => {
                   <Select
                     isSearchable
                     options={roleOptions}
-                    placeholder='Select Role'
-                    className='edit-user-select-status'
+                    placeholder="Select Role"
+                    className="edit-user-select-status"
                     value={roleID.value !== 0 ? roleID : null}
                     onChange={handleSelectRole}
                   />
                 </Col>
               </Row>
 
-              <Row className='mt-3'>
-                <Col lg={3} md={3} sm={12} className='pe-0'>
+              <Row className="mt-3">
+                <Col lg={3} md={3} sm={12} className="pe-0">
                   <Select
-                    className='edit-user-select-status'
+                    className="edit-user-select-status"
                     isSearchable
-                    placeholder='Select Status'
+                    placeholder="Select Status"
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}
@@ -827,27 +829,27 @@ const BankUser = () => {
 
                 <Col lg={9} md={9} sm={12}>
                   <Button
-                    icon={<i className='icon-search icon-search-space'></i>}
-                    text='Search'
-                    className='search-Bank-Edit-User-btn'
+                    icon={<i className="icon-search icon-search-space"></i>}
+                    text="Search"
+                    className="search-Bank-Edit-User-btn"
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className='icon-refresh icon-reset-space'></i>}
-                    text='Reset'
+                    icon={<i className="icon-refresh icon-reset-space"></i>}
+                    text="Reset"
                     onClick={resetHandler}
-                    className='reset-Bank-Edit-User-btn'
+                    className="reset-Bank-Edit-User-btn"
                   />
 
                   <Button
-                    icon={<i className='icon-download icon-reset-space'></i>}
-                    text='Export'
-                    className='export-Bank-Edit-User-btn'
+                    icon={<i className="icon-download icon-reset-space"></i>}
+                    text="Export"
+                    className="export-Bank-Edit-User-btn"
                   />
                 </Col>
               </Row>
 
-              <Row className='mt-4'>
+              <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
                   <span>
                     <Row>
@@ -855,7 +857,8 @@ const BankUser = () => {
                         lg={12}
                         md={12}
                         sm={12}
-                        className='d-flex gap-1 align-items-center'>
+                        className="d-flex gap-1 align-items-center"
+                      >
                         <span className={"Bank-show-text-above-table"}>
                           Show
                         </span>
@@ -864,7 +867,7 @@ const BankUser = () => {
                           options={options}
                           value={dropdownvalue}
                           onChange={handleChangeDropDown}
-                          className='select-Bank-field-edit'
+                          className="select-Bank-field-edit"
                         />
 
                         <span className={"Bank-show-text-above-table"}>
@@ -876,7 +879,7 @@ const BankUser = () => {
                   <Table
                     column={columns}
                     rows={bankUserTableData}
-                    className='Edituser-table'
+                    className="Edituser-table"
                     scroll={{ y: 250, x: "auto" }}
                   />
                 </Col>
@@ -888,15 +891,15 @@ const BankUser = () => {
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
-        size='lg'
+        size="lg"
         className={"modaldialog modal-Update"}
-        modalHeaderClassName='d-none'
-        modalFooterClassName='modal-update-footer'
+        modalHeaderClassName="d-none"
+        modalFooterClassName="modal-update-footer"
         onHide={closeUpdateModal}
         ModalBody={
           <Row>
             <Col lg={12} md={12} sm={12}>
-              <p className='update-modal-heading'>
+              <p className="update-modal-heading">
                 Are you sure want to update?
               </p>
             </Col>
@@ -908,15 +911,16 @@ const BankUser = () => {
               lg={12}
               md={12}
               sm={12}
-              className='d-flex justify-content-center'>
+              className="d-flex justify-content-center"
+            >
               <Button
                 icon={
                   <>
                     <span>Proceed</span>
-                    <i className='icon-arrow-right'></i>
+                    <i className="icon-arrow-right"></i>
                   </>
                 }
-                className='Update-Proceed-btn'
+                className="Update-Proceed-btn"
                 onClick={handleProceed}
               />
             </Col>

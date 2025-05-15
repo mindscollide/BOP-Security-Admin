@@ -45,6 +45,7 @@ const PendingApprovalCorporate = () => {
     corproateUserRequested,
     corproateUserCreated,
     corproateUserRejected,
+    corproateUpdated
   } = useMqtt();
   //Global State
   const { securityReducer } = useSelector((state) => state);
@@ -201,6 +202,25 @@ const PendingApprovalCorporate = () => {
       }
     }
   }, [corproateUserRequested]);
+
+  useEffect(() => {
+    if(corproateUpdated !== null) {
+      try {
+        const { corporate } = corproateUpdated;
+        setTableData((prevTableData) => {
+          return prevTableData.map((data2, index) => {
+            if (data2.fK_CorporateID === corporate.corporateID) {
+              return {
+                ...data2,
+                corporateName: corporate.corporateName,
+              };
+            }
+            return data2;
+          });
+        });
+      } catch (error) {}
+    }
+  }, [corproateUpdated])
 
   // column of create user
   const columnsCreate = [

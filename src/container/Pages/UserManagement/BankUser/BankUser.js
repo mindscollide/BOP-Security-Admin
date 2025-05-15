@@ -39,6 +39,9 @@ const BankUser = () => {
     bankUserUpdated,
     branchCreated,
     branchUpdated,
+    bankBulkUpload,
+    bankUserCreated,
+    setBankBulkUpload,
   } = useMqtt();
   const { securityReducer } = useSelector((state) => state);
 
@@ -156,7 +159,23 @@ const BankUser = () => {
     dispatch(GetAllBranchesAPI(navigate));
   }, []);
   console.log(hasReachedBottom, "hasReachedBottom");
-
+  useEffect(() => {
+    if (bankBulkUpload !== null) {
+      try {
+        setBankBulkUpload(null);
+        let Data = {
+          Name: "",
+          EmployeeID: "",
+          Email: "",
+          RoleID: 0,
+          StatusID: 0,
+          sRow: 0,
+          Length: 10,
+        };
+        dispatch(SearchBankUsersAPI(navigate, Data));
+      } catch (error) {}
+    }
+  }, [bankBulkUpload]);
   //handelled states for scrolling here (4)
   useEffect(() => {
     if (SearchBankUsers !== null) {
@@ -201,6 +220,43 @@ const BankUser = () => {
       }
     }
   }, [bankUserRoleStatusChange]);
+
+  useEffect(() => {
+    if (bankUserCreated !== null) {
+      try {
+        const { user, createdUserID, createdDateTime } = bankUserCreated;
+        let findisExist = bankUserTableData.find(() => {
+          return (
+            user.userRegistrationRequestID ===
+            bankUserTableData.userRegistrationRequestID
+          );
+        });
+        console.log(
+          bankUserTableData,
+          user,
+          "bankUserTableDatabankUserTableData"
+        );
+        if (findisExist === undefined) {
+          let bankUserData = {
+            branch: user.branchName,
+            employeeID: user.employeeID,
+            ldapAccount: user.loginID,
+            userID: createdUserID,
+            firstName: user.firstname,
+            email: user.email,
+            contactNumber: user.contactnumber,
+            failedAttemptCount: 0,
+            userRoleID: user.fK_UserRoleID,
+            userStatusID: user.fK_UserStatusID,
+            creationDateTime: createdDateTime,
+          };
+          setBankUserTableData((prevData) => {
+            return [bankUserData, ...prevData];
+          });
+        }
+      } catch (error) {}
+    }
+  }, [bankUserCreated]);
 
   // bankUserUpdated
   useEffect(() => {

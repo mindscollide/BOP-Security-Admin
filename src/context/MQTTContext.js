@@ -27,7 +27,7 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
   const [bankUserUpdated, setBankUserUpdated] = useState(null);
   const [branchCreated, setBranchCreated] = useState(null);
   const [branchUpdated, setBranchUpdated] = useState(null);
-  const [bankBulkUpload, setBankBulkUpload] = useState(false);
+  const [bankBulkUpload, setBankBulkUpload] = useState(null);
 
   // Related Corporate User Request and Created and Rejected
   const [corproateUserRequested, setCorporateUserRequested] = useState(null);
@@ -150,6 +150,9 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
           setCorporateUserBulkUpload(data.payload);
 
           break;
+        case "BANK_USER_BULK_REQUEST":
+          setBankBulkUpload(data.payload);
+          break;
         default:
           break;
       }
@@ -211,6 +214,7 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
         corporateUserBulkUpload,
         setCorporateUserBulkUpload,
         bankBulkUpload,
+        setBankBulkUpload,
       }}>
       {children}
     </MqttContext.Provider>

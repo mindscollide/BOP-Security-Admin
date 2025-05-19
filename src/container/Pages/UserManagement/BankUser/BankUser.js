@@ -44,7 +44,6 @@ const BankUser = () => {
     setBankBulkUpload,
   } = useMqtt();
   const { securityReducer } = useSelector((state) => state);
-
   //Search all corporate Users
   const SearchBankUsers = useSelector(
     (state) => state.securityReducer.SearchBankUsersData
@@ -261,6 +260,7 @@ const BankUser = () => {
   // bankUserUpdated
   useEffect(() => {
     if (bankUserUpdated !== null) {
+      console.log("bankUserUpdated", bankUserUpdated);
       try {
         const { user } = bankUserUpdated;
 
@@ -280,6 +280,20 @@ const BankUser = () => {
         });
       } catch (error) {
         console.log(error);
+      }
+
+      if (roleOptions.length > 0) {
+        let findRoleObj = roleOptions.find(
+          (roleData, index) =>
+            roleData.roleID === bankUserUpdated.user.userRoleID
+        );
+        if (findRoleObj !== undefined) {
+          setEditBankUserRole({
+            value: findRoleObj.roleID,
+            label: findRoleObj.roleName,
+          });
+        }
+        console.log(findRoleObj, "findRoleObj");
       }
     }
   }, [bankUserUpdated]);
@@ -336,31 +350,6 @@ const BankUser = () => {
       }
     }
   }, [branchUpdated]);
-  // const onchangeModalTextFieldsHandler = (e) => {
-  //   let name = e.target.name;
-  //   let value = e.target.value;
-
-  //   if (name === "Email" && value !== "") {
-  //     if (value !== "") {
-  //       setModalEditState({
-  //         ...modalEditState,
-  //         Email: {
-  //           value: value.trimStart(),
-  //           errorMessage: "",
-  //           errorStatus: false,
-  //         },
-  //       });
-  //     }
-  //   } else if (name === "Email" && value === "") {
-  //     setModalEditState({
-  //       ...modalEditState,
-  //       Email: {
-  //         value: "",
-  //         errorMessage: "",
-  //         errorStatus: true,
-  //       },
-  //     });
-  //   }
 
   //edit user security admin validate handler
   const editUserValidateHandler = (e) => {
@@ -557,10 +546,21 @@ const BankUser = () => {
           (roleData, index) => roleData.roleID === record.userRoleID
         );
         if (findRoleObj !== undefined) {
+          // if (findRoleObj.roleID !== 9) {
           setEditBankUserRole({
             value: findRoleObj.roleID,
             label: findRoleObj.roleName,
           });
+          //   setEditBankUserBranch({
+          //     value: 0,
+          //     label: "",
+          //   });
+          // } else if (findRoleObj.roleID === 9) {
+          //   setEditBankUserRole({
+          //     value: findRoleObj.roleID,
+          //     label: findRoleObj.roleName,
+          //   });
+          // }
         }
         console.log(findRoleObj, "findRoleObj");
       }
@@ -717,7 +717,14 @@ const BankUser = () => {
     };
 
     console.log("data to store is: ", data);
-    dispatch(UpdateBankUserAPI(navigate, data, setUpdateModal));
+    dispatch(
+      UpdateBankUserAPI(
+        navigate,
+        data,
+        setUpdateModal,
+        handleCloseEditBankUserModal
+      )
+    );
   };
 
   useEffect(() => {

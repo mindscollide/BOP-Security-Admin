@@ -218,6 +218,7 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
         bankBulkUpload,
         setBankBulkUpload,
         setBranchUpdated,
+        setBankUserUpdated,
       }}
     >
       {children}

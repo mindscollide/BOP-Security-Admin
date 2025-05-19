@@ -815,7 +815,12 @@ const UpdateBankUserFail = (message) => {
   };
 };
 
-const UpdateBankUserAPI = (navigate, data, setUpdateModal) => {
+const UpdateBankUserAPI = (
+  navigate,
+  data,
+  setUpdateModal,
+  handleCloseEditBankUserModal
+) => {
   let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
     dispatch(UpdateBankUserInit());
@@ -833,7 +838,14 @@ const UpdateBankUserAPI = (navigate, data, setUpdateModal) => {
       .then(async (response) => {
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
-          dispatch(UpdateBankUserAPI(navigate, data, setUpdateModal));
+          dispatch(
+            UpdateBankUserAPI(
+              navigate,
+              data,
+              setUpdateModal,
+              handleCloseEditBankUserModal
+            )
+          );
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted === true) {
             if (
@@ -847,7 +859,7 @@ const UpdateBankUserAPI = (navigate, data, setUpdateModal) => {
                 )
               );
               setUpdateModal(false);
-     
+              handleCloseEditBankUserModal();
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

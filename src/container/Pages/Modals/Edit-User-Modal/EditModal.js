@@ -76,6 +76,10 @@ const EditModal = ({
                       value={editBankUserRole}
                       onChange={(selectedVal) => {
                         setEditBankUserRole(selectedVal);
+                        setEditBankUserBranch({
+                          value: 0,
+                          label: "",
+                        });
                       }}
                     />
                   </Col>
@@ -127,6 +131,17 @@ const EditModal = ({
                   text="Update"
                   className="update-btn-editModal"
                   onClick={UpdateBtnHandle}
+                  disableBtn={
+                    editBankUserRole.value !== 9 &&
+                    editBankUserStatus.value &&
+                    editBankUserBranch.value === 0
+                      ? false
+                      : editBankUserRole.value === 9 &&
+                        editBankUserBranch.value !== 0 &&
+                        editBankUserStatus
+                      ? false
+                      : true
+                  }
                 />
                 <Button
                   icon={<i className="icon-close icon-right"></i>}

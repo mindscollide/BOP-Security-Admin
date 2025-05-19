@@ -16,31 +16,19 @@ import {
 } from "../../../../components/elements";
 import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
-// import {
-//   Table,
-//   Paper,
-//   Loader,
-//   Notification,
-// } from "../../../components/elements";
-// import CreateModal from "../../Pages/Modals/Create-User-Modal/CreateModal";
-// import AcceptModal from "../../Pages/Modals/Accept-User-Modal/AcceptModal";
-// import { useDispatch, useSelector } from "react-redux";
-
-// import { useNavigate } from "react-router-dom";
-// import "./PendingApprovalBank.css";
-// import {
-//   getNewBankUserRequestApi,
-//   saveBankUserApi,
-// } from "../../../store/actions/Security_Admin";
-// import { useMqtt } from "../../../context/MQTTContext";
-// import { useTableScrollBottom } from "../../../helpers/useTableScrollBottom";
 
 const PendingApprovalBank = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const { bankUserRequested, bankUserCreated, bankUserRejected } = useMqtt();
+  const {
+    bankUserRequested,
+    bankUserCreated,
+    bankUserRejected,
+    branchUpdated,
+    setBranchUpdated,
+  } = useMqtt();
   console.log(
     { bankUserRequested, bankUserCreated, bankUserRejected },
     "bankUserRequestedbankUserRequested"
@@ -62,7 +50,6 @@ const PendingApprovalBank = () => {
   //row length on scroll
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);
-  const [modalState, setModalState] = useState(0);
 
   //Custome hook for Scrolling (1)
   const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
@@ -159,6 +146,7 @@ const PendingApprovalBank = () => {
       } catch (error) {}
     }
   }, [bankUserCreated]);
+
   // Remove From List
   useEffect(() => {
     if (bankUserRejected !== null) {
@@ -195,6 +183,24 @@ const PendingApprovalBank = () => {
     }
   }, [bankUserRequested]);
 
+  useEffect(() => {
+    if (branchUpdated !== null) {
+      console.log("branchUpdatedbranchUpdated", branchUpdated);
+      console.log("UpdatedTableData", tableData);
+      const UpdatedTableData = tableData.map((user) => {
+        if (user?.fK_BranchID === branchUpdated?.branch?.branchID) {
+          return {
+            ...user,
+            branchName: branchUpdated?.branch?.branchName,
+          };
+        }
+        return user;
+      });
+      setTableData(UpdatedTableData);
+      setBranchUpdated(null);
+    }
+  }, [branchUpdated]);
+
   // column of create user
   const columns = [
     {
@@ -211,7 +217,6 @@ const PendingApprovalBank = () => {
       dataIndex: "firstname",
       key: "firstname",
       width: "280px",
-
       ellipsis: true,
     },
     {
@@ -224,10 +229,11 @@ const PendingApprovalBank = () => {
       title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "branchName",
       key: "branchName",
+      align: "left",
       ellipsis: true,
       render: (text, record) => {
         return (
-          <label className="d-flex justify-content-center">
+          <label className="d-flex justify-content-left">
             {record.branchName !== "" ? record.branchName : "-"}
           </label>
         );

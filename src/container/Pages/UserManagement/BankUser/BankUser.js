@@ -591,21 +591,21 @@ const BankUser = () => {
       key: "employeeID",
       align: "left",
       ellipsis: true,
-      width: "100px",
+      width: "200px",
     },
     {
       title: <label className="bottom-table-header">LoginID</label>,
       dataIndex: "email",
       key: "loginId",
       align: "left",
-      width: "260px",
+      width: "400px",
       ellipsis: true,
     },
     {
       title: <label className="bottom-table-header">Empolyee Name</label>,
       dataIndex: "firstName",
       key: "name",
-      width: "190px",
+      width: "250px",
       align: "left",
       ellipsis: true,
     },
@@ -613,8 +613,8 @@ const BankUser = () => {
       title: <label className="bottom-table-header">Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
-      align: "center",
-      width: "190px",
+      align: "left",
+      width: "250px",
       ellipsis: true,
       render: (text, record) => {
         if (roleOptions.length > 0) {
@@ -633,8 +633,8 @@ const BankUser = () => {
       title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "BranchName",
       key: "BranchName",
-      width: "110px",
-      align: "center",
+      width: "250px",
+      align: "left",
       ellipsis: true,
       render: (text, record) => {
         if (record.branch !== null) {
@@ -647,7 +647,8 @@ const BankUser = () => {
       dataIndex: "userStatusID",
       key: "userStatusID",
       ellipsis: true,
-      align: "center",
+      align: "left",
+      width: "250px",
       render: (text, record) => {
         if (statusOptions.length > 0) {
           let StatusNameFind = statusOptions.find(
@@ -665,6 +666,7 @@ const BankUser = () => {
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
+      width: "250px",
       align: "center",
       render: (text, record) => {
         return (

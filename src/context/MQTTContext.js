@@ -217,7 +217,9 @@ export const MqttProvider = ({ subscribeID, dispatch, children }) => {
         setCorporateUserBulkUpload,
         bankBulkUpload,
         setBankBulkUpload,
-      }}>
+        setBranchUpdated,
+      }}
+    >
       {children}
     </MqttContext.Provider>
   );

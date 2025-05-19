@@ -113,12 +113,9 @@
   color: #fff !important;
 }
 
-
 :where(.css-dev-only-do-not-override-1e3x2xa).ant-layout .ant-layout-sider {
   background: #4d4946 !important;
 }
-
-
 
 :where(.css-dev-only-do-not-override-1e3x2xa).ant-menu
   .ant-menu-submenu-open.ant-menu-submenu-inline

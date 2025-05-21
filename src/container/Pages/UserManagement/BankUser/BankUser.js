@@ -29,6 +29,7 @@ import {
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { useMqtt } from "../../../../context/MQTTContext";
+import { IndexCell } from "../../../../helpers/ReusableMethods";
 const BankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -202,17 +203,19 @@ const BankUser = () => {
 
         console.log(updatedUser, "updatedUserupdatedUser");
         setBankUserTableData((prevData) => {
-          return prevData.map((data2, index) => {
-            if (data2.employeeID === updatedUser.employeeID) {
-              return {
-                ...data2,
-                userRoleID: updatedUser.userRoleID,
-                userStatusID: updatedUser.userStatusID,
-                branch: updatedUser.branch,
-              };
-            }
-            return data2;
-          });
+          if (Array.isArray(prevData)) {
+            return prevData.map((data2, index) => {
+              if (data2.employeeID === updatedUser.employeeID) {
+                return {
+                  ...data2,
+                  userRoleID: updatedUser.userRoleID,
+                  userStatusID: updatedUser.userStatusID,
+                  branch: updatedUser.branch,
+                };
+              }
+              return data2;
+            });
+          }
         });
       } catch (error) {
         console.log(error);
@@ -608,6 +611,9 @@ const BankUser = () => {
       width: "250px",
       align: "left",
       ellipsis: true,
+      render: (val, record) => {
+        return <IndexCell value={val} record={record} />;
+      },
     },
     {
       title: <label className="bottom-table-header">Role</label>,
@@ -616,30 +622,32 @@ const BankUser = () => {
       align: "left",
       width: "250px",
       ellipsis: true,
-      render: (text, record) => {
-        if (roleOptions.length > 0) {
-          let roleNameFind = roleOptions.find(
-            (role, index) => role.roleID === record.userRoleID
-          );
-          console.log(roleNameFind, "roleNameFind");
-          if (roleNameFind !== undefined) {
-            return roleNameFind.roleName;
-          }
-        }
-        return text;
+      render: (val, record) => {
+        let role =
+          RoleList?.roles?.length > 0 &&
+          RoleList.roles.find((role) => role.roleID === val);
+        return (
+          <IndexCell
+            value={role !== undefined ? role.roleName : ""}
+            record={record}
+          />
+        );
       },
     },
     {
       title: <label className="bottom-table-header">Branch</label>,
-      dataIndex: "BranchName",
-      key: "BranchName",
+      dataIndex: "branch",
+      key: "branch",
       width: "250px",
       align: "left",
       ellipsis: true,
-      render: (text, record) => {
-        if (record.branch !== null) {
-          return record.branch.branchName;
-        }
+      render: (val, record) => {
+        return (
+          <IndexCell
+            value={val !== null ? val.branchName : ""}
+            record={record}
+          />
+        );
       },
     },
     {
@@ -649,17 +657,24 @@ const BankUser = () => {
       ellipsis: true,
       align: "left",
       width: "250px",
-      render: (text, record) => {
-        if (statusOptions.length > 0) {
-          let StatusNameFind = statusOptions.find(
-            (role, index) => role.statusID === record.userStatusID
-          );
-          if (StatusNameFind !== undefined) {
-            return StatusNameFind.statusName;
-          }
-        }
-        return text;
+      render: (val, record) => {
+        console.log("valvalval", val);
+        console.log("recordrecord", record);
+
+        return <IndexCell value={val !== null ? val : ""} record={record} />;
       },
+
+      // render: (text, record) => {
+      //   if (statusOptions.length > 0) {
+      //     let StatusNameFind = statusOptions.find(
+      //       (role, index) => role.statusID === record.userStatusID
+      //     );
+      //     if (StatusNameFind !== undefined) {
+      //       return StatusNameFind.statusName;
+      //     }
+      //   }
+      //   return text;
+      // },
     },
     {
       title: <label className="bottom-table-header">Edit</label>,

@@ -1,56 +1,36 @@
-import React, { Fragment, useState } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import {
-  TextField,
-  Button,
-  Table,
-  Modal,
-} from "../../../../components/elements";
+import React, { Fragment } from "react";
+import { Col, Row } from "react-bootstrap";
+import { TextField, Button, Modal } from "../../../../components/elements";
 // import { Select } from "antd";
 import Select from "react-select";
 import "./EditModal.css";
 
 const EditModal = ({
   modalEdit,
-  modalEditState,
-  setModalEditState,
+  editBankUserUpdate,
   setModalEdit,
-  Role,
-  StatusData,
-  UpdateButtonOnClick,
-  SelectRoleChangeHandler,
-  SelectStatusChangeHandler,
-  onChangeTextFieldHandler,
+  Roles,
+  StatusList,
+  editBankUserStatus,
+  editBankUserRole,
+  setEditBankUserRole,
+  setEditBankUserStatus,
+  UpdateBtnHandle,
+  branchOptions,
+  editBankUserBranch,
+  setEditBankUserBranch,
+  handleDiscard,
 }) => {
-  // for select role state
-  const [selectedRole, setSelectedRole] = useState(null);
-
-  // for close modal handler
-  const closeEditModal = async () => {
-    setModalEdit(false);
-  };
-
-  const options = [
-    { value: "1", label: "Dealer" },
-    { value: "2", label: "Treasury" },
-    { value: "3", label: "Branch" },
-  ];
-
-  const handleSelectRoleChange = (selectedOption) => {
-    setSelectedRole(selectedOption.value); // update state with selected value
-    SelectRoleChangeHandler(selectedOption);
-  };
-
   return (
     <Fragment>
       <Modal
         show={modalEdit}
-        setShow={setModalEdit}
+        setShow={handleDiscard}
         className="modaldialog modal-Edit-styles"
         modalHeaderClassName={"header-Edit-Modal-close-btn"}
         modalFooterClassName="modal-footer-edit"
         size="lg"
-        onHide={closeEditModal}
+        onHide={handleDiscard}
         ModalBody={
           <Fragment>
             {modalEdit ? (
@@ -77,11 +57,9 @@ const EditModal = ({
                 <Row>
                   <Col lg={12} md={12} sm={12}>
                     <TextField
-                      name="Email"
-                      value={modalEditState.Email.value}
+                      // name="Email"
+                      value={editBankUserUpdate.email}
                       label={<small className="email-heading">Email</small>}
-                      onChange={onChangeTextFieldHandler}
-                      placeholder="mindscollide.aamir@hbl.com"
                       className="textfield-edit-modal"
                       disable={true}
                     />
@@ -94,37 +72,51 @@ const EditModal = ({
                     <Select
                       placeholder="Select Role"
                       className="select-role"
-                      value={modalEditState.selectRole}
-                      options={options}
-                      onChange={handleSelectRoleChange}
+                      options={Roles}
+                      value={editBankUserRole}
+                      onChange={(selectedVal) => {
+                        setEditBankUserRole(selectedVal);
+                        setEditBankUserBranch({
+                          value: 0,
+                          label: "",
+                        });
+                      }}
                     />
                   </Col>
                   <Col lg={6} md={6} sm={12}>
-                    <label className="select-labels">Select Status </label>
+                    <label className="select-labels">Select Status</label>
                     <Select
-                      value={modalEditState.selectStatus}
+                      value={editBankUserStatus}
                       placeholder="Select Status"
                       className="select-status"
-                      options={StatusData}
-                      onChange={SelectStatusChangeHandler}
+                      options={StatusList}
+                      onChange={(selectedVal) => {
+                        setEditBankUserStatus(selectedVal);
+                      }}
                     />
                   </Col>
                 </Row>
-                {selectedRole === "3" && (
-                  <>
-                    <Row className="mt-2">
-                      <Col lg={12} md={12} sm={12}>
-                        <label className="select-labels">Select Branch</label>
-                        <Select
-                          name="BranchField"
-                          // value={modalEditState.BranchField?.value}
-                          placeholder="Select Branch"
-                          // onChange={onChangeTextFieldHandler}
-                          className="select-status"
-                        />
-                      </Col>
-                    </Row>
-                  </>
+                {editBankUserRole.value === 9 && (
+                  <Row className="mt-3">
+                    <Col
+                      lg={12}
+                      md={12}
+                      sm={12}
+                      className="flex-column flex-wrap"
+                    >
+                      <label className="select-labels">Select Branch</label>
+                      <Select
+                        options={branchOptions}
+                        placeholder="Select Branch"
+                        value={editBankUserBranch}
+                        onChange={(selectedVal) => {
+                          setEditBankUserBranch(selectedVal);
+                        }}
+                        isSearchable={true}
+                        // menuPortalTarget={document.body}
+                      />
+                    </Col>
+                  </Row>
                 )}
               </Fragment>
             ) : null}
@@ -132,19 +124,30 @@ const EditModal = ({
         }
         ModalFooter={
           <Fragment>
-            <Row className="mb-3">
+            <Row className="mb-3 mt-3">
               <Col lg={12} md={12} sm={12} className="footer-btn-col">
                 <Button
-                  icon={<i class="icon-refresh icon-right"></i>}
+                  icon={<i className="icon-refresh icon-right"></i>}
                   text="Update"
                   className="update-btn-editModal"
-                  onClick={UpdateButtonOnClick}
+                  onClick={UpdateBtnHandle}
+                  disableBtn={
+                    editBankUserRole.value !== 9 &&
+                    editBankUserStatus.value &&
+                    editBankUserBranch.value === 0
+                      ? false
+                      : editBankUserRole.value === 9 &&
+                        editBankUserBranch.value !== 0 &&
+                        editBankUserStatus
+                      ? false
+                      : true
+                  }
                 />
                 <Button
-                  icon={<i class="icon-close icon-right"></i>}
+                  icon={<i className="icon-close icon-right"></i>}
                   text="Discard"
                   className="discard-btn-editModal"
-                  onClick={closeEditModal}
+                  onClick={handleDiscard}
                 />
               </Col>
             </Row>

@@ -33,6 +33,7 @@
   font-weight: 600;
   font-size: 15px;
   color: #fff !important;
+  background: transparent !important;
   width: 100% !important;
   height: 100%;
 }
@@ -48,6 +49,7 @@
   padding: 6px 0px !important;
   border-radius: 0px !important;
   border-bottom: 1px solid #ffffff33 !important;
+  color: #fff !important;
 }
 
 .submenu-sidebar-icons:active,
@@ -103,13 +105,11 @@
   color: #fff !important;
   border-radius: 0px !important;
 }
-
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light
-  .ant-menu-item-selected,
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light
-  > .ant-menu
-  .ant-menu-item-selected {
+.menu-items-sidebar_active {
   background-color: #096fed !important;
+  border-radius: 0px !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
   color: #fff !important;
 }
 
@@ -117,17 +117,17 @@
   background: #4d4946 !important;
 }
 
-.SecurityMenu > ant-menu-submenu-arrow,
-.ant-menu-submenu-arrow {
-  /* right: 10px !important; */
-  transform: rotate(270deg) translateX(2.5px) !important;
-}
-
 :where(.css-dev-only-do-not-override-1e3x2xa).ant-menu
   .ant-menu-submenu-open.ant-menu-submenu-inline
   > .ant-menu-submenu-title
   > .ant-menu-submenu-arrow::after {
-  transform: rotate(135deg) translateX(-2.5px) translateY(0px);
+  transform: rotate(-45deg) translateX(-2.5px) translateY(0px);
+}
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu
+  .ant-menu-submenu-open.ant-menu-submenu-inline
+  > .ant-menu-submenu-title
+  > .ant-menu-submenu-arrow::before {
+  transform: rotate(230deg) translateX(-2.5px) translateY(0px);
 }
 
 section.ant-layout.ant-layout-has-sider.css-dev-only-do-not-override-1e3x2xa {
@@ -170,4 +170,25 @@ aside.ant-layout-sider.ant-layout-sider-dark {
 li.ant-menu-item.ant-menu-item-selected.ant-menu-item-only-child.menu-items-sidebar.noDefault {
   background-color: transparent;
   color: #45494d;
+}
+
+:where(.css-1e3x2xa).ant-menu-light
+  .ant-menu-item:hover:not(.ant-menu-item-selected):not(
+    .ant-menu-submenu-selected
+  ),
+:where(.css-1e3x2xa).ant-menu-light
+  > .ant-menu
+  .ant-menu-item:hover:not(.ant-menu-item-selected):not(
+    .ant-menu-submenu-selected
+  ),
+:where(.css-1e3x2xa).ant-menu-light
+  .ant-menu-submenu-title:hover:not(.ant-menu-item-selected):not(
+    .ant-menu-submenu-selected
+  ),
+:where(.css-1e3x2xa).ant-menu-light
+  > .ant-menu
+  .ant-menu-submenu-title:hover:not(.ant-menu-item-selected):not(
+    .ant-menu-submenu-selected
+  ) {
+  color: #fff !important;
 }

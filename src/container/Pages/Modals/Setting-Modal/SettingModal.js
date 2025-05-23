@@ -1,19 +1,103 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SettingModal.css";
 import { Row, Col } from "react-bootstrap";
 
 import {
   TextField,
   Button,
-  Table,
   Modal,
+  Loader,
 } from "../../../../components/elements";
 import { Checkbox, Switch } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {
+  GetUserSettingsAPI,
+  // GetUserSettingsAPI,
+  UpdateUserSettingsAPI,
+} from "../../../../store/actions/SettingsActions";
 
 const SettingModal = ({ SettingModalState, setSettingModalState }) => {
+  console.log(SettingModalState, "SettingModalStateSettingModalState");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [settingUser, setSettingUser] = useState(true);
   const [passcodeSetting, setPasscodeSetting] = useState(false);
-  const [marketTiming, setMarketTiming] = useState(false);
+  // const [marketTiming, setMarketTiming] = useState(false);
+  // const [settings, setSettings] = useState({
+  //   chatPannalOverlap: true,
+  //   soundOnEveryMessage: true,
+  //   twoFactorAuthentication: true,
+  //   newPassword: {
+  //     value: "",
+  //   },
+  //   confirmNewPassword: {
+  //     value: "",
+  //   },
+  //   monToThurStartTime: {
+  //     value: "",
+  //   },
+  //   monToThurEndTime: {
+  //     value: "",
+  //   },
+  //   friStartTime: {
+  //     value: "",
+  //   },
+  //   friEndTime: {
+  //     value: "",
+  //   },
+  // });
+
+  const [settingsRecord, setSettingRecords] = useState({
+    BD_Enable2FA: false,
+    BD_SoundOnEveryMessage: false,
+    BD_EmailOnEveryMessage: false,
+  });
+
+  // const [errors, setErrors] = useState({
+  //   lengthError: true,
+  //   numberError: true,
+  //   specialCharError: true,
+  //   matchError: true,
+  // });
+
+  console.log(settingsRecord, "settingsRecordsettingsRecord");
+
+  const LoadingState = useSelector((state) => state.settingsReducer.Loading);
+
+  console.log("securityReducersecurityReducer", LoadingState);
+
+  const GetUserSettings = useSelector(
+    (state) => state.settingsReducer.GetUserSettings
+  );
+
+  useEffect(() => {
+    dispatch(GetUserSettingsAPI(navigate));
+  }, []);
+
+  useEffect(() => {
+    if (GetUserSettings !== null) {
+      try {
+        const { userSettingsList } = GetUserSettings;
+        if (userSettingsList.length > 0) {
+          const newSettings = {};
+
+          userSettingsList.forEach((settingData) => {
+            newSettings[settingData.configKey] = JSON.parse(
+              settingData.configValue
+            );
+          });
+
+          setSettingRecords((prevSettings) => ({
+            ...prevSettings,
+            ...newSettings,
+          }));
+        }
+      } catch (error) {
+        console.error("Error setting user settings:", error);
+      }
+    }
+  }, [GetUserSettings]);
 
   const onCloseButton = () => {
     setSettingModalState(false);
@@ -22,25 +106,73 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
   const onClickSettingUser = () => {
     setSettingUser(true);
     setPasscodeSetting(false);
-    setMarketTiming(false);
+    // setMarketTiming(false);
   };
 
   const onClickPasscodeSetting = () => {
     setSettingUser(false);
     setPasscodeSetting(true);
-    setMarketTiming(false);
+    // setMarketTiming(false);
   };
 
-  const onClickMarketSetting = () => {
-    setSettingUser(false);
-    setPasscodeSetting(false);
-    setMarketTiming(true);
+  // const onClickMarketSetting = () => {
+  //   setSettingUser(false);
+  //   setPasscodeSetting(false);
+  //   setMarketTiming(true);
+  // };
+
+  // Checkbox for Chat Panal Overlap and Sound on every personal message
+  const onChangeCheckbox = (e) => {
+    console.log("e.target.checked,", e.target.checked);
+    if (e.target.name === "chatPannal") {
+      setSettingRecords({
+        ...settingsRecord,
+        BD_EmailOnEveryMessage: e.target.checked,
+      });
+    } else if (e.target.name === "soundOnEveryMessage") {
+      setSettingRecords({
+        ...settingsRecord,
+        BD_SoundOnEveryMessage: e.target.checked,
+      });
+    }
+  };
+
+  // radio button for Two factor authentication
+  const onChangeSwitch = (e) => {
+    setSettingRecords({
+      ...settingsRecord,
+      BD_Enable2FA: e,
+    });
+    console.log(`switch to ${e}`);
   };
 
   // const onChange = (e) => {
   //   console.log(`checked = ${e.target.checked}`);
   // };
+  const UpdateButtonOnClick = () => {
+    try {
+      let updateData = {
+        Settings: [
+          {
+            Key: "BD_EmailOnEveryMessage",
+            Value: String(settingsRecord.BD_EmailOnEveryMessage),
+          },
+          {
+            Key: "BD_SoundOnEveryMessage",
+            Value: String(settingsRecord.BD_SoundOnEveryMessage),
+          },
+          {
+            Key: "BD_Enable2FA",
+            Value: String(settingsRecord.BD_Enable2FA),
+          },
+        ],
+      };
 
+      dispatch(
+        UpdateUserSettingsAPI(navigate, updateData, setSettingModalState)
+      );
+    } catch (err) {}
+  };
   return (
     <>
       <Modal
@@ -78,7 +210,7 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                       : `${"setting-button-disabled"}`
                   }
                 />
-                <Button
+                {/* <Button
                   text="Market Timing"
                   onClick={onClickMarketSetting}
                   className={
@@ -86,7 +218,7 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                       ? `${"setting-button-modal"}`
                       : `${"setting-button-disabled"}`
                   }
-                />
+                /> */}
               </Col>
             </Row>
 
@@ -94,14 +226,22 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
               <>
                 <Row className="mt-4">
                   <Col className="checkbox-border">
-                    <Checkbox onChange={() => e.target.checked()}>
+                    <Checkbox
+                      name="chatPannal"
+                      checked={settingsRecord.BD_EmailOnEveryMessage}
+                      onChange={onChangeCheckbox}
+                    >
                       Chat Panel Overlap
                     </Checkbox>
                   </Col>
                 </Row>
                 <Row>
                   <Col className="checkbox-border">
-                    <Checkbox onChange={() => e.target.checked()}>
+                    <Checkbox
+                      name="soundOnEveryMessage"
+                      checked={settingsRecord.BD_SoundOnEveryMessage}
+                      onChange={onChangeCheckbox}
+                    >
                       Sound on every personal message
                     </Checkbox>
                   </Col>
@@ -127,88 +267,15 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                       sm={12}
                       className="d-flex justify-content-end"
                     >
-                      <Switch />
+                      <Switch
+                        name="twoFactorAuth"
+                        checked={settingsRecord.BD_Enable2FA}
+                        value={settingsRecord.BD_Enable2FA}
+                        onChange={onChangeSwitch}
+                      />
                     </Col>
                   </Row>
                 </div>
-
-                <Row className="mt-3">
-                  <Col lg={12} md={12} sm={12}>
-                    <p className="change-password-text">Change Password</p>
-                  </Col>
-                </Row>
-
-                <Row className="mt-1">
-                  <Col lg={4} md={4} sm={12}>
-                    <span className="change-password-label">
-                      Enter New Password *
-                    </span>
-                  </Col>
-                  <Col lg={8} md={8} sm={12}>
-                    <TextField
-                      name="Password"
-                      labelClass="d-none"
-                      autoComplete={"off"}
-                    />
-                  </Col>
-                </Row>
-
-                <Row className="mt-3">
-                  <Col lg={4} md={4} sm={12}>
-                    <span className="change-password-label">
-                      Confirm New Password *
-                    </span>
-                  </Col>
-                  <Col lg={8} md={8} sm={12}>
-                    <TextField
-                      name="ConfirmNewPassword"
-                      autoComplete={"off"}
-                      labelClass="d-none"
-                    />
-                  </Col>
-                </Row>
-              </>
-            ) : marketTiming ? (
-              <>
-                <Row className="mt-4">
-                  <Col>
-                    <p className="change-password-text">Mon - Thur</p>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col lg={8} md={8} sm={8}>
-                    <Row>
-                      <Col lg={6} md={6} sm={6}>
-                        <label className="two-factor-text">Start Time</label>
-                        <TextField labelClass="d-none" />
-                      </Col>
-                      <Col lg={6} md={6} sm={6}>
-                        <label className="two-factor-text">End Time</label>
-                        <TextField labelClass="d-none" />
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
-
-                <Row className="mt-3">
-                  <Col>
-                    <p className="change-password-text">Friday</p>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col lg={8} md={8} sm={8}>
-                    <Row>
-                      <Col lg={6} md={6} sm={6}>
-                        <label className="two-factor-text">Start Time</label>
-                        <TextField labelClass="d-none" />
-                      </Col>
-                      <Col lg={6} md={6} sm={6}>
-                        <label className="two-factor-text">End Time</label>
-                        <TextField labelClass="d-none" />
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
               </>
             ) : null}
           </>
@@ -220,13 +287,14 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                 <Button
                   text="Save"
                   className="update-btn-editModal"
-                  //   onClick={UpdateButtonOnClick}
+                  onClick={UpdateButtonOnClick}
                 />
               </Col>
             </Row>
           </>
         }
       />
+      {LoadingState && <Loader />}
     </>
   );
 };

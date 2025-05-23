@@ -10,14 +10,16 @@ import "@fontsource/roboto/700.css"; // bold
 import "@fontsource/roboto/900.css";
 import Header from "./components/layout/Header/Header";
 import Sidebar from "./components/layout/Sidebar/Sidebar";
-import Userreport from "./container/Reports/Userreport";
+// import Userreport from "./container/Reports/Userreport";
+import { useContext, useEffect } from "react";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes/Routes";
+import { useMqtt } from "./context/MQTTContext";
 function App() {
-  return (
-    <>
-      <Sidebar />
-      <Header />
-    </>
-  );
+  const { isConnected, bankUserRequested } = useMqtt();
+  console.log(bankUserRequested, isConnected, "lastMessageslastMessages");
+  console.log("App component rendered", isConnected);
+  return <RouterProvider router={router} />;
 }
 
 export default App;

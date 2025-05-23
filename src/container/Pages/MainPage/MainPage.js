@@ -1,13 +1,10 @@
-import React, { Fragment, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import React from "react";
+import { Outlet } from "react-router-dom";
 import Header from "../../../components/layout/Header/Header";
-import allUser from "../../Usermanagement/CorporateUser/CorporateUser";
-import PendingUserRequest from "../../Usermanagement/PendingApprovalBank/PendingApprovalBank";
-import Userreport from "../../../container/Reports/Userreport";
-
 import Sidebar from "../../../components/layout/Sidebar/Sidebar";
-import { Row, Col } from "react-bootstrap";
 import { Layout } from "antd";
+import ResponseMessage from "../../../utils/ResponseMessage";
+import "./MainPage.css"
 
 const MainPage = () => {
   const { Sider, Content } = Layout;
@@ -16,7 +13,7 @@ const MainPage = () => {
       <Layout>
         <Header />
         <Layout>
-          <Sider width={250}>
+          <Sider collapsed={false} className="siderClass" width={250}>
             <Sidebar />
           </Sider>
 
@@ -24,6 +21,7 @@ const MainPage = () => {
             <Outlet />
           </Content>
         </Layout>
+        <ResponseMessage />
       </Layout>
     </>
     // <Fragment>

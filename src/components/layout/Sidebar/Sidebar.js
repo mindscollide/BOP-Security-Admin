@@ -9,47 +9,37 @@ import "./Sidebar.css";
 
 const Sidebar = () => {
   const { SubMenu } = Menu;
-  const { Sider } = Layout;
   const navigate = useNavigate();
-  let defaultOpenKey = localStorage.getItem("defaultOpenKey ");
-  let defaultSelectedKey = localStorage.getItem("defaultSelectedKey");
+  let defaultOpenKey = localStorage.getItem("defaultOpenKey");
 
   console.log("defaultOpenKey", defaultOpenKey);
-  console.log("defaultSelectedKey", defaultSelectedKey);
 
   //Create User Page Name is Pending User Requests
 
   const navigateToBankUser = () => {
-    localStorage.setItem("defaultOpenKey ", "sub1");
-    localStorage.setItem("defaultSelectedKey", "5");
+    localStorage.setItem("defaultOpenKey", "editBankUser");
     navigate("/BOP/Admin/BankUser");
   };
 
   const navigateToCorporateUser = () => {
-    localStorage.setItem("defaultOpenKey ", "sub1");
-    localStorage.setItem("defaultSelectedKey", "6");
+    localStorage.setItem("defaultOpenKey", "editCorporateUser");
     navigate("/BOP/Admin/CorporateUser");
   };
 
   const navigateToPendingApproval = () => {
-    localStorage.setItem("defaultOpenKey ", "sub1");
-    localStorage.setItem("defaultSelectedKey", "7");
+    localStorage.setItem("defaultOpenKey", "pendingApprovalBank");
     navigate("/BOP/Admin/PendingApprovalBank");
   };
 
   const navigateToPendingApprovalCorporate = () => {
-    localStorage.setItem("defaultOpenKey ", "sub1");
-    localStorage.setItem("defaultSelectedKey", "8");
+    localStorage.setItem("defaultOpenKey", "pendingApprovalCorporate");
     navigate("/BOP/Admin/PendingApprovalCorporate");
   };
 
   const navigateToReport = () => {
-    localStorage.setItem("defaultOpenKey ", "sub3");
-    localStorage.setItem("defaultSelectedKey", "8");
+    localStorage.setItem("defaultOpenKey", "userReport");
     navigate("/BOP/Admin/userReport");
   };
-
-  let defaultKeySidebar = localStorage.getItem("defaultSelectedKey");
 
   return (
     <Row>
@@ -57,56 +47,55 @@ const Sidebar = () => {
         <Menu
           theme="light"
           defaultOpenKeys={[defaultOpenKey]}
-          defaultSelectedKeys={[defaultSelectedKey]}
           mode="inline"
           className="Menu-sidebar-class"
         >
           <SubMenu
-            key="sub1"
+            key="userManagement"
             icon={<i className="icon-user menu-icons"></i>}
             title="User Management"
             className="submenu-sidebar-icons"
           >
             <Menu.Item
               className={
-                defaultKeySidebar !== "5"
-                  ? "menu-items-sidebar noDefault"
+                defaultOpenKey === "editBankUser"
+                  ? "menu-items-sidebar_active  noDefault"
                   : "menu-items-sidebar"
               }
-              key="5"
+              key="editBankUser"
               onClick={navigateToBankUser}
             >
               Edit Bank User
             </Menu.Item>
             <Menu.Item
               className={
-                defaultKeySidebar !== "6"
-                  ? "menu-items-sidebar noDefault"
+                defaultOpenKey === "editCorporateUser"
+                  ? "menu-items-sidebar_active noDefault"
                   : "menu-items-sidebar"
               }
-              key="6"
+              key="editCorporateUser"
               onClick={navigateToCorporateUser}
             >
               Edit Corporate User
             </Menu.Item>
             <Menu.Item
               className={
-                defaultKeySidebar !== "7"
-                  ? "menu-items-sidebar noDefault"
+                defaultOpenKey === "pendingApprovalBank"
+                  ? "menu-items-sidebar_active noDefault"
                   : "menu-items-sidebar"
               }
-              key="7"
+              key="pendingApprovalBank"
               onClick={navigateToPendingApproval}
             >
               Pending Approval Bank
             </Menu.Item>
             <Menu.Item
               className={
-                defaultKeySidebar !== "8"
-                  ? "menu-items-sidebar noDefault"
+                defaultOpenKey === "pendingApprovalCorporate"
+                  ? "menu-items-sidebar_active noDefault"
                   : "menu-items-sidebar"
               }
-              key="8"
+              key="pendingApprovalCorporate"
               onClick={navigateToPendingApprovalCorporate}
             >
               Pending Approval Corporate
@@ -121,11 +110,11 @@ const Sidebar = () => {
           >
             <Menu.Item
               className={
-                defaultKeySidebar !== "9"
-                  ? "menu-items-sidebar noDefault"
+                defaultOpenKey === "userReport"
+                  ? "menu-items-sidebar_active noDefault"
                   : "menu-items-sidebar"
               }
-              key="9"
+              key="userReport"
               onClick={navigateToReport}
             >
               User Report

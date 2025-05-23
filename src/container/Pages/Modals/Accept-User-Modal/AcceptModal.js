@@ -1,11 +1,6 @@
 import React, { Fragment } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import {
-  TextField,
-  Button,
-  Table,
-  Modal,
-} from "../../../../components/elements";
+import { Col, Row } from "react-bootstrap";
+import { Button, Modal } from "../../../../components/elements";
 import "./AcceptModal.css";
 
 const AcceptModal = ({
@@ -65,14 +60,14 @@ const AcceptModal = ({
                 <Button
                   text="Yes"
                   className="proceed-btn"
-                  icon={<i class="icon-check icon-right"></i>}
+                  icon={<i className="icon-check icon-right"></i>}
                   onClick={acceptHandler}
                 />
                 <Button
                   text="No"
                   className="discard-accept-btn"
                   onClick={closeAcceptModal}
-                  icon={<i class="icon-close icon-right"></i>}
+                  icon={<i className="icon-close icon-right"></i>}
                 />
               </Col>
             </Row>

@@ -658,23 +658,16 @@ const BankUser = () => {
       align: "left",
       width: "250px",
       render: (val, record) => {
-        console.log("valvalval", val);
-        console.log("recordrecord", record);
-
-        return <IndexCell value={val !== null ? val : ""} record={record} />;
+        return (
+          <IndexCell
+            value={val === 1 ? "Active" : "Inactive"}
+            // CellClassName={
+            //   val === 1 ? styles.ActiveStatus : styles.InactiveStatus
+            // }
+            record={record}
+          />
+        );
       },
-
-      // render: (text, record) => {
-      //   if (statusOptions.length > 0) {
-      //     let StatusNameFind = statusOptions.find(
-      //       (role, index) => role.statusID === record.userStatusID
-      //     );
-      //     if (StatusNameFind !== undefined) {
-      //       return StatusNameFind.statusName;
-      //     }
-      //   }
-      //   return text;
-      // },
     },
     {
       title: <label className="bottom-table-header">Edit</label>,

@@ -29,7 +29,7 @@
 }
 
 .Menu-sidebar-class {
-  margin-left: -10px !important;
+  /* margin-left: -10px !important; */
   font-weight: 600;
   font-size: 15px;
   color: #fff !important;
@@ -42,14 +42,22 @@
   font-size: 18px !important;
 }
 
-.submenu-sidebar-icons {
+/* .submenu-sidebar-icons {
   font-weight: 700 !important;
+  font-size: 16px !important;
   margin-left: -10px;
   width: 100% !important;
   padding: 6px 0px !important;
   border-radius: 0px !important;
   border-bottom: 1px solid #ffffff33 !important;
   color: #fff !important;
+} */
+.submenu-sidebar-icons {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  width: 100% !important;
+  padding: 6px 0px !important;
+  border-radius: 0px !important;
 }
 
 .submenu-sidebar-icons:active,
@@ -57,6 +65,12 @@
   color: #fff !important;
 }
 
+/* li.ant-menu-submenu.ant-menu-submenu-inline.submenu-sidebar-icons.ant-menu-submenu-selected {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+} */
+.submenu-sidebar-icons {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
 .menu-items-sidebar {
   font-size: 14px !important;
   font-weight: 400 !important;
@@ -72,6 +86,17 @@
   .ant-menu-submenu-selected
   > .ant-menu-submenu-title {
   color: #fff !important;
+}
+.menuMain > ant-menu-submenu-arrow,
+.ant-menu-submenu-arrow {
+  transform: rotate(270deg) translateX(2.5px) !important;
+}
+
+:where(.css-dev-only-do-not-override-k7429z).ant-menu
+  .ant-menu-submenu-open.ant-menu-submenu-inline
+  > .ant-menu-submenu-title
+  > .ant-menu-submenu-arrow::after {
+  transform: rotate(135deg) translateX(-2.5px) translateY(0px) !important;
 }
 
 :where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-light
@@ -92,7 +117,9 @@
   .ant-menu-submenu-title:hover:not(.ant-menu-item-selected):not(
     .ant-menu-submenu-selected
   ) {
-  background-color: #096fed;
+  /* background-color: #096fed; */
+  background-color: transparent;
+
   color: #fff !important;
 }
 
@@ -101,7 +128,7 @@
 .menu-items-sidebar:focus,
 .menu-items-sidebar:focus-visible,
 .menu-items-sidebar:focus-within {
-  background-color: #096fed !important;
+  /* background-color: #096fed !important; */
   color: #fff !important;
   border-radius: 0px !important;
 }
@@ -133,7 +160,6 @@
 section.ant-layout.ant-layout-has-sider.css-dev-only-do-not-override-1e3x2xa {
   min-height: 93vh !important;
   max-height: 100vh !important;
-  margin-top: 5px !important;
   overflow: hidden !important;
 }
 
@@ -161,12 +187,6 @@ aside.ant-layout-sider.ant-layout-sider-dark {
   border-top-right-radius: 0px !important;
 }
 
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-inline .ant-menu-submenu,
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-vertical
-  .ant-menu-submenu {
-  margin: 0 !important;
-}
-
 li.ant-menu-item.ant-menu-item-selected.ant-menu-item-only-child.menu-items-sidebar.noDefault {
   background-color: transparent;
   color: #45494d;
@@ -191,4 +211,19 @@ li.ant-menu-item.ant-menu-item-selected.ant-menu-item-only-child.menu-items-side
     .ant-menu-submenu-selected
   ) {
   color: #fff !important;
+}
+/* Sidebar2.css */
+/* .submenu-sidebar-icons .ant-menu-submenu-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+} */
+
+/* Optional: Add space between title and arrow */
+/* .submenu-sidebar-icons .ant-menu-submenu-title > span {
+  margin-right: 20px;
+} */
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-inline
+  .ant-menu-submenu-title {
+  margin-block: 0px;
 }

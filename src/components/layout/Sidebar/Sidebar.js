@@ -105,7 +105,7 @@ const Sidebar = () => {
           <SubMenu
             key="sub3"
             icon={<i className="icon-user menu-icons"></i>}
-            title="Report"
+            title="Reports"
             className="submenu-sidebar-icons"
           >
             <Menu.Item
@@ -117,7 +117,7 @@ const Sidebar = () => {
               key="userReport"
               onClick={navigateToReport}
             >
-              User Report
+              User Reports
             </Menu.Item>
           </SubMenu>
         </Menu>

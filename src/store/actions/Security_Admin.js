@@ -53,6 +53,10 @@ const saveBankUserApi = (navigate, Data, setAcceptModal) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(saveBankUserApi(navigate, Data, setAcceptModal));
@@ -176,6 +180,10 @@ const saveCorporateUserApi = (navigate, Data) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(saveCorporateUserApi(navigate, Data));
@@ -303,6 +311,10 @@ const getNewBankUserRequestApi = (navigate, Data) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(getNewBankUserRequestApi(navigate, Data));
@@ -389,6 +401,10 @@ const getNewCorporateUserRequestApi = (navigate, Data) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(getNewCorporateUserRequestApi(navigate, Data));
@@ -474,6 +490,10 @@ const rejectUserRequestApi = (navigate, Data, setModalReject) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(rejectUserRequestApi(navigate, Data, setModalReject));
@@ -568,6 +588,10 @@ const getAllUsersListMainAPI = (navigate, Data) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(getAllUsersListMainAPI(navigate, Data));
@@ -662,7 +686,10 @@ const SearchCorporateUsersAPI = (navigate, data) => {
       },
     })
       .then(async (response) => {
-        console.log("response", response);
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           console.log("response", response);
 
@@ -748,6 +775,10 @@ const SearchBankUsersAPI = (navigate, data) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(SearchBankUsersAPI(navigate, data));
@@ -836,6 +867,10 @@ const UpdateBankUserAPI = (
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(
@@ -944,6 +979,10 @@ const UpdateCorporateUserAPI = (navigate, data, setUpdateModal) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(UpdateCorporateUserAPI(navigate, data, setUpdateModal));
@@ -960,16 +999,6 @@ const UpdateCorporateUserAPI = (navigate, data, setUpdateModal) => {
                 )
               );
               setUpdateModal(false);
-              // let Data = {
-              //   Name: "",
-              //   CompanyName: "",
-              //   Email: "",
-              //   StatusID: 0,
-              //   PageNumber: 1,
-              //   Length: 10,
-              // };
-
-              // dispatch(SearchCorporateUsersAPI(navigate, Data));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

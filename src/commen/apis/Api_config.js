@@ -81,6 +81,11 @@ const LogOut = {
   RequestMethod: "ServiceManager.LogOut",
 };
 
+// Bank User Report
+const bankUserReport = {
+  RequestMethod: "ServiceManager.DownloadBankUserReport",
+};
+
 export {
   authenticationRefreshToken,
   authenticationLogIn,
@@ -102,4 +107,5 @@ export {
   GetUserSettings,
   UpdateUserSettings,
   LogOut,
+  bankUserReport,
 };

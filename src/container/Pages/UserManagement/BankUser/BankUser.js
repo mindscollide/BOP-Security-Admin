@@ -30,6 +30,7 @@ import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { useMqtt } from "../../../../context/MQTTContext";
 import { IndexCell } from "../../../../helpers/ReusableMethods";
+import { downloadBankUserReportApi } from "../../../../store/actions/Download-Report";
 const BankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -775,6 +776,19 @@ const BankUser = () => {
     }
   }, [GetAllUserStatus, RoleList, BranchList]);
 
+  const handleExportButton = () => {
+    let data = {
+      EmployeeID: BankEditUser.EmployeeID.value,
+      Name: BankEditUser.Name.value,
+      RoleID: Number(roleID.value),
+      StatusID: Number(statusID.value),
+      Email: BankEditUser.LoginID.value,
+      sRow: 0,
+      Length: 10,
+    };
+    dispatch(downloadBankUserReportApi(navigate, data));
+  };
+
   return (
     <>
       <section className="edit-user-container">
@@ -862,6 +876,7 @@ const BankUser = () => {
                     icon={<i className="icon-download icon-reset-space"></i>}
                     text="Export"
                     className="export-Bank-Edit-User-btn"
+                    onClick={handleExportButton}
                   />
                 </Col>
               </Row>

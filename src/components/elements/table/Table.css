@@ -51,3 +51,44 @@
 .title {
   color: #2097d6;
 }
+/* Bank Table One Commmon Class (Universal Used CSS Over All used in the Project For table) */
+.UniversalList-table {
+  /* max-height: 45vh !important; */
+  /* height: 45vh; */
+  /* max-width: 76vw; */
+  width: 100%;
+  box-sizing: border-box !important;
+  /* overflow-x: auto !important; */
+  border-radius: 0px !important;
+}
+
+.UniversalList-table th.ant-table-cell {
+  color: #ffffff !important;
+  border-radius: 0% !important;
+  position: sticky !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  /* top: 0 !important; */
+  z-index: 1;
+  background: #f26522 !important;
+}
+
+.UniversalList-table::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 20px;
+  background-color: #ffffff;
+}
+
+.UniversalList-table::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: #ccc;
+  margin-left: -15px;
+}
+
+.UniversalList-table .ant-table-thead > tr > th {
+  height: 40px;
+  line-height: 20px;
+  padding: 0;
+}

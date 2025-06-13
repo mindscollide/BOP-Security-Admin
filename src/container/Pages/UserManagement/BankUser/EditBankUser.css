@@ -1,9 +1,12 @@
+/* * {
+  font-family: "Roboto", sans-serif;
+} */
 .edit-user-container {
   width: 100% !important;
   margin: 0 -10px 0 0 !important;
 }
 
-.edit-user-label {
+.editBankUser-label {
   font-size: 24px;
   color: #4d4946 !important;
   font-weight: 600 !important;
@@ -67,6 +70,7 @@
   padding: 8px 16px !important;
   border: none;
   background: #096fed;
+  -webkit-transition: all 0.3s ease-in;
 }
 
 .search-Bank-Edit-User-btn:hover {
@@ -82,6 +86,7 @@
   padding: 8px 16px !important;
   border: none;
   background: #dc3545 !important;
+  -webkit-transition: all 0.3s ease-in;
 }
 
 .reset-Bank-Edit-User-btn:hover {
@@ -96,12 +101,13 @@
   border-radius: 4px;
   padding: 8px 28px !important;
   border: none;
-  background: #019308 !important;
+  background: #12a812 !important;
+  -webkit-transition: all 0.3s ease-in;
 }
 
 .export-Bank-Edit-User-btn:hover {
-  border: none;
-  background: #019308 !important;
+  background-color: #f26522 !important;
+  border-color: #f26522;
 }
 
 .col-edit-textfield {
@@ -110,7 +116,7 @@
   width: 100%;
 }
 
-.Edituser-table {
+/* .Edituser-table {
   max-width: 77vw;
   width: 100%;
   box-sizing: border-box !important;
@@ -141,16 +147,20 @@
   border-radius: 20px;
   background: #ccc;
   margin-left: -15px;
-}
+} */
 
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-table-wrapper
+.EditBankUser-bottom-table-header {
+  font-weight: 700;
+  font-size: 14px;
+}
+/* :where(.css-dev-only-do-not-override-1e3x2xa).ant-table-wrapper
   .ant-table-thead
   > tr
   > th {
   position: relative;
   padding: 10px 16px;
   overflow-wrap: break-word;
-}
+} */
 
 .check-status {
   color: green !important;
@@ -165,8 +175,11 @@
   font-size: 18px;
 }
 
-.icon-search-space {
+.bankUser-icon {
   margin-right: 5px !important;
+  font-size: 17px !important;
+  position: relative;
+  top: 3px;
 }
 
 .icon-reset-space {
@@ -181,7 +194,7 @@
   background-color: #ffffff !important;
 }
 
-:where(.css-dev-only-do-not-override-1e3x2xa).ant-select .ant-select-arrow {
+/* :where(.css-dev-only-do-not-override-1e3x2xa).ant-select .ant-select-arrow {
   display: flex;
   align-items: center;
   color: rgb(0 0 0);
@@ -199,13 +212,13 @@
   font-size: 11px;
   font-weight: 700 !important;
   pointer-events: none;
-}
+} */
 
-.issue-date-column {
+/* .issue-date-column {
   font-size: 14px !important;
   font-weight: 500 !important;
   color: #000000 !important;
-}
+} */
 
 .edit-update-column {
   font-size: 14px !important;
@@ -213,14 +226,14 @@
   color: #000000 !important;
   cursor: pointer;
 }
-
+/* 
 :where(
     .css-dev-only-do-not-override-1e3x2xa
   ).ant-select-single.ant-select-show-arrow
   .ant-select-selection-placeholder {
   padding-inline-end: 18px;
   color: #45494d !important;
-}
+} */
 
 .modal-Update .modal-content {
   position: relative;
@@ -269,7 +282,7 @@
   background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
 }
 
-.edit-user-icon-color {
+.editBank-user-icon-color {
   color: #096fed !important;
   font-size: 17px !important;
 }

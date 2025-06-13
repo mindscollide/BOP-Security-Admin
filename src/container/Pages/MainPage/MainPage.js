@@ -4,7 +4,7 @@ import Header from "../../../components/layout/Header/Header";
 import Sidebar from "../../../components/layout/Sidebar/Sidebar";
 import { Layout } from "antd";
 import ResponseMessage from "../../../utils/ResponseMessage";
-import "./MainPage.css"
+import "./MainPage.css";
 
 const MainPage = () => {
   const { Sider, Content } = Layout;
@@ -17,7 +17,7 @@ const MainPage = () => {
             <Sidebar />
           </Sider>
 
-          <Content className="px-3">
+          <Content className="px-2 mainContent">
             <Outlet />
           </Content>
         </Layout>

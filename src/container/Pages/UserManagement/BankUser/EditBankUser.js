@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import "./BankUser.css";
+import "./EditBankUser.css";
 
 import {
   TextField,
@@ -14,7 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import EditModal from "../../../Pages/Modals/Edit-User-Modal/EditModal";
+import EditBankUserModal from "../../Modals/Edit-Bank-User-Modal/EditBankUserModal";
 import { searchEditBankUserSchema } from "../../../../utils/schemas";
 import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import {
@@ -31,7 +31,7 @@ import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/Ac
 import { useMqtt } from "../../../../context/MQTTContext";
 import { IndexCell } from "../../../../helpers/ReusableMethods";
 import { downloadBankUserReportApi } from "../../../../store/actions/Download-Report";
-const BankUser = () => {
+const EditBankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sRow, setSRow] = useState(0);
@@ -566,7 +566,6 @@ const BankUser = () => {
           //   });
           // }
         }
-        console.log(findRoleObj, "findRoleObj");
       }
 
       if (branchOptions.length > 0 && record.branch !== null) {
@@ -579,7 +578,6 @@ const BankUser = () => {
             label: findBranchObj.branchName,
           });
         }
-        console.log(findBranchObj, "findBranchObj");
       }
 
       setBankUserUpdate(record);
@@ -595,21 +593,21 @@ const BankUser = () => {
       key: "employeeID",
       align: "left",
       ellipsis: true,
-      width: "200px",
+      width: "120px",
     },
     {
       title: <label className="bottom-table-header">LoginID</label>,
       dataIndex: "email",
       key: "loginId",
       align: "left",
-      width: "400px",
+      width: "320px",
       ellipsis: true,
     },
     {
       title: <label className="bottom-table-header">Empolyee Name</label>,
       dataIndex: "firstName",
       key: "name",
-      width: "250px",
+      width: "200px",
       align: "left",
       ellipsis: true,
       render: (val, record) => {
@@ -621,7 +619,7 @@ const BankUser = () => {
       dataIndex: "userRoleID",
       key: "userRoleID",
       align: "left",
-      width: "250px",
+      width: "100px",
       ellipsis: true,
       render: (val, record) => {
         let role =
@@ -639,7 +637,7 @@ const BankUser = () => {
       title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "branch",
       key: "branch",
-      width: "250px",
+      width: "150px",
       align: "left",
       ellipsis: true,
       render: (val, record) => {
@@ -657,7 +655,7 @@ const BankUser = () => {
       key: "userStatusID",
       ellipsis: true,
       align: "left",
-      width: "250px",
+      width: "80px",
       render: (val, record) => {
         return (
           <IndexCell
@@ -675,7 +673,7 @@ const BankUser = () => {
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
-      width: "250px",
+      width: "100px",
       align: "center",
       render: (text, record) => {
         return (
@@ -683,7 +681,7 @@ const BankUser = () => {
             className="edit-update-column"
             onClick={() => handleClickEdit(record)}
           >
-            <i className="icon-edit edit-user-icon-color" />
+            <i className="icon-edit editCorporate-user-icon-color" />
           </label>
         );
       },
@@ -794,13 +792,13 @@ const BankUser = () => {
       <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="edit-user-label">Edit Bank User</div>
+            <div className="editBankUser-label">Edit Bank User</div>
           </Col>
         </Row>
         <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
             <Paper className="span-edit-user">
-              <Row className="mt-3">
+              <Row className="mt-1">
                 <Col lg={3} md={3} sm={12} className="pe-0">
                   <TextField
                     name="EmployeeID"
@@ -860,20 +858,20 @@ const BankUser = () => {
 
                 <Col lg={9} md={9} sm={12}>
                   <Button
-                    icon={<i className="icon-search icon-search-space"></i>}
+                    icon={<i className="icon-search bankUser-icon"></i>}
                     text="Search"
                     className="search-Bank-Edit-User-btn"
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className="icon-refresh icon-reset-space"></i>}
+                    icon={<i className="icon-refresh bankUser-icon"></i>}
                     text="Reset"
                     onClick={resetHandler}
                     className="reset-Bank-Edit-User-btn"
                   />
 
                   <Button
-                    icon={<i className="icon-download icon-reset-space"></i>}
+                    icon={<i className="icon-download bankUser-icon"></i>}
                     text="Export"
                     className="export-Bank-Edit-User-btn"
                     onClick={handleExportButton}
@@ -883,7 +881,7 @@ const BankUser = () => {
 
               <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
-                  <span>
+                  {/* <span>
                     <Row>
                       <Col
                         lg={12}
@@ -907,12 +905,13 @@ const BankUser = () => {
                         </span>
                       </Col>
                     </Row>
-                  </span>
+                  </span> */}
                   <Table
                     column={columns}
                     rows={bankUserTableData}
-                    className="Edituser-table"
-                    scroll={{ y: 250, x: "auto" }}
+                    className="UniversalList-table"
+                    scroll={{ y: 230, x: "scroll" }}
+                    pagination={false}
                   />
                 </Col>
               </Row>
@@ -960,7 +959,7 @@ const BankUser = () => {
         }
       />
       {editModalSecurity ? (
-        <EditModal
+        <EditBankUserModal
           modalEdit={editModalSecurity}
           editBankUserUpdate={editBankUserUpdate}
           setModalEdit={setEditModalSecurity}
@@ -988,4 +987,4 @@ const BankUser = () => {
   );
 };
 
-export default BankUser;
+export default EditBankUser;

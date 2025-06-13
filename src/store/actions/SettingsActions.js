@@ -48,7 +48,10 @@ const GetUserSettingsAPI = (navigate) => {
       },
     })
       .then(async (response) => {
-        console.log("Checkig GetUserSettings");
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data?.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(GetUserSettingsAPI(navigate));
@@ -135,6 +138,10 @@ const UpdateUserSettingsAPI = (navigate, data, setSettingModalState) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(UpdateUserSettingsAPI(navigate, data, setSettingModalState));

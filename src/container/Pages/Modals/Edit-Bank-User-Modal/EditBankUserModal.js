@@ -3,9 +3,9 @@ import { Col, Row } from "react-bootstrap";
 import { TextField, Button, Modal } from "../../../../components/elements";
 // import { Select } from "antd";
 import Select from "react-select";
-import "./EditModal.css";
+import "./EditBankUserModal.css";
 
-const EditModal = ({
+const EditBankUserModal = ({
   modalEdit,
   editBankUserUpdate,
   setModalEdit,
@@ -26,10 +26,10 @@ const EditModal = ({
       <Modal
         show={modalEdit}
         setShow={handleDiscard}
-        className="modaldialog modal-Edit-styles"
+        className="modaldialog bank-user-modal-Edit-styles"
         modalHeaderClassName={"header-Edit-Modal-close-btn"}
         modalFooterClassName="modal-footer-edit"
-        size="lg"
+        size="md"
         onHide={handleDiscard}
         ModalBody={
           <Fragment>
@@ -42,7 +42,9 @@ const EditModal = ({
                     sm={12}
                     className="d-flex justify-content-center"
                   >
-                    <label className="Modal-Title-Heading">Edit User</label>
+                    <label className="Modal-Title-Heading">
+                      Edit Bank User
+                    </label>
                   </Col>
                 </Row>
                 <Row className="mt-3">
@@ -57,10 +59,9 @@ const EditModal = ({
                 <Row>
                   <Col lg={12} md={12} sm={12}>
                     <TextField
-                      // name="Email"
                       value={editBankUserUpdate.email}
                       label={<small className="email-heading">Email</small>}
-                      className="textfield-edit-modal"
+                      className="disableEditBankModalText"
                       disable={true}
                     />
                   </Col>
@@ -158,4 +159,4 @@ const EditModal = ({
   );
 };
 
-export default EditModal;
+export default EditBankUserModal;

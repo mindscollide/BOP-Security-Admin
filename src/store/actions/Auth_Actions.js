@@ -50,7 +50,6 @@ const refreshtokenSuccess = (response, message) => {
 };
 // API
 const RefreshToken = (navigate) => {
-  console.log("RefreshTokenRefreshToken");
   let Token = JSON.parse(localStorage.getItem("token"));
   let RefreshToken = localStorage.getItem("refreshToken");
   console.log("RefreshToken", Token, RefreshToken);
@@ -134,158 +133,6 @@ const loginSecurityAdminFailed = (message, response) => {
   };
 };
 
-// const loginSecurityAdminAPI = (navigate) => {
-//   let data = {
-//     Device: "iPhone 13 Pro",
-//     DeviceID: "ABCD1234-5678-90EF-GHIJ-KLMNOPQRSTUV",
-//     Password: "0",
-//     UserName: "mehdi.branchuser",
-//   };
-//   return (dispatch) => {
-//     dispatch(loginSecurityAdmininit());
-//     let form = new FormData();
-//     form.append("RequestMethod", authenticationLogIn.RequestMethod);
-//     form.append("RequestData", JSON.stringify(data));
-//     axios({
-//       method: "POST",
-//       url: authenticationAPI,
-//       data: form,
-//     })
-//       .then(async (response) => {
-//         if (response.data.responseCode === 417) {
-//           await dispatch(RefreshToken(navigate));
-//           dispatch(loginSecurityAdminAPI(navigate, data));
-//         } else if (response.data.responseCode === 200) {
-//           if (response.data.responseResult.isExecuted === true) {
-//             if (
-//               response.data.responseResult.responseMessage.toLowerCase() ===
-//               "ERM_AuthService_AuthManager_Login_01".toLowerCase()
-//             ) {
-//               dispatch(
-//                 loginSecurityAdminFailed(
-//                   response.data.responseResult,
-//                   "Device is Empty"
-//                 )
-//               );
-//             } else if (
-//               response.data.responseResult.responseMessage
-//                 .toLowerCase()
-//                 .includes("ERM_AuthService_AuthManager_Login_02".toLowerCase())
-//             ) {
-//               dispatch(loginSecurityAdminFailed("Device ID is Empty"));
-//             } else if (
-//               response.data.responseResult.responseMessage
-//                 .toLowerCase()
-//                 .includes("ERM_AuthService_AuthManager_Login_03".toLowerCase())
-//             ) {
-//               localStorage.setItem(
-//                 "token",
-//                 JSON.stringify(response.data.responseResult.token)
-//               );
-//               localStorage.setItem(
-//                 "loginTime",
-//                 response.data.responseResult.loginTime
-//               );
-//               localStorage.setItem(
-//                 "userID",
-//                 response.data.responseResult.userID
-//               );
-//               localStorage.setItem(
-//                 "firstName",
-//                 response.data.responseResult.firstName
-//               );
-//               localStorage.setItem(
-//                 "lastName",
-//                 response.data.responseResult.lastName
-//               );
-//               localStorage.setItem(
-//                 "userName",
-//                 response.data.responseResult.userName
-//               );
-//               localStorage.setItem(
-//                 "roleID",
-//                 response.data.responseResult.roleID
-//               );
-//               localStorage.setItem(
-//                 "bankID",
-//                 response.data.responseResult.bankID
-//               );
-//               localStorage.setItem(
-//                 "refreshToken",
-//                 JSON.stringify(response.data.responseResult.refreshToken)
-//               );
-//               navigate("/BOP/Admin/BankUser");
-//               dispatch(loginSecurityAdminSuccess("LDAP auth Successful"));
-//             }
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_04".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("LDAP Auth Failed"));
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_05".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("User is Locked"));
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_06".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("User is Disabled"));
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_07".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("User is Closed"));
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_08".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("User is Dormant"));
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_09".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("Login Failed"));
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_12".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("Not A valid role to login"));
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_10".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("Login Failed"));
-//           } else if (
-//             response.data.responseResult.responseMessage
-//               .toLowerCase()
-//               .includes("ERM_AuthService_AuthManager_Login_11".toLowerCase())
-//           ) {
-//             dispatch(loginSecurityAdminFailed("Something went wrong"));
-//           } else {
-//             dispatch(loginSecurityAdminFailed("Something went wrong"));
-//           }
-//         } else {
-//           dispatch(loginSecurityAdminFailed("Something went wrong"));
-//         }
-//       })
-//       .catch((response) => {
-//         dispatch(loginSecurityAdminFailed("something went wrong"));
-//       });
-//   };
-// };
-
-//Send Email Reset Password
-
 const loginSecurityAdminAPI = (navigate, data) => {
   // let token = JSON.parse(localStorage.getItem("token"));
   return (dispatch) => {
@@ -302,7 +149,10 @@ const loginSecurityAdminAPI = (navigate, data) => {
       // },
     })
       .then(async (response) => {
-        console.log("loginSecurityAdmin", response);
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(loginSecurityAdminAPI(navigate, data));
@@ -345,11 +195,11 @@ const loginSecurityAdminAPI = (navigate, data) => {
               );
               localStorage.setItem(
                 "userID",
-                response.data.responseResult.userID
+                response.data.responseResult.user.userID
               );
               localStorage.setItem(
                 "userName",
-                response.data.responseResult.userName
+                response.data.responseResult.user.firstName
               );
               localStorage.setItem("defaultOpenKey", "editBankUser");
               navigate("/BOP/Admin/BankUser");
@@ -472,6 +322,10 @@ const SendEmailResetPasswordAPI = (navigate, data) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(SendEmailResetPasswordAPI(navigate, data));
@@ -579,6 +433,10 @@ const GetAllUserStatusAPI = (navigate) => {
         //   response.data.responseResult.responseMessage,
         //   response.data.responseCode
         // );
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data?.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(GetAllUserStatusAPI(navigate));
@@ -664,10 +522,14 @@ const RoleListAPI = (navigate) => {
       url: authenticationAPI,
       data: form,
       headers: {
-        _token:token,
+        _token: token,
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data?.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(RoleListAPI(navigate));
@@ -748,6 +610,10 @@ const GetBankUserRolesAPI = (navigate) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data?.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(GetBankUserRolesAPI(navigate));
@@ -830,6 +696,10 @@ const GetAllBranchesAPI = (navigate) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data?.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(GetAllBranchesAPI(navigate));
@@ -912,6 +782,10 @@ const LogOutAPI = (navigate) => {
       },
     })
       .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
         if (response.data?.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(LogOutAPI(navigate));

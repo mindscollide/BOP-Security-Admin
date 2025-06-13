@@ -1,3 +1,8 @@
-.siderClass  .ant-layout-sider-children {
-    min-height: calc(100vh - 40px) !important;
+.siderClass .ant-layout-sider-children {
+  min-height: calc(100vh - 40px) !important;
+}
+.mainContent {
+  min-height: 90vh !important;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

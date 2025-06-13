@@ -7,7 +7,7 @@ import "./Header.css";
 import { LogOutAPI, signOut } from "../../../store/actions/Auth_Actions";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { message } from "antd";
+// import { message } from "antd";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -23,34 +23,38 @@ const Header = () => {
   };
   return (
     <>
-      <Container fluid className="container-header-2">
+      <section className="container-header-2">
         <Navbar>
-          <Container fluid>
-            <Navbar.Brand>
-              <img src={BOPLogo} width={200} alt="" />
-            </Navbar.Brand>
-            <Dropdown>
-              <Dropdown.Toggle className="dropdown-toggle-header2">
-                <p className="user-name-header2">
-                  {localStorage.getItem("userName")}
-                </p>
-                <i className="icon-arrow-down"></i>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown_menu-Header2">
-                <Dropdown.Item onClick={onClickSetting}>
-                  <Nav.Link>
-                    <i className="icon-settings me-1"></i>
-                    <label className="dropdown-select-labels">Setting</label>
-                  </Nav.Link>
-                </Dropdown.Item>
+          <Navbar.Brand>
+            <img src={BOPLogo} width={200} alt="" />
+          </Navbar.Brand>
+          <Dropdown>
+            <Dropdown.Toggle className="dropdown-toggle-header2">
+              <p className="user-name-header2">
+                {localStorage.getItem("userName")}
+              </p>
+              <i className="icon-arrow-down dropdown-style"></i>
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="dropdown_menu-Header2">
+              <Dropdown.Item
+                className="dropdown_menu-Item"
+                onClick={onClickSetting}
+              >
+                <Nav.Link>
+                  <i className="icon-settings me-1 header-icon-style"></i>
+                  <label className="dropdown-select-labels">Setting</label>
+                </Nav.Link>
+              </Dropdown.Item>
 
-                <Dropdown.Item onClick={handleLogout}>
-                  <i className="icon-logout me-1"></i>
-                  <label className="dropdown-select-labels">Logout</label>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Container>
+              <Dropdown.Item
+                className="dropdown_menu-Item"
+                onClick={handleLogout}
+              >
+                <i className="icon-logout me-1 header-icon-style"></i>
+                <label className="dropdown-select-labels">Logout</label>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Navbar>
         {SettingModalState ? (
           <SettingModal
@@ -58,7 +62,7 @@ const Header = () => {
             setSettingModalState={setSettingModalState}
           />
         ) : null}
-      </Container>
+      </section>
     </>
   );
 };

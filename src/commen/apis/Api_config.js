@@ -86,6 +86,10 @@ const bankUserReport = {
   RequestMethod: "ServiceManager.DownloadBankUserReport",
 };
 
+const CorporateUserReport = {
+  RequestMethod: "ServiceManager.DownloadCorporateUserReport",
+};
+
 export {
   authenticationRefreshToken,
   authenticationLogIn,
@@ -108,4 +112,5 @@ export {
   UpdateUserSettings,
   LogOut,
   bankUserReport,
+  CorporateUserReport,
 };

@@ -1,4 +1,7 @@
-import { bankUserReport } from "../../commen/apis/Api_config";
+import {
+  bankUserReport,
+  CorporateUserReport,
+} from "../../commen/apis/Api_config";
 import { downloadReportApi } from "../../commen/apis/Api_ends_points";
 import * as actions from "../action_types";
 import axios from "axios";
@@ -98,7 +101,7 @@ const downloadCorporateUserReport_fail = (message) => {
 const downloadCorporateUserReportApi = (navigate, Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
   let form = new FormData();
-  form.append("RequestMethod", bankUserReport.RequestMethod);
+  form.append("RequestMethod", CorporateUserReport.RequestMethod);
   form.append("RequestData", JSON.stringify(Data));
   return async (dispatch) => {
     await dispatch(downloadCorporateUserReport_init());

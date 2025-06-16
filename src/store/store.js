@@ -10,6 +10,7 @@ import {
   downloadReducer,
   securityModalReducer,
   SettingsReducer,
+  DownloadReportReducer,
 } from "./reducers";
 
 import { configureStore } from "@reduxjs/toolkit";
@@ -23,6 +24,7 @@ const AppReducer = combineReducers({
   downloadReducer: downloadReducer,
   securityModalReducer: securityModalReducer,
   settingsReducer: SettingsReducer,
+  DownloadReportReducer: DownloadReportReducer,
 });
 
 const rootReducer = (state, action) => {

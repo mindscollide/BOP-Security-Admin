@@ -23,6 +23,7 @@ import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { useMqtt } from "../../../../context/MQTTContext";
+import { downloadCorporateUserReportApi } from "../../../../store/actions/Download-Report";
 
 const EditCorporateUser = () => {
   const navigate = useNavigate();
@@ -536,6 +537,18 @@ const EditCorporateUser = () => {
     }
   }, [GetAllUserStatus]);
 
+  const handleCorporateUser = () => {
+    let data = {
+      Name: editUser.Name.value,
+      CompanyName: editUser.CorporateName.value,
+      Email: editUser.LoginID.value,
+      StatusID: Number(statusID.value),
+      sRow: 0,
+      Length: 10,
+    };
+    dispatch(downloadCorporateUserReportApi(navigate, data));
+  };
+
   return (
     <>
       <section className="edit-user-container">
@@ -616,6 +629,7 @@ const EditCorporateUser = () => {
                     }
                     text="Export"
                     className="export-Corporate-Edit-User-btn"
+                    onClick={handleCorporateUser}
                   />
                 </Col>
               </Row>

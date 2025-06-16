@@ -90,6 +90,18 @@ const CorporateUserReport = {
   RequestMethod: "ServiceManager.DownloadCorporateUserReport",
 };
 
+const SecurityAdminUserLoginHistoryReport = {
+  RequestMethod: "ServiceManager.DownloadUserLoginHistorySecurityAdminReport",
+};
+
+const SecurityAdminAccessDetailReport = {
+  RequestMethod: "ServiceManager.DownloadUserAccessDetailSecurityAdminReport",
+};
+
+const SecurityAdminLastLoggedInReport = {
+  RequestMethod: "ServiceManager.DownloadUserLastloggedInSecurityAdminReport",
+};
+
 export {
   authenticationRefreshToken,
   authenticationLogIn,
@@ -113,4 +125,7 @@ export {
   LogOut,
   bankUserReport,
   CorporateUserReport,
+  SecurityAdminUserLoginHistoryReport,
+  SecurityAdminAccessDetailReport,
+  SecurityAdminLastLoggedInReport,
 };

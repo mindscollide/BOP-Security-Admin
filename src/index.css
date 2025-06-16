@@ -1,3 +1,63 @@
 .ant-table-measure-row {
-    visibility: collapse !important;
+  visibility: collapse !important;
+}
+:root {
+  --color-black: #000000;
+  --color-dark: #4d4946;
+  --color-dark2: #290d00;
+  --color-light: #ebe8e6;
+  --color-gray: #808285;
+  --color-dark-gray: #616366;
+  --disabled-button: #b6b9bf;
+  --disabled-font: #b1aca9;
+  --disabled-field: #f1f0f0;
+  --color-light-gray2: #d6d9e1;
+  --color-white: #ffffff;
+  --color-blue: #096fed;
+
+  --color-red: #f21616;
+  --color-lighter: #f1f1f1;
+  --color-dark-blue: #081152;
+
+  --border-color: #e0e9ec;
+
+  --color-primary: #f26522;
+  --color-secondary: #096fed;
+
+  --border-primary: #f26522;
+  --border-secondary: #096fed;
+
+  --color-orange-gray1: #82756b;
+  --color-orange-gray2: #998e85;
+
+  --color-green: #0dc45f;
+
+  --color-Yorange-light: #fbd5b0;
+  --color-Yorange-light2: #f3b273;
+  --color-Yorange: #f8a041;
+
+  --color-Yorange-gray: #e9e2dc;
+}
+.modal {
+  --bs-modal-zindex: 1055;
+  --bs-modal-width: 500px;
+  --bs-modal-padding: 1rem;
+  --bs-modal-margin: 0.5rem;
+  --bs-modal-color: ;
+  --bs-modal-bg: #fff;
+  --bs-modal-border-color: var(--bs-border-color-translucent);
+  --bs-modal-border-width: 1px;
+  --bs-modal-border-radius: 0.5rem;
+  --bs-modal-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --bs-modal-inner-border-radius: calc(0.5rem - 1px);
+  --bs-modal-header-padding-x: 1rem;
+  --bs-modal-header-padding-y: 1rem;
+  --bs-modal-header-padding: 1rem 1rem;
+  --bs-modal-header-border-color: var(--bs-border-color);
+  --bs-modal-header-border-width: 1px;
+  --bs-modal-title-line-height: 1.5;
+  --bs-modal-footer-gap: 0.5rem;
+  --bs-modal-footer-bg: ;
+  --bs-modal-footer-border-color: var(--bs-border-color);
+  --bs-modal-footer-border-width: 1px;
 }

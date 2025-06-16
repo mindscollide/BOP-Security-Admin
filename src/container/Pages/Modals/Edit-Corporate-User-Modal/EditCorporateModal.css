@@ -1,9 +1,11 @@
 .modal-Corporate-Edit-styles .modal-content {
-  /* position: relative;
-  top: 0px !important;
+  position: relative;
+  /* top: 0px !important;
   left: 100px; */
+  /* display: flex;
+  flex-direction: column; */
   height: 304px !important;
-  width: 550px !important;
+  width: 500px !important;
   background-color: #f3f2f1;
   border-radius: 8px !important;
   margin: 0px 120px;
@@ -21,6 +23,13 @@
   font-size: 20px;
   font-weight: 500;
   color: #f26522 !important;
+}
+.disableEditCorporateModalText {
+  margin-top: 5px;
+  color: var(--disabled-font);
+  background: var(--disabled-field);
+  width: 100%;
+  flex: 1;
 }
 
 .header-Edit-Modal-close-btn {
@@ -89,6 +98,7 @@
   padding: 8px 18px;
   border: none;
   background: #096fed !important;
+  -webkit-transition: all 0.3s ease-in;
 }
 
 .update-btn-editModal:hover {
@@ -101,14 +111,17 @@
   border-radius: 4px !important;
   padding: 8px 18px;
   border: none;
+  -webkit-transition: all 0.3s ease-in;
   background: linear-gradient(to bottom, #feac78 0%, #e97225 100%) !important;
 }
 
 .discard-btn-editModal:hover {
-  background: #096fed;
+  background: #096fed !important;
 }
 
-.icon-right {
+.editCorporateModal_icon-style {
   margin-right: 5px;
   font-size: 14px;
+  position: relative;
+  top: 2px;
 }

@@ -5,15 +5,15 @@
 * {
   margin: 0;
   padding: 0;
-  /* font-family: "Montserrat", sans-serif !important; */
 }
 
 body {
   background-color: #f4f4f4 !important;
-  font-family: "Roboto", sans-serif !important;
-  overflow-y: auto !important;
+  overflow-y: hidden !important;
   overflow-x: hidden !important;
+  font-family: "Roboto" !important;
   padding: 0 !important;
+  font-size: 13px;
 }
 
 body::-webkit-scrollbar {
@@ -59,4 +59,20 @@ body::-webkit-scrollbar-thumb {
   border-start-start-radius: 8px;
   border-start-end-radius: 8px;
   border-bottom: 2px solid #5a5a5a !important;
+} */
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-table-wrapper
+  .ant-table
+  .ant-table-title,
+:where(.css-dev-only-do-not-override-1e3x2xa).ant-table-wrapper
+  .ant-table
+  .ant-table-header {
+  border-radius: 0;
+}
+
+/* .modal {
+  --bs-modal-width: 500px;
+} */
+/* .container-fluid {
+  --bs-gutter-x: 15px !important;
+  height: 52px;
 } */

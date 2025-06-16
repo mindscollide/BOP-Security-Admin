@@ -37,7 +37,9 @@ const EditCorporateModal = ({
                     sm={12}
                     className="d-flex justify-content-center"
                   >
-                    <label className="Modal-Title-Heading">Edit User</label>
+                    <label className="Modal-Title-Heading">
+                      Edit Corporate User
+                    </label>
                   </Col>
                 </Row>
                 <Row className="mt-3">
@@ -57,7 +59,7 @@ const EditCorporateModal = ({
                       // placeholder="mindscollide.aamir@hbl.com"
                       // onChange={onChangeTextFieldHandler}
                       label={<small className="email-heading">Email</small>}
-                      className="textfield-edit-modal"
+                      className="disableEditCorporateModalText"
                       disable={true}
                     />
                   </Col>
@@ -86,13 +88,17 @@ const EditCorporateModal = ({
             <Row className="mb-3">
               <Col lg={12} md={12} sm={12} className="footer-btn-col">
                 <Button
-                  icon={<i className="icon-refresh icon-right"></i>}
+                  icon={
+                    <i className="icon-refresh editCorporateModal_icon-style"></i>
+                  }
                   text="Update"
                   className="update-btn-editModal"
                   onClick={UpdateBtnHandle}
                 />
                 <Button
-                  icon={<i className="icon-close icon-right"></i>}
+                  icon={
+                    <i className="icon-close editCorporateModal_icon-style"></i>
+                  }
                   text="Discard"
                   className="discard-btn-editModal"
                   onClick={handleDiscard}

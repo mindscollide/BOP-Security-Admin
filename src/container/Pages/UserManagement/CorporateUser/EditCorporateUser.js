@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useState } from "react";
-import "./CorporateUser.css";
+import "./EditCorporateUser.css";
 import { Col, Row } from "react-bootstrap";
 import {
   TextField,
@@ -23,8 +23,9 @@ import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { useMqtt } from "../../../../context/MQTTContext";
+import { downloadCorporateUserReportApi } from "../../../../store/actions/Download-Report";
 
-const EditUser = () => {
+const EditCorporateUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -411,36 +412,44 @@ const EditUser = () => {
 
   const columns = [
     {
-      title: <label className="bottom-table-header">Corporate Name</label>,
+      title: (
+        <label className="EditBankUser-bottom-table-header">
+          Corporate Name
+        </label>
+      ),
       dataIndex: "corporateName",
       key: "CorporateName",
-      width: "300px",
+      // width: "230px",
       align: "left",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Login ID</label>,
+      title: (
+        <label className="EditBankUser-bottom-table-header">Login ID</label>
+      ),
       dataIndex: "email",
       key: "email",
       align: "left",
-      width: "300px",
+      // width: "400px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">User Name</label>,
+      title: (
+        <label className="EditBankUser-bottom-table-header">User Name</label>
+      ),
       dataIndex: "name",
       key: "name",
-      width: "300px",
+      // width: "280px",
       align: "left",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Status</label>,
+      title: <label className="EditBankUser-bottom-table-header">Status</label>,
       dataIndex: "statusId",
       key: "statusId",
       ellipsis: true,
       align: "left",
-      width: "300px",
+      // width: "150px",
       render: (text, record) => {
         if (statusOptions.length > 0) {
           let StatusNameFind = statusOptions.find(
@@ -455,11 +464,11 @@ const EditUser = () => {
       },
     },
     {
-      title: <label className="bottom-table-header">Edit</label>,
+      title: <label className="EditBankUser-bottom-table-header">Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
-      align: "center",
+      align: "left",
       render: (text, record) => {
         return (
           <label
@@ -468,7 +477,7 @@ const EditUser = () => {
               handleClickEdit(record);
             }}
           >
-            <i className="icon-edit edit-user-icon-color" />
+            <i className="icon-edit editCorporate-user-icon-color" />
           </label>
         );
       },
@@ -528,18 +537,30 @@ const EditUser = () => {
     }
   }, [GetAllUserStatus]);
 
+  const handleCorporateUser = () => {
+    let data = {
+      Name: editUser.Name.value,
+      CompanyName: editUser.CorporateName.value,
+      Email: editUser.LoginID.value,
+      StatusID: Number(statusID.value),
+      sRow: 0,
+      Length: 10,
+    };
+    dispatch(downloadCorporateUserReportApi(navigate, data));
+  };
+
   return (
     <>
       <section className="edit-user-container">
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="edit-user-label">Edit Corporate User</div>
+            <div className="editCorporateUser-label">Edit Corporate User</div>
           </Col>
         </Row>
         <Row className="mt-3">
           <Col lg={12} md={12} sm={12}>
             <Paper className="span-edit-user">
-              <Row className="mt-3">
+              <Row className="mt-1">
                 <Col lg={2} md={2} sm={12} className="pe-0">
                   <TextField
                     name="CorporateName"
@@ -586,29 +607,36 @@ const EditUser = () => {
 
                 <Col lg={4} md={12} sm={12}>
                   <Button
-                    icon={<i className="icon-search icon-search-space"></i>}
+                    icon={
+                      <i className="icon-search EditCorporateUser-icon"></i>
+                    }
                     text="Search"
                     className="search-Corporate-Edit-User-btn"
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className="icon-refresh icon-reset-space"></i>}
+                    icon={
+                      <i className="icon-refresh EditCorporateUser-icon"></i>
+                    }
                     text="Reset"
                     onClick={resetHandler}
                     className="reset-Corporate-Edit-User-btn"
                   />
 
                   <Button
-                    icon={<i className="icon-download icon-reset-space"></i>}
+                    icon={
+                      <i className="icon-download EditCorporateUser-icon"></i>
+                    }
                     text="Export"
                     className="export-Corporate-Edit-User-btn"
+                    onClick={handleCorporateUser}
                   />
                 </Col>
               </Row>
 
               <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
-                  <span>
+                  {/* <span>
                     <Row>
                       <Col
                         lg={12}
@@ -632,12 +660,12 @@ const EditUser = () => {
                         </span>
                       </Col>
                     </Row>
-                  </span>
+                  </span> */}
                   <Table
                     column={columns}
                     rows={corporateUserTableData}
-                    className="Edituser-table"
-                    scroll={{ y: 300, x: "auto" }}
+                    className="UniversalList-table"
+                    scroll={{ y: 300, x: "scroll" }}
                   />
                 </Col>
               </Row>
@@ -718,4 +746,4 @@ const EditUser = () => {
   );
 };
 
-export default EditUser;
+export default EditCorporateUser;

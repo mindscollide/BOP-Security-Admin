@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import reportWebVitals from "./reportWebVitals";
 import { MqttProvider } from "./context/MQTTContext";
+import "@fontsource/roboto";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

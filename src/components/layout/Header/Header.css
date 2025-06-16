@@ -5,7 +5,7 @@
   display: flex;
   justify-content: space-between; /* Ensures logo on the left and dropdown on the right */
   align-items: center;
-  margin: -5px 0px !important;
+  padding: 1.5px 15px;
 }
 
 .navbar {
@@ -13,6 +13,7 @@
   display: flex;
   justify-content: space-between; /* Ensure the brand and dropdown are spaced correctly */
   align-items: center;
+  padding: 0;
 }
 
 .navbar-brand {
@@ -39,12 +40,25 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  /* top: 1px; */
+  /* font-family: "Roboto", sans-serif; */
+  left: 7px;
+}
+.dropdown-style {
+  font-size: 16px;
+  position: relative;
+  top: 2px;
 }
 
 .dropdown_menu-Header2.dropdown-menu {
   border: none !important;
-  margin-top: 15px !important;
-  z-index: 100;
+  margin-top: 12px !important;
+  -webkit-box-shadow: 10px 10px 40px rgb(0 0 0 / 10%);
+}
+.dropdown_menu-Item {
+  z-index: 1000;
+  font-size: 14px !important;
 }
 
 @media (max-width: 1024px) and (min-width: 769px) {
@@ -84,4 +98,9 @@
   .container-header-2 {
     width: 100% !important;
   }
+}
+.header-icon-style {
+  font-size: 16px;
+  position: relative;
+  top: 2px;
 }

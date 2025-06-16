@@ -333,7 +333,7 @@ const downloadAccessDetailReportApi = (navigate, Data) => {
 
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "Last LoggedIn Report.xlsx");
+          link.setAttribute("download", "Access Detail Report.xlsx");
           document.body.appendChild(link);
           link.click();
           dispatch(

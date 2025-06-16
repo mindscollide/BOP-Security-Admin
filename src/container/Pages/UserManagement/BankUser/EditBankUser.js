@@ -778,11 +778,9 @@ const EditBankUser = () => {
     let data = {
       EmployeeID: BankEditUser.EmployeeID.value,
       Name: BankEditUser.Name.value,
-      RoleID: Number(roleID.value),
-      StatusID: Number(statusID.value),
+      RoleID: Number(roleID.value) !== 0 ? Number(roleID.value) : 0,
+      StatusID: Number(statusID.value) !== 0 ? Number(statusID.value) : 0,
       Email: BankEditUser.LoginID.value,
-      sRow: 0,
-      Length: 10,
     };
     dispatch(downloadBankUserReportApi(navigate, data));
   };

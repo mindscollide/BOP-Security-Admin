@@ -102,6 +102,10 @@ const SecurityAdminLastLoggedInReport = {
   RequestMethod: "ServiceManager.DownloadUserLastloggedInSecurityAdminReport",
 };
 
+const SecurityAdminUserStatusWiseReport = {
+  RequestMethod: "ServiceManager.DownloadUserStatusWiseSecurityAdminReport",
+};
+
 export {
   authenticationRefreshToken,
   authenticationLogIn,
@@ -128,4 +132,5 @@ export {
   SecurityAdminUserLoginHistoryReport,
   SecurityAdminAccessDetailReport,
   SecurityAdminLastLoggedInReport,
+  SecurityAdminUserStatusWiseReport,
 };

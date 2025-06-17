@@ -9,6 +9,7 @@ const initialState = {
   userLoginHistoryData: null,
   accessDetailReportData: null,
   lastLoggedInData: null,
+  userStatusWiseReportData: null,
 };
 
 const DownloadReportReducer = (state = initialState, action) => {
@@ -125,6 +126,29 @@ const DownloadReportReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         lastLoggedInData: null,
+        ResponseMessage: action.message,
+      };
+
+    //User Status Wise  Report
+    case actions.USER_STATUS_WISE_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.USER_STATUS_WISE_REPORT_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        userStatusWiseReportData: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.USER_STATUS_WISE_REPORT_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        userStatusWiseReportData: null,
         ResponseMessage: action.message,
       };
 

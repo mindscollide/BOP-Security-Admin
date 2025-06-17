@@ -4,6 +4,7 @@ import {
   SecurityAdminAccessDetailReport,
   SecurityAdminLastLoggedInReport,
   SecurityAdminUserLoginHistoryReport,
+  SecurityAdminUserStatusWiseReport,
 } from "../../commen/apis/Api_config";
 import { downloadReportApi } from "../../commen/apis/Api_ends_points";
 import * as actions from "../action_types";
@@ -268,7 +269,7 @@ const downloadLastLoggedInReportApi = (navigate, Data) => {
 
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "Access Detail Report.xlsx");
+          link.setAttribute("download", "Last LoggedIn Report.xlsx");
           document.body.appendChild(link);
           link.click();
           dispatch(
@@ -350,6 +351,71 @@ const downloadAccessDetailReportApi = (navigate, Data) => {
   };
 };
 
+// Access Detail Report
+const downloadUserStatusWiseReport_init = () => {
+  return {
+    type: actions.USER_STATUS_WISE_REPORT_INIT,
+  };
+};
+const downloadUserStatusWiseReport_success = (response, message) => {
+  return {
+    type: actions.USER_STATUS_WISE_REPORT_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+const downloadUserStatusWiseReport_fail = (message) => {
+  return {
+    type: actions.USER_STATUS_WISE_REPORT_FAIL,
+    message: message,
+  };
+};
+
+const downloadUserStatusWiseReportApi = (navigate, Data) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  let form = new FormData();
+  form.append("RequestMethod", SecurityAdminUserStatusWiseReport.RequestMethod);
+  form.append("RequestData", JSON.stringify(Data));
+  return async (dispatch) => {
+    await dispatch(downloadUserStatusWiseReport_init());
+    axios({
+      method: "post",
+      url: downloadReportApi,
+      data: form,
+      headers: {
+        _token: token,
+        "Content-Disposition": "attachment; filename=template.xlsx",
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      },
+      responseType: "arraybuffer",
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(downloadUserStatusWiseReportApi(navigate, Data));
+        } else if (response.status === 200) {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "User Status Wise Report.xlsx");
+          document.body.appendChild(link);
+          link.click();
+          dispatch(
+            downloadUserStatusWiseReport_success(
+              response.data.responseResult,
+              "Download-successffuly"
+            )
+          );
+        }
+      })
+      .catch((response) => {
+        dispatch(downloadUserStatusWiseReport_fail(response));
+      });
+  };
+};
+
 export {
   cleareMessage,
   downloadBankUserReportApi,
@@ -357,4 +423,5 @@ export {
   downloadSystemAdminUserLoginHistoryReportApi,
   downloadAccessDetailReportApi,
   downloadLastLoggedInReportApi,
+  downloadUserStatusWiseReportApi,
 };

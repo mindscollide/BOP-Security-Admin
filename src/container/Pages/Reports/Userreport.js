@@ -14,6 +14,7 @@ import {
   downloadAccessDetailReportApi,
   downloadLastLoggedInReportApi,
   downloadSystemAdminUserLoginHistoryReportApi,
+  downloadUserStatusWiseReportApi,
 } from "../../../store/actions/Download-Report";
 
 const Userreport = () => {
@@ -276,11 +277,18 @@ const Userreport = () => {
   // handle Access Detail Report
   const HandleAccessDetailReport = () => {
     let data = {
-      loginID: Number(userReport.loginID.value),
-      StatusID: Number(userReport.statusID.value),
-      Name: userReport.name.value,
-      DateFrom: userReport.startDate.value,
-      DateTo: userReport.endDate.value,
+      loginID:
+        Number(userReport.loginID.value) !== 0
+          ? Number(userReport.loginID.value)
+          : 0,
+      StatusID:
+        Number(userReport.statusID.value) !== 0
+          ? Number(userReport.statusID.value)
+          : 0,
+      Name: userReport.name.value !== "" ? userReport.name.value : "",
+      DateFrom:
+        userReport.startDate.value !== "" ? userReport.startDate.value : "",
+      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : null,
     };
     console.log(data, "downloadAccessDetailReportApi");
     dispatch(downloadAccessDetailReportApi(navigate, data));
@@ -289,11 +297,18 @@ const Userreport = () => {
   // Handle Login History
   const handleLoginHistory = () => {
     let data = {
-      loginID: Number(userReport.loginID.value),
-      StatusID: Number(userReport.statusID.value),
-      Name: userReport.name.value,
-      DateFrom: userReport.startDate.value,
-      DateTo: userReport.endDate.value,
+      loginID:
+        Number(userReport.loginID.value) !== 0
+          ? Number(userReport.loginID.value)
+          : 0,
+      StatusID:
+        Number(userReport.statusID.value) !== 0
+          ? Number(userReport.statusID.value)
+          : 0,
+      Name: userReport.name.value !== "" ? userReport.name.value : "",
+      DateFrom:
+        userReport.startDate.value !== "" ? userReport.startDate.value : "",
+      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : null,
     };
     console.log(data, "downloadAccessDetailReportApi");
     dispatch(downloadSystemAdminUserLoginHistoryReportApi(navigate, data));
@@ -301,14 +316,40 @@ const Userreport = () => {
 
   const handlelastLoggedIn = () => {
     let data = {
-      loginID: Number(userReport.loginID.value),
-      StatusID: Number(userReport.statusID.value),
-      Name: userReport.name.value,
-      DateFrom: userReport.startDate.value,
-      DateTo: userReport.endDate.value,
+      loginID:
+        Number(userReport.loginID.value) !== 0
+          ? Number(userReport.loginID.value)
+          : 0,
+      StatusID:
+        Number(userReport.statusID.value) !== 0
+          ? Number(userReport.statusID.value)
+          : 0,
+      Name: userReport.name.value !== "" ? userReport.name.value : "",
+      DateFrom:
+        userReport.startDate.value !== "" ? userReport.startDate.value : "",
+      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : "",
     };
     console.log(data, "downloadAccessDetailReportApi");
     dispatch(downloadLastLoggedInReportApi(navigate, data));
+  };
+
+  const handleStatuswiseReport = () => {
+    let data = {
+      loginID:
+        Number(userReport.loginID.value) !== 0
+          ? Number(userReport.loginID.value)
+          : 0,
+      StatusID:
+        Number(userReport.statusID.value) !== 0
+          ? Number(userReport.statusID.value)
+          : 0,
+      Name: userReport.name.value !== "" ? userReport.name.value : "",
+      DateFrom:
+        userReport.startDate.value !== "" ? userReport.startDate.value : "",
+      DateTo: userReport.endDate.value !== "" ? userReport.startDate.value : "",
+    };
+    console.log(data, "downloadAccessDetailReportApi");
+    dispatch(downloadUserStatusWiseReportApi(navigate, data));
   };
 
   return (
@@ -451,6 +492,7 @@ const Userreport = () => {
                     icon={<i className="icon-download download-btn-icons"></i>}
                     text="Status Wise"
                     className="report-btm-buttons"
+                    onClick={handleStatuswiseReport}
                   />
                 </Col>
                 <Col lg={3} md={3} sm={3} className="p-1">

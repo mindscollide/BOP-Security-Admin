@@ -6,6 +6,10 @@ const initialState = {
   ResponseMessage: "",
   bankuserReportData: null,
   corporateUserReportData: null,
+  userLoginHistoryData: null,
+  accessDetailReportData: null,
+  lastLoggedInData: null,
+  userStatusWiseReportData: null,
 };
 
 const DownloadReportReducer = (state = initialState, action) => {
@@ -53,6 +57,98 @@ const DownloadReportReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         corporateUserReportData: null,
+        ResponseMessage: action.message,
+      };
+
+    //Security User Login History Report
+    case actions.SECURITY_ADMIN_USER_LOGIN_HISTORY_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.SECURITY_ADMIN_USER_LOGIN_HISTORY_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        userLoginHistoryData: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.SECURITY_ADMIN_USER_LOGIN_HISTORY_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        userLoginHistoryData: null,
+        ResponseMessage: action.message,
+      };
+
+    //Access Detail  Report
+    case actions.ACCESS_DETAIL_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.ACCESS_DETAIL_REPORT_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        accessDetailReportData: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.ACCESS_DETAIL_REPORT_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        accessDetailReportData: null,
+        ResponseMessage: action.message,
+      };
+
+    //Access Detail  Report
+    case actions.LAST_LOGGED_IN_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.LAST_LOGGED_IN_REPORT_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        lastLoggedInData: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.LAST_LOGGED_IN_REPORT_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        lastLoggedInData: null,
+        ResponseMessage: action.message,
+      };
+
+    //User Status Wise  Report
+    case actions.USER_STATUS_WISE_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.USER_STATUS_WISE_REPORT_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        userStatusWiseReportData: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.USER_STATUS_WISE_REPORT_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        userStatusWiseReportData: null,
         ResponseMessage: action.message,
       };
 

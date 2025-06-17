@@ -542,9 +542,7 @@ const EditCorporateUser = () => {
       Name: editUser.Name.value,
       CompanyName: editUser.CorporateName.value,
       Email: editUser.LoginID.value,
-      StatusID: Number(statusID.value),
-      sRow: 0,
-      Length: 10,
+      StatusID: Number(statusID.value) !== 0 ? Number(statusID.value) : 0,
     };
     dispatch(downloadCorporateUserReportApi(navigate, data));
   };

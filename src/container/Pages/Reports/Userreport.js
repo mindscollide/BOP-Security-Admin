@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Col, Row } from "react-bootstrap";
-// import { TextField, Button, Paper, Loader } from "../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
@@ -11,10 +10,13 @@ import ActivateConfirmationModal from "../Modals/ActivateConfirmationModal/Activ
 import { Button, Paper, TextField } from "../../../components/elements";
 import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
 import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
-// import { ConfirmationModalSecurityAdmin } from "../../../store/actions/Security_Admin_Modal";
-// import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
-// import ActivateConfirmationModal from "../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-// import ActivateConfirmationModal from "../../helpers/Modals/ActivateConfirmationModal/ActivateConfirmationModal";
+import {
+  downloadAccessDetailReportApi,
+  downloadLastLoggedInReportApi,
+  downloadSystemAdminUserLoginHistoryReportApi,
+  downloadUserStatusWiseReportApi,
+} from "../../../store/actions/Download-Report";
+
 const Userreport = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -51,8 +53,6 @@ const Userreport = () => {
     (state) => state.securityModalReducer.confirmationModal
   );
   const [modalState, setModalState] = useState(0);
-  // state for select Role
-  // const [selectRoleValueReport, setSelectRoleValueReport] = useState([]);
 
   //state for userReports fields
   const [userReport, setUserReport] = useState({
@@ -110,13 +110,20 @@ const Userreport = () => {
   });
 
   const handleSelectStatus = async (selectedStatus) => {
+    console.log(selectedStatus, "downloadAccessDetailReportApi");
     setStatusID(selectedStatus);
 
     setUserReport((prevState) => ({
       ...prevState,
-      statusID: { ...prevState.statusID, value: selectedStatus.value },
+      statusID: {
+        ...prevState.statusID,
+        value: selectedStatus.statusID,
+      },
     }));
   };
+
+  console.log(userReport.statusID, "downloadAccessDetailReportApi");
+
   // onchange handler for user report
   const userReportHandler = (e) => {
     let name = e.target.name;
@@ -267,6 +274,84 @@ const Userreport = () => {
     }
   }, [GetAllUserStatus]);
 
+  // handle Access Detail Report
+  const HandleAccessDetailReport = () => {
+    let data = {
+      loginID:
+        Number(userReport.loginID.value) !== 0
+          ? Number(userReport.loginID.value)
+          : 0,
+      StatusID:
+        Number(userReport.statusID.value) !== 0
+          ? Number(userReport.statusID.value)
+          : 0,
+      Name: userReport.name.value !== "" ? userReport.name.value : "",
+      DateFrom:
+        userReport.startDate.value !== "" ? userReport.startDate.value : "",
+      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : null,
+    };
+    console.log(data, "downloadAccessDetailReportApi");
+    dispatch(downloadAccessDetailReportApi(navigate, data));
+  };
+
+  // Handle Login History
+  const handleLoginHistory = () => {
+    let data = {
+      loginID:
+        Number(userReport.loginID.value) !== 0
+          ? Number(userReport.loginID.value)
+          : 0,
+      StatusID:
+        Number(userReport.statusID.value) !== 0
+          ? Number(userReport.statusID.value)
+          : 0,
+      Name: userReport.name.value !== "" ? userReport.name.value : "",
+      DateFrom:
+        userReport.startDate.value !== "" ? userReport.startDate.value : "",
+      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : null,
+    };
+    console.log(data, "downloadAccessDetailReportApi");
+    dispatch(downloadSystemAdminUserLoginHistoryReportApi(navigate, data));
+  };
+
+  const handlelastLoggedIn = () => {
+    let data = {
+      loginID:
+        Number(userReport.loginID.value) !== 0
+          ? Number(userReport.loginID.value)
+          : 0,
+      StatusID:
+        Number(userReport.statusID.value) !== 0
+          ? Number(userReport.statusID.value)
+          : 0,
+      Name: userReport.name.value !== "" ? userReport.name.value : "",
+      DateFrom:
+        userReport.startDate.value !== "" ? userReport.startDate.value : "",
+      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : "",
+    };
+    console.log(data, "downloadAccessDetailReportApi");
+    dispatch(downloadLastLoggedInReportApi(navigate, data));
+  };
+
+  const handleStatuswiseReport = () => {
+    let data = {
+      loginID:
+        Number(userReport.loginID.value) !== 0
+          ? Number(userReport.loginID.value)
+          : 0,
+      StatusID:
+        Number(userReport.statusID.value) !== 0
+          ? Number(userReport.statusID.value)
+          : 0,
+      Name: userReport.name.value !== "" ? userReport.name.value : "",
+      DateFrom:
+        userReport.startDate.value !== "" ? userReport.startDate.value : "",
+      DateTo: userReport.endDate.value !== "" ? userReport.startDate.value : "",
+    };
+    console.log(data, "downloadAccessDetailReportApi");
+    dispatch(downloadUserStatusWiseReportApi(navigate, data));
+  };
+
   return (
     <>
       <section className="report-user-container">
@@ -391,6 +476,7 @@ const Userreport = () => {
                     icon={<i className="icon-download download-btn-icons"></i>}
                     text="Access Detail"
                     className="report-btm-buttons"
+                    onClick={HandleAccessDetailReport}
                   />
                 </Col>
                 <Col lg={3} md={3} sm={3} className="p-1">
@@ -398,6 +484,7 @@ const Userreport = () => {
                     icon={<i className="icon-download download-btn-icons"></i>}
                     text="Login History"
                     className="report-btm-buttons"
+                    onClick={handleLoginHistory}
                   />
                 </Col>
                 <Col lg={3} md={3} sm={3} className="p-1">
@@ -405,6 +492,7 @@ const Userreport = () => {
                     icon={<i className="icon-download download-btn-icons"></i>}
                     text="Status Wise"
                     className="report-btm-buttons"
+                    onClick={handleStatuswiseReport}
                   />
                 </Col>
                 <Col lg={3} md={3} sm={3} className="p-1">
@@ -412,6 +500,7 @@ const Userreport = () => {
                     icon={<i className="icon-download download-btn-icons"></i>}
                     text="Last Login"
                     className="report-btm-buttons"
+                    onClick={handlelastLoggedIn}
                   />
                 </Col>
               </Row>

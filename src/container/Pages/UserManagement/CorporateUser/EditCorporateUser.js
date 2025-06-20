@@ -24,11 +24,19 @@ import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Securi
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { useMqtt } from "../../../../context/MQTTContext";
 import { downloadCorporateUserReportApi } from "../../../../store/actions/Download-Report";
+import { ExceptionMap } from "antd/es/result";
+import { Popover } from "antd";
+import pdfIcon from "../../../../assets/images/pdf.png";
+import excelIcon from "../../../../assets/images/excel.png";
 
 const EditCorporateUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
 
+  const handleOpenChange = (newOpen) => {
+    setOpen(newOpen);
+  };
   //Global State
   const { securityReducer } = useSelector((state) => state);
   const {
@@ -37,8 +45,9 @@ const EditCorporateUser = () => {
     setCorporateUserBulkUpload,
     corporateUserRoleStatusChange,
     corproateUpdated,
+    setCorporateUserUpdated,
+    setCorporateUpdated,
   } = useMqtt();
-  console.log(corporateUserBulkUpload, "corporateUserBulkUpload");
   const SearchCorporateUsersData = useSelector(
     (state) => state.securityReducer.SearchCorporateUsersData
   );
@@ -83,10 +92,15 @@ const EditCorporateUser = () => {
     { value: 100, label: "100" },
     { value: 150, label: "150" },
   ];
+
   //row length on scroll
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);
-
+  const [showExportOptions, setShowExportOptions] = useState(false);
+  // Function to toggle the export options (PDF & Excel buttons)
+  const toggleExportOptions = () => {
+    setShowExportOptions(!showExportOptions);
+  };
   //initial APIs calling
   useEffect(() => {
     dispatch(GetAllUserStatusAPI(navigate));
@@ -154,7 +168,6 @@ const EditCorporateUser = () => {
   useEffect(() => {
     if (corporateUserBulkUpload !== null) {
       try {
-        setCorporateUserBulkUpload(null);
         let Data = {
           Name: "",
           CompanyName: "",
@@ -164,11 +177,13 @@ const EditCorporateUser = () => {
           Length: 10,
         };
         dispatch(SearchCorporateUsersAPI(navigate, Data));
+        setCorporateUserBulkUpload(null);
       } catch (error) {
         console.log("error", error);
       }
     }
   }, [corporateUserBulkUpload]);
+
   useEffect(() => {
     if (corporateUserUpdated !== null) {
       try {
@@ -186,6 +201,7 @@ const EditCorporateUser = () => {
         });
       } catch (error) {}
     }
+    setCorporateUserUpdated(null);
   }, [corporateUserUpdated]);
 
   useEffect(() => {
@@ -222,6 +238,8 @@ const EditCorporateUser = () => {
             return data2;
           });
         });
+
+        setCorporateUpdated(null);
       } catch (error) {}
     }
   }, [corproateUpdated]);
@@ -326,6 +344,7 @@ const EditCorporateUser = () => {
       setModalState(0);
     }
   }, [modalState]);
+
   const handleSelectStatus = async (selectedStatus) => {
     setStatusID(selectedStatus);
   };
@@ -391,21 +410,18 @@ const EditCorporateUser = () => {
   }, []);
 
   const handleClickEdit = (record) => {
-    console.log("recordrecordrecord", record);
     setEditModalSecurity(true);
     if (statusOptions.length > 0) {
       let findStatusObj = statusOptions.find(
         (statusData, index) => statusData.statusID === record.statusId
       );
 
-      console.log("findStatusObj", findStatusObj);
       if (findStatusObj !== undefined) {
         setEditCorporateUserStatus({
           value: findStatusObj.statusID,
           label: findStatusObj.statusName,
         });
       }
-      console.log(findStatusObj, "findStatusObj");
     }
     seCorporateUserUpdate(record);
   };
@@ -419,7 +435,6 @@ const EditCorporateUser = () => {
       ),
       dataIndex: "corporateName",
       key: "CorporateName",
-      // width: "230px",
       align: "left",
       ellipsis: true,
     },
@@ -430,7 +445,6 @@ const EditCorporateUser = () => {
       dataIndex: "email",
       key: "email",
       align: "left",
-      // width: "400px",
       ellipsis: true,
     },
     {
@@ -439,7 +453,6 @@ const EditCorporateUser = () => {
       ),
       dataIndex: "name",
       key: "name",
-      // width: "280px",
       align: "left",
       ellipsis: true,
     },
@@ -449,7 +462,6 @@ const EditCorporateUser = () => {
       key: "statusId",
       ellipsis: true,
       align: "left",
-      // width: "150px",
       render: (text, record) => {
         if (statusOptions.length > 0) {
           let StatusNameFind = statusOptions.find(
@@ -537,16 +549,20 @@ const EditCorporateUser = () => {
     }
   }, [GetAllUserStatus]);
 
-  const handleCorporateUser = () => {
-    let data = {
-      Name: editUser.Name.value,
-      CompanyName: editUser.CorporateName.value,
-      Email: editUser.LoginID.value,
-      StatusID: Number(statusID.value),
-      sRow: 0,
-      Length: 10,
-    };
-    dispatch(downloadCorporateUserReportApi(navigate, data));
+  const handleExport = (format) => {
+    if (format === "excel") {
+      let data = {
+        Name: editUser.Name.value,
+        CompanyName: editUser.CorporateName.value,
+        Email: editUser.LoginID.value,
+        StatusID: Number(statusID.value),
+        sRow: 0,
+        Length: 10,
+      };
+      dispatch(downloadCorporateUserReportApi(navigate, data));
+    } else if (format === "pdf") {
+      //Logic of PDF Download
+    }
   };
 
   return (
@@ -605,7 +621,12 @@ const EditCorporateUser = () => {
                   />
                 </Col>
 
-                <Col lg={4} md={12} sm={12}>
+                <Col
+                  lg={4}
+                  md={4}
+                  sm={12}
+                  className="d-flex justify-content-left gap-1"
+                >
                   <Button
                     icon={
                       <i className="icon-search EditCorporateUser-icon"></i>
@@ -622,45 +643,40 @@ const EditCorporateUser = () => {
                     onClick={resetHandler}
                     className="reset-Corporate-Edit-User-btn"
                   />
-
-                  <Button
-                    icon={
-                      <i className="icon-download EditCorporateUser-icon"></i>
+                  <Popover
+                    content={
+                      <div className="EditBankUser_export-options">
+                        <Button
+                          icon={<img src={pdfIcon} alt="PDF Icon" />}
+                          onClick={() => handleExport("pdf")}
+                          className="EditBankUser_export-button"
+                        />
+                        <Button
+                          icon={<img src={excelIcon} alt="Excel Icon" />}
+                          onClick={() => handleExport("excel")}
+                          className="EditBankUser_export-button"
+                        />
+                      </div>
                     }
-                    text="Export"
-                    className="export-Corporate-Edit-User-btn"
-                    onClick={handleCorporateUser}
-                  />
+                    trigger="click"
+                    open={open}
+                    onOpenChange={handleOpenChange}
+                    placement="bottomRight"
+                    arrow={false}
+                  >
+                    <Button
+                      icon={<i className="icon-download"></i>}
+                      className="EditBankUser_Main-Export-Button"
+                      text="Export"
+                      iconClass="resetIconClass"
+                      onClick={toggleExportOptions}
+                    />
+                  </Popover>
                 </Col>
               </Row>
 
               <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
-                  {/* <span>
-                    <Row>
-                      <Col
-                        lg={12}
-                        md={12}
-                        sm={12}
-                        className="d-flex gap-1 align-items-center"
-                      >
-                        <span className={"corporate-show-text-above-table"}>
-                          Show
-                        </span>
-
-                        <Select
-                          options={options}
-                          value={dropdownvalue}
-                          onChange={handleChangeDropDown}
-                          className="select-Bank-field-edit"
-                        />
-
-                        <span className={"corporate-show-text-above-table"}>
-                          entries
-                        </span>
-                      </Col>
-                    </Row>
-                  </span> */}
                   <Table
                     column={columns}
                     rows={corporateUserTableData}

@@ -23,7 +23,10 @@ import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { useMqtt } from "../../../../context/MQTTContext";
-import { downloadCorporateUserReportApi } from "../../../../store/actions/Download-Report";
+import {
+  downloadCorporateUserReportApi,
+  downloadPDFCorporateUserSecurityAdminReportApi,
+} from "../../../../store/actions/Download-Report";
 import { ExceptionMap } from "antd/es/result";
 import { Popover } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
@@ -561,7 +564,13 @@ const EditCorporateUser = () => {
       };
       dispatch(downloadCorporateUserReportApi(navigate, data));
     } else if (format === "pdf") {
-      //Logic of PDF Download
+      let data = {
+        Name: editUser.Name.value,
+        CompanyName: editUser.CorporateName.value,
+        Email: editUser.LoginID.value,
+        StatusID: Number(statusID.value),
+      };
+      dispatch(downloadPDFCorporateUserSecurityAdminReportApi(navigate, data));
     }
   };
 

@@ -31,6 +31,10 @@ import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/Ac
 import { useMqtt } from "../../../../context/MQTTContext";
 import { IndexCell } from "../../../../helpers/ReusableMethods";
 import { downloadBankUserReportApi } from "../../../../store/actions/Download-Report";
+import { Popover } from "antd";
+import pdfIcon from "../../../../assets/images/pdf.png";
+import excelIcon from "../../../../assets/images/excel.png";
+
 const EditBankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -81,7 +85,11 @@ const EditBankUser = () => {
   const [BankEditUser, setBankEditUser] = useState({
     ...searchEditBankUserSchema,
   });
+  const [open, setOpen] = useState(false);
 
+  const handleOpenChange = (newOpen) => {
+    setOpen(newOpen);
+  };
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -114,6 +122,11 @@ const EditBankUser = () => {
     { value: 100, label: "100" },
     { value: 150, label: "150" },
   ];
+  const [showExportOptions, setShowExportOptions] = useState(false);
+  // Function to toggle the export options (PDF & Excel buttons)
+  const toggleExportOptions = () => {
+    setShowExportOptions(!showExportOptions);
+  };
 
   const [bankUserTableData, setBankUserTableData] = useState([]);
   console.log(bankUserTableData, "bankUserTableData");
@@ -774,15 +787,21 @@ const EditBankUser = () => {
     }
   }, [GetAllUserStatus, RoleList, BranchList]);
 
-  const handleExportButton = () => {
-    let data = {
-      EmployeeID: BankEditUser.EmployeeID.value,
-      Name: BankEditUser.Name.value,
-      RoleID: Number(roleID.value) !== 0 ? Number(roleID.value) : 0,
-      StatusID: Number(statusID.value) !== 0 ? Number(statusID.value) : 0,
-      Email: BankEditUser.LoginID.value,
-    };
-    dispatch(downloadBankUserReportApi(navigate, data));
+  const handleExportButton = (format) => {
+    if (format === "excel") {
+      let data = {
+        EmployeeID: BankEditUser.EmployeeID.value,
+        Name: BankEditUser.Name.value,
+        RoleID: Number(roleID.value),
+        StatusID: Number(statusID.value),
+        Email: BankEditUser.LoginID.value,
+        sRow: 0,
+        Length: 10,
+      };
+      dispatch(downloadBankUserReportApi(navigate, data));
+    } else if (format === "pdf") {
+      //logic of pdf Download
+    }
   };
 
   return (
@@ -854,7 +873,12 @@ const EditBankUser = () => {
                   />
                 </Col>
 
-                <Col lg={9} md={9} sm={12}>
+                <Col
+                  lg={9}
+                  md={9}
+                  sm={12}
+                  className="d-flex justify-content-left gap-1"
+                >
                   <Button
                     icon={<i className="icon-search bankUser-icon"></i>}
                     text="Search"
@@ -867,13 +891,35 @@ const EditBankUser = () => {
                     onClick={resetHandler}
                     className="reset-Bank-Edit-User-btn"
                   />
-
-                  <Button
-                    icon={<i className="icon-download bankUser-icon"></i>}
-                    text="Export"
-                    className="export-Bank-Edit-User-btn"
-                    onClick={handleExportButton}
-                  />
+                  <Popover
+                    content={
+                      <div className="EditBankUser_export-options">
+                        <Button
+                          icon={<img src={pdfIcon} alt="PDF Icon" />}
+                          onClick={() => handleExportButton("pdf")}
+                          className="EditBankUser_export-button"
+                        />
+                        <Button
+                          icon={<img src={excelIcon} alt="Excel Icon" />}
+                          onClick={() => handleExportButton("excel")}
+                          className="EditBankUser_export-button"
+                        />
+                      </div>
+                    }
+                    trigger="click"
+                    open={open}
+                    onOpenChange={handleOpenChange}
+                    placement="bottomRight"
+                    arrow={false}
+                  >
+                    <Button
+                      icon={<i className="icon-download"></i>}
+                      className="EditBankUser_Main-Export-Button"
+                      text="Export"
+                      iconClass="resetIconClass"
+                      onClick={toggleExportOptions}
+                    />
+                  </Popover>
                 </Col>
               </Row>
 

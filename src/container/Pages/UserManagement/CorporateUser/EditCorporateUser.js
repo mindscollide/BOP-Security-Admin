@@ -22,15 +22,20 @@ import {
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-import { useMqtt } from "../../../../context/MQTTContext";
 import {
   downloadCorporateUserReportApi,
   downloadPDFCorporateUserSecurityAdminReportApi,
 } from "../../../../store/actions/Download-Report";
-import { ExceptionMap } from "antd/es/result";
 import { Popover } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
 import excelIcon from "../../../../assets/images/excel.png";
+import {
+  setCorpUserRoleStatusChange,
+  setCorporateUpdated,
+  setCorporateUserBulkRequest,
+  setCorporateUserCreated,
+  setCorporateUserUpdated,
+} from "../../../../store/actions/RealtimeActions";
 
 const EditCorporateUser = () => {
   const navigate = useNavigate();
@@ -42,15 +47,23 @@ const EditCorporateUser = () => {
   };
   //Global State
   const { securityReducer } = useSelector((state) => state);
-  const {
-    corporateUserBulkUpload,
-    corporateUserUpdated,
-    setCorporateUserBulkUpload,
-    corporateUserRoleStatusChange,
-    corproateUpdated,
-    setCorporateUserUpdated,
-    setCorporateUpdated,
-  } = useMqtt();
+  const corporateUserBulkUpload = useSelector(
+    (state) => state.RealtimeReducer.corporateUserBulkUpload
+  );
+  const corporateUserUpdated = useSelector(
+    (state) => state.RealtimeReducer.corporateUserUpdated
+  );
+  const corporateUserRoleStatusChange = useSelector(
+    (state) => state.RealtimeReducer.corpUserRoleStatusChange
+  );
+  const corporateUpdated = useSelector(
+    (state) => state.RealtimeReducer.corporateUpdated
+  );
+
+  const corporateUserCreated = useSelector(
+    (state) => state.RealtimeReducer.corporateUserCreated
+  );
+
   const SearchCorporateUsersData = useSelector(
     (state) => state.securityReducer.SearchCorporateUsersData
   );
@@ -180,7 +193,7 @@ const EditCorporateUser = () => {
           Length: 10,
         };
         dispatch(SearchCorporateUsersAPI(navigate, Data));
-        setCorporateUserBulkUpload(null);
+        dispatch(setCorporateUserBulkRequest(null));
       } catch (error) {
         console.log("error", error);
       }
@@ -204,7 +217,7 @@ const EditCorporateUser = () => {
         });
       } catch (error) {}
     }
-    setCorporateUserUpdated(null);
+    dispatch(setCorporateUserUpdated(null));
   }, [corporateUserUpdated]);
 
   useEffect(() => {
@@ -222,14 +235,15 @@ const EditCorporateUser = () => {
             return data2;
           });
         });
+        dispatch(setCorpUserRoleStatusChange(null));
       } catch (error) {}
     }
   }, [corporateUserRoleStatusChange]);
 
   useEffect(() => {
-    if (corproateUpdated !== null) {
+    if (corporateUpdated !== null) {
       try {
-        const { corporate } = corproateUpdated;
+        const { corporate } = corporateUpdated;
         setCorporateUserTableData((prevTableData) => {
           return prevTableData.map((data2, index) => {
             if (data2.corporateID === corporate.corporateID) {
@@ -242,10 +256,29 @@ const EditCorporateUser = () => {
           });
         });
 
-        setCorporateUpdated(null);
+        dispatch(setCorporateUpdated(null));
       } catch (error) {}
     }
-  }, [corproateUpdated]);
+  }, [corporateUpdated]);
+
+  useEffect(() => {
+    if (corporateUserCreated !== null) {
+      try {
+        const { user, createdUserID } = corporateUserCreated;
+        let findisExist = corporateUserTableData.find(
+          (rowData, index) => rowData.userID === createdUserID
+        );
+        if (findisExist === undefined) {
+          setCorporateUserTableData((prevData) => {
+            return [user, ...prevData];
+          });
+        }
+        dispatch(setCorporateUserCreated(null)); // Reset the corporateUserCreated state after processing
+      } catch (error) {
+        console.log(error, "corporateUserCreated error");
+      }
+    }
+  }, [corporateUserCreated]);
 
   //edit user security admin validate handler
   const editUserValidateHandler = (e) => {
@@ -432,7 +465,7 @@ const EditCorporateUser = () => {
   const columns = [
     {
       title: (
-        <label className="EditBankUser-bottom-table-header">
+        <label className='EditBankUser-bottom-table-header'>
           Corporate Name
         </label>
       ),
@@ -443,7 +476,7 @@ const EditCorporateUser = () => {
     },
     {
       title: (
-        <label className="EditBankUser-bottom-table-header">Login ID</label>
+        <label className='EditBankUser-bottom-table-header'>Login ID</label>
       ),
       dataIndex: "email",
       key: "email",
@@ -452,7 +485,7 @@ const EditCorporateUser = () => {
     },
     {
       title: (
-        <label className="EditBankUser-bottom-table-header">User Name</label>
+        <label className='EditBankUser-bottom-table-header'>User Name</label>
       ),
       dataIndex: "name",
       key: "name",
@@ -460,7 +493,7 @@ const EditCorporateUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className="EditBankUser-bottom-table-header">Status</label>,
+      title: <label className='EditBankUser-bottom-table-header'>Status</label>,
       dataIndex: "statusId",
       key: "statusId",
       ellipsis: true,
@@ -479,7 +512,7 @@ const EditCorporateUser = () => {
       },
     },
     {
-      title: <label className="EditBankUser-bottom-table-header">Edit</label>,
+      title: <label className='EditBankUser-bottom-table-header'>Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
@@ -487,12 +520,11 @@ const EditCorporateUser = () => {
       render: (text, record) => {
         return (
           <label
-            className="edit-update-column"
+            className='edit-update-column'
             onClick={() => {
               handleClickEdit(record);
-            }}
-          >
-            <i className="icon-edit editCorporate-user-icon-color" />
+            }}>
+            <i className='icon-edit editCorporate-user-icon-color' />
           </label>
         );
       },
@@ -576,54 +608,54 @@ const EditCorporateUser = () => {
 
   return (
     <>
-      <section className="edit-user-container">
+      <section className='edit-user-container'>
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="editCorporateUser-label">Edit Corporate User</div>
+            <div className='editCorporateUser-label'>Edit Corporate User</div>
           </Col>
         </Row>
-        <Row className="mt-3">
+        <Row className='mt-3'>
           <Col lg={12} md={12} sm={12}>
-            <Paper className="span-edit-user">
-              <Row className="mt-1">
-                <Col lg={2} md={2} sm={12} className="pe-0">
+            <Paper className='span-edit-user'>
+              <Row className='mt-1'>
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="CorporateName"
-                    className="text-fields-Corporate-edituser"
-                    labelClass="d-none"
-                    placeholder="Corporate Name"
+                    name='CorporateName'
+                    className='text-fields-Corporate-edituser'
+                    labelClass='d-none'
+                    placeholder='Corporate Name'
                     maxLength={100}
                     value={editUser.CorporateName.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="email"
-                    className="text-fields-Corporate-edituser"
-                    labelClass="d-none"
+                    name='email'
+                    className='text-fields-Corporate-edituser'
+                    labelClass='d-none'
                     maxLength={100}
-                    placeholder="Login ID"
+                    placeholder='Login ID'
                     value={editUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="pe-0">
+                <Col lg={2} md={2} sm={12} className='pe-0'>
                   <TextField
-                    name="Name"
-                    labelClass="d-none"
+                    name='Name'
+                    labelClass='d-none'
                     maxLength={100}
-                    className="text-fields-Corporate-edituser"
-                    placeholder="Name"
+                    className='text-fields-Corporate-edituser'
+                    placeholder='Name'
                     value={editUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={2} md={2} sm={12} className="dropdown pe-0">
+                <Col lg={2} md={2} sm={12} className='dropdown pe-0'>
                   <Select
-                    name="statusID"
-                    className="edit-Corporate-user-select-status"
-                    placeholder="Status"
+                    name='statusID'
+                    className='edit-Corporate-user-select-status'
+                    placeholder='Status'
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}
@@ -634,62 +666,60 @@ const EditCorporateUser = () => {
                   lg={4}
                   md={4}
                   sm={12}
-                  className="d-flex justify-content-left gap-1"
-                >
+                  className='d-flex justify-content-left gap-1'>
                   <Button
                     icon={
-                      <i className="icon-search EditCorporateUser-icon"></i>
+                      <i className='icon-search EditCorporateUser-icon'></i>
                     }
-                    text="Search"
-                    className="search-Corporate-Edit-User-btn"
+                    text='Search'
+                    className='search-Corporate-Edit-User-btn'
                     onClick={handleSearch}
                   />
                   <Button
                     icon={
-                      <i className="icon-refresh EditCorporateUser-icon"></i>
+                      <i className='icon-refresh EditCorporateUser-icon'></i>
                     }
-                    text="Reset"
+                    text='Reset'
                     onClick={resetHandler}
-                    className="reset-Corporate-Edit-User-btn"
+                    className='reset-Corporate-Edit-User-btn'
                   />
                   <Popover
                     content={
-                      <div className="EditBankUser_export-options">
+                      <div className='EditBankUser_export-options'>
                         <Button
-                          icon={<img src={pdfIcon} alt="PDF Icon" />}
+                          icon={<img src={pdfIcon} alt='PDF Icon' />}
                           onClick={() => handleExport("pdf")}
-                          className="EditBankUser_export-button"
+                          className='EditBankUser_export-button'
                         />
                         <Button
-                          icon={<img src={excelIcon} alt="Excel Icon" />}
+                          icon={<img src={excelIcon} alt='Excel Icon' />}
                           onClick={() => handleExport("excel")}
-                          className="EditBankUser_export-button"
+                          className='EditBankUser_export-button'
                         />
                       </div>
                     }
-                    trigger="click"
+                    trigger='click'
                     open={open}
                     onOpenChange={handleOpenChange}
-                    placement="bottomRight"
-                    arrow={false}
-                  >
+                    placement='bottomRight'
+                    arrow={false}>
                     <Button
-                      icon={<i className="icon-download"></i>}
-                      className="EditBankUser_Main-Export-Button"
-                      text="Export"
-                      iconClass="resetIconClass"
+                      icon={<i className='icon-download'></i>}
+                      className='EditBankUser_Main-Export-Button'
+                      text='Export'
+                      iconClass='resetIconClass'
                       onClick={toggleExportOptions}
                     />
                   </Popover>
                 </Col>
               </Row>
 
-              <Row className="mt-4">
+              <Row className='mt-4'>
                 <Col lg={12} md={12} sm={12}>
                   <Table
                     column={columns}
                     rows={corporateUserTableData}
-                    className="UniversalList-table"
+                    className='UniversalList-table'
                     scroll={{ y: 300, x: "scroll" }}
                   />
                 </Col>
@@ -702,10 +732,10 @@ const EditCorporateUser = () => {
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
-        size="lg"
+        size='lg'
         className={"modaldialog modal-Update"}
-        modalHeaderClassName="d-none"
-        modalFooterClassName="modal-update-footer"
+        modalHeaderClassName='d-none'
+        modalFooterClassName='modal-update-footer'
         onHide={closeUpdateModal}
         ModalBody={
           <Fragment>
@@ -713,7 +743,7 @@ const EditCorporateUser = () => {
               <Fragment>
                 <Row>
                   <Col lg={12} md={12} sm={12}>
-                    <p className="update-modal-heading">
+                    <p className='update-modal-heading'>
                       Are you sure want to update?
                     </p>
                   </Col>
@@ -729,16 +759,15 @@ const EditCorporateUser = () => {
                 lg={12}
                 md={12}
                 sm={12}
-                className="d-flex justify-content-center"
-              >
+                className='d-flex justify-content-center'>
                 <Button
                   icon={
                     <>
                       <span>Proceed</span>
-                      <i className="icon-arrow-right"></i>
+                      <i className='icon-arrow-right'></i>
                     </>
                   }
-                  className="Update-Proceed-btn"
+                  className='Update-Proceed-btn'
                   onClick={handleProceed}
                 />
               </Col>

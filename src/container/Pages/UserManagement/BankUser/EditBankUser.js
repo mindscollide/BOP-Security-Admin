@@ -28,7 +28,6 @@ import {
 } from "../../../../store/actions/Security_Admin";
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-import { useMqtt } from "../../../../context/MQTTContext";
 import { IndexCell } from "../../../../helpers/ReusableMethods";
 import {
   downloadBankUserReportApi,
@@ -37,21 +36,32 @@ import {
 import { Popover } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
 import excelIcon from "../../../../assets/images/excel.png";
+import { setBankUserBulkRequest } from "../../../../store/actions/RealtimeActions";
 
 const EditBankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);
-  const {
-    bankUserRoleStatusChange,
-    bankUserUpdated,
-    branchCreated,
-    branchUpdated,
-    bankBulkUpload,
-    bankUserCreated,
-    setBankBulkUpload,
-  } = useMqtt();
+  const bankUserRoleStatusChange = useSelector(
+    (state) => state.RealtimeReducer.bankUserRoleStatusChange
+  );
+  const bankUserUpdated = useSelector(
+    (state) => state.RealtimeReducer.bankUserUpdated
+  );
+  const branchCreated = useSelector(
+    (state) => state.RealtimeReducer.branchCreated
+  );
+  const branchUpdated = useSelector(
+    (state) => state.RealtimeReducer.branchUpdated
+  );
+  const bankBulkUpload = useSelector(
+    (state) => state.RealtimeReducer.bankUserBulkUpload
+  );
+  const bankUserCreated = useSelector(
+    (state) => state.RealtimeReducer.bankUserCreated
+  );
+
   const { securityReducer } = useSelector((state) => state);
   //Search all corporate Users
   const SearchBankUsers = useSelector(
@@ -179,7 +189,7 @@ const EditBankUser = () => {
   useEffect(() => {
     if (bankBulkUpload !== null) {
       try {
-        setBankBulkUpload(null);
+        dispatch(setBankUserBulkRequest(null));
         let Data = {
           Name: "",
           EmployeeID: "",
@@ -250,11 +260,7 @@ const EditBankUser = () => {
             bankUserTableData.userRegistrationRequestID
           );
         });
-        console.log(
-          bankUserTableData,
-          user,
-          "bankUserTableDatabankUserTableData"
-        );
+
         if (findisExist === undefined) {
           let bankUserData = {
             branch: user.branchName,
@@ -280,11 +286,9 @@ const EditBankUser = () => {
   // bankUserUpdated
   useEffect(() => {
     if (bankUserUpdated !== null) {
-      console.log("bankUserUpdated", bankUserUpdated);
       try {
         const { user } = bankUserUpdated;
 
-        console.log(user, "updatedUserupdatedUser");
         setBankUserTableData((prevData) => {
           return prevData.map((data2, index) => {
             if (data2.employeeID === user.employeeID) {
@@ -545,7 +549,6 @@ const EditBankUser = () => {
   }, [modalState]);
 
   const handleClickEdit = (record) => {
-    console.log("recordrecordrecord", record);
     try {
       setEditModalSecurity(true);
       if (statusOptions.length > 0) {
@@ -558,7 +561,6 @@ const EditBankUser = () => {
             label: findStatusObj.statusName,
           });
         }
-        console.log(findStatusObj, "findStatusObj");
       }
 
       if (roleOptions.length > 0) {
@@ -566,21 +568,10 @@ const EditBankUser = () => {
           (roleData, index) => roleData.roleID === record.userRoleID
         );
         if (findRoleObj !== undefined) {
-          // if (findRoleObj.roleID !== 9) {
           setEditBankUserRole({
             value: findRoleObj.roleID,
             label: findRoleObj.roleName,
           });
-          //   setEditBankUserBranch({
-          //     value: 0,
-          //     label: "",
-          //   });
-          // } else if (findRoleObj.roleID === 9) {
-          //   setEditBankUserRole({
-          //     value: findRoleObj.roleID,
-          //     label: findRoleObj.roleName,
-          //   });
-          // }
         }
       }
 
@@ -604,7 +595,7 @@ const EditBankUser = () => {
 
   const columns = [
     {
-      title: <label className="bottom-table-header">Employee ID</label>,
+      title: <label className='bottom-table-header'>Employee ID</label>,
       dataIndex: "employeeID",
       key: "employeeID",
       align: "left",
@@ -612,7 +603,7 @@ const EditBankUser = () => {
       width: "120px",
     },
     {
-      title: <label className="bottom-table-header">LoginID</label>,
+      title: <label className='bottom-table-header'>LoginID</label>,
       dataIndex: "email",
       key: "loginId",
       align: "left",
@@ -620,7 +611,7 @@ const EditBankUser = () => {
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Empolyee Name</label>,
+      title: <label className='bottom-table-header'>Empolyee Name</label>,
       dataIndex: "firstName",
       key: "name",
       width: "200px",
@@ -631,7 +622,7 @@ const EditBankUser = () => {
       },
     },
     {
-      title: <label className="bottom-table-header">Role</label>,
+      title: <label className='bottom-table-header'>Role</label>,
       dataIndex: "userRoleID",
       key: "userRoleID",
       align: "left",
@@ -650,7 +641,7 @@ const EditBankUser = () => {
       },
     },
     {
-      title: <label className="bottom-table-header">Branch</label>,
+      title: <label className='bottom-table-header'>Branch</label>,
       dataIndex: "branch",
       key: "branch",
       width: "150px",
@@ -666,7 +657,7 @@ const EditBankUser = () => {
       },
     },
     {
-      title: <label className="bottom-table-header">Status</label>,
+      title: <label className='bottom-table-header'>Status</label>,
       dataIndex: "userStatusID",
       key: "userStatusID",
       ellipsis: true,
@@ -685,7 +676,7 @@ const EditBankUser = () => {
       },
     },
     {
-      title: <label className="bottom-table-header">Edit</label>,
+      title: <label className='bottom-table-header'>Edit</label>,
       dataIndex: "edit",
       key: "edit",
       ellipsis: true,
@@ -694,10 +685,9 @@ const EditBankUser = () => {
       render: (text, record) => {
         return (
           <label
-            className="edit-update-column"
-            onClick={() => handleClickEdit(record)}
-          >
-            <i className="icon-edit editCorporate-user-icon-color" />
+            className='edit-update-column'
+            onClick={() => handleClickEdit(record)}>
+            <i className='icon-edit editCorporate-user-icon-color' />
           </label>
         );
       },
@@ -816,45 +806,45 @@ const EditBankUser = () => {
 
   return (
     <>
-      <section className="edit-user-container">
+      <section className='edit-user-container'>
         <Row>
           <Col lg={12} md={12} sm={12}>
-            <div className="editBankUser-label">Edit Bank User</div>
+            <div className='editBankUser-label'>Edit Bank User</div>
           </Col>
         </Row>
-        <Row className="mt-3">
+        <Row className='mt-3'>
           <Col lg={12} md={12} sm={12}>
-            <Paper className="span-edit-user">
-              <Row className="mt-1">
-                <Col lg={3} md={3} sm={12} className="pe-0">
+            <Paper className='span-edit-user'>
+              <Row className='mt-1'>
+                <Col lg={3} md={3} sm={12} className='pe-0'>
                   <TextField
-                    name="EmployeeID"
-                    className="text-fields-edituser"
-                    labelClass="d-none"
-                    placeholder="Employee ID"
+                    name='EmployeeID'
+                    className='text-fields-edituser'
+                    labelClass='d-none'
+                    placeholder='Employee ID'
                     maxLength={100}
                     value={BankEditUser.EmployeeID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className="pe-0">
+                <Col lg={3} md={3} sm={12} className='pe-0'>
                   <TextField
-                    name="LoginID"
-                    className="text-fields-edituser"
-                    labelClass="d-none"
+                    name='LoginID'
+                    className='text-fields-edituser'
+                    labelClass='d-none'
                     maxLength={100}
-                    placeholder="Login ID"
+                    placeholder='Login ID'
                     value={BankEditUser.LoginID.value}
                     onChange={editUserValidateHandler}
                   />
                 </Col>
-                <Col lg={3} md={3} sm={12} className="pe-0">
+                <Col lg={3} md={3} sm={12} className='pe-0'>
                   <TextField
-                    name="Name"
-                    labelClass="d-none"
+                    name='Name'
+                    labelClass='d-none'
                     maxLength={100}
-                    className="text-fields-edituser"
-                    placeholder="Employee Name"
+                    className='text-fields-edituser'
+                    placeholder='Employee Name'
                     value={BankEditUser.Name.value}
                     onChange={editUserValidateHandler}
                   />
@@ -863,20 +853,20 @@ const EditBankUser = () => {
                   <Select
                     isSearchable
                     options={roleOptions}
-                    placeholder="Select Role"
-                    className="edit-user-select-status"
+                    placeholder='Select Role'
+                    className='edit-user-select-status'
                     value={roleID.value !== 0 ? roleID : null}
                     onChange={handleSelectRole}
                   />
                 </Col>
               </Row>
 
-              <Row className="mt-3">
-                <Col lg={3} md={3} sm={12} className="pe-0">
+              <Row className='mt-3'>
+                <Col lg={3} md={3} sm={12} className='pe-0'>
                   <Select
-                    className="edit-user-select-status"
+                    className='edit-user-select-status'
                     isSearchable
-                    placeholder="Select Status"
+                    placeholder='Select Status'
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}
@@ -887,53 +877,51 @@ const EditBankUser = () => {
                   lg={9}
                   md={9}
                   sm={12}
-                  className="d-flex justify-content-left gap-1"
-                >
+                  className='d-flex justify-content-left gap-1'>
                   <Button
-                    icon={<i className="icon-search bankUser-icon"></i>}
-                    text="Search"
-                    className="search-Bank-Edit-User-btn"
+                    icon={<i className='icon-search bankUser-icon'></i>}
+                    text='Search'
+                    className='search-Bank-Edit-User-btn'
                     onClick={handleSearch}
                   />
                   <Button
-                    icon={<i className="icon-refresh bankUser-icon"></i>}
-                    text="Reset"
+                    icon={<i className='icon-refresh bankUser-icon'></i>}
+                    text='Reset'
                     onClick={resetHandler}
-                    className="reset-Bank-Edit-User-btn"
+                    className='reset-Bank-Edit-User-btn'
                   />
                   <Popover
                     content={
-                      <div className="EditBankUser_export-options">
+                      <div className='EditBankUser_export-options'>
                         <Button
-                          icon={<img src={pdfIcon} alt="PDF Icon" />}
+                          icon={<img src={pdfIcon} alt='PDF Icon' />}
                           onClick={() => handleExportButton("pdf")}
-                          className="EditBankUser_export-button"
+                          className='EditBankUser_export-button'
                         />
                         <Button
-                          icon={<img src={excelIcon} alt="Excel Icon" />}
+                          icon={<img src={excelIcon} alt='Excel Icon' />}
                           onClick={() => handleExportButton("excel")}
-                          className="EditBankUser_export-button"
+                          className='EditBankUser_export-button'
                         />
                       </div>
                     }
-                    trigger="click"
+                    trigger='click'
                     open={open}
                     onOpenChange={handleOpenChange}
-                    placement="bottomRight"
-                    arrow={false}
-                  >
+                    placement='bottomRight'
+                    arrow={false}>
                     <Button
-                      icon={<i className="icon-download"></i>}
-                      className="EditBankUser_Main-Export-Button"
-                      text="Export"
-                      iconClass="resetIconClass"
+                      icon={<i className='icon-download'></i>}
+                      className='EditBankUser_Main-Export-Button'
+                      text='Export'
+                      iconClass='resetIconClass'
                       onClick={toggleExportOptions}
                     />
                   </Popover>
                 </Col>
               </Row>
 
-              <Row className="mt-4">
+              <Row className='mt-4'>
                 <Col lg={12} md={12} sm={12}>
                   {/* <span>
                     <Row>
@@ -963,7 +951,7 @@ const EditBankUser = () => {
                   <Table
                     column={columns}
                     rows={bankUserTableData}
-                    className="UniversalList-table"
+                    className='UniversalList-table'
                     scroll={{ y: 230, x: "scroll" }}
                     pagination={false}
                   />
@@ -976,15 +964,15 @@ const EditBankUser = () => {
       <Modal
         show={updateModal}
         setShow={setUpdateModal}
-        size="lg"
+        size='lg'
         className={"modaldialog modal-Update"}
-        modalHeaderClassName="d-none"
-        modalFooterClassName="modal-update-footer"
+        modalHeaderClassName='d-none'
+        modalFooterClassName='modal-update-footer'
         onHide={closeUpdateModal}
         ModalBody={
           <Row>
             <Col lg={12} md={12} sm={12}>
-              <p className="update-modal-heading">
+              <p className='update-modal-heading'>
                 Are you sure want to update?
               </p>
             </Col>
@@ -996,16 +984,15 @@ const EditBankUser = () => {
               lg={12}
               md={12}
               sm={12}
-              className="d-flex justify-content-center"
-            >
+              className='d-flex justify-content-center'>
               <Button
                 icon={
                   <>
                     <span>Proceed</span>
-                    <i className="icon-arrow-right"></i>
+                    <i className='icon-arrow-right'></i>
                   </>
                 }
-                className="Update-Proceed-btn"
+                className='Update-Proceed-btn'
                 onClick={handleProceed}
               />
             </Col>

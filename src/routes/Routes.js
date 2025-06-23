@@ -2,6 +2,7 @@ import {
   Route,
   createRoutesFromElements,
   createHashRouter,
+  createBrowserRouter,
 } from "react-router-dom";
 
 import Userreport from "../container/Pages/Reports/Userreport";
@@ -19,7 +20,7 @@ import EmailSentPage from "../container/SecurityLogin/PasswordEmailSent/EmailSen
 import EditBankUser from "../container/Pages/UserManagement/BankUser/EditBankUser";
 import EditCorporateUser from "../container/Pages/UserManagement/CorporateUser/EditCorporateUser";
 
-export const router = createHashRouter(
+export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route exact path="/" element={<SecurityLogin />} />

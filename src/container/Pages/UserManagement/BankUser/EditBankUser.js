@@ -30,7 +30,10 @@ import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { useMqtt } from "../../../../context/MQTTContext";
 import { IndexCell } from "../../../../helpers/ReusableMethods";
-import { downloadBankUserReportApi } from "../../../../store/actions/Download-Report";
+import {
+  downloadBankUserReportApi,
+  downloadPDFBankUserSecurityAdminReportApi,
+} from "../../../../store/actions/Download-Report";
 import { Popover } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
 import excelIcon from "../../../../assets/images/excel.png";
@@ -800,7 +803,14 @@ const EditBankUser = () => {
       };
       dispatch(downloadBankUserReportApi(navigate, data));
     } else if (format === "pdf") {
-      //logic of pdf Download
+      let data = {
+        EmployeeID: BankEditUser.EmployeeID.value,
+        Name: BankEditUser.Name.value,
+        RoleID: Number(roleID.value),
+        StatusID: Number(statusID.value),
+        Email: BankEditUser.LoginID.value,
+      };
+      dispatch(downloadPDFBankUserSecurityAdminReportApi(navigate, data));
     }
   };
 

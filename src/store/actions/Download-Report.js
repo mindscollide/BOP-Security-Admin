@@ -1,6 +1,8 @@
 import {
   bankUserReport,
   CorporateUserReport,
+  PDFDownloadBankUserListSecurityAdminReport,
+  PDFDownloadCorporateUserListSecurityAdminReport,
   SecurityAdminAccessDetailReport,
   SecurityAdminLastLoggedInReport,
   SecurityAdminUserLoginHistoryReport,
@@ -370,7 +372,6 @@ const downloadUserStatusWiseReport_fail = (message) => {
     message: message,
   };
 };
-
 const downloadUserStatusWiseReportApi = (navigate, Data) => {
   let token = JSON.parse(localStorage.getItem("token"));
   let form = new FormData();
@@ -416,6 +417,153 @@ const downloadUserStatusWiseReportApi = (navigate, Data) => {
   };
 };
 
+// PDF Version Report Download Bank User List
+const downloadPDFBankUserSecurityAdminReport_init = () => {
+  return {
+    type: actions.PDF_BANK_USER_REPORT_INIT,
+  };
+};
+const downloadPDFBankUserSecurityAdminReport_success = (response, message) => {
+  return {
+    type: actions.PDF_BANK_USER_REPORT_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+const downloadPDFBankUserSecurityAdminyReport_fail = (message) => {
+  return {
+    type: actions.PDF_BANK_USER_REPORT_FAIL,
+    message: message,
+  };
+};
+const downloadPDFBankUserSecurityAdminReportApi = (navigate, Data) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  let form = new FormData();
+  form.append(
+    "RequestMethod",
+    PDFDownloadBankUserListSecurityAdminReport.RequestMethod
+  );
+  form.append("RequestData", JSON.stringify(Data));
+
+  return async (dispatch) => {
+    await dispatch(downloadPDFBankUserSecurityAdminReport_init());
+
+    axios({
+      method: "post",
+      url: downloadReportApi,
+      data: form,
+      headers: {
+        _token: token,
+        "Content-Type": "application/pdf",
+      },
+      responseType: "arraybuffer",
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(downloadPDFBankUserSecurityAdminReportApi(navigate, Data));
+        } else if (response.status === 200) {
+          const blob = new Blob([response.data], { type: "application/pdf" });
+          const url = window.URL.createObjectURL(blob);
+
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "BankUserReport.pdf");
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+
+          dispatch(
+            downloadPDFBankUserSecurityAdminReport_success(
+              response.data.responseResult,
+              "Download-successfully"
+            )
+          );
+        }
+      })
+      .catch((error) => {
+        dispatch(downloadPDFBankUserSecurityAdminyReport_fail(error.message));
+      });
+  };
+};
+
+// PDF Version Report Download Bank User List
+const downloadPDFCorporateUserSecurityAdminReport_init = () => {
+  return {
+    type: actions.PDF_CORPORATE_USER_REPORT_INIT,
+  };
+};
+const downloadPDFCorporateUserSecurityAdminReport_success = (
+  response,
+  message
+) => {
+  return {
+    type: actions.PDF_CORPORATE_USER_REPORT_SUCCESS,
+    response: response,
+    message: message,
+  };
+};
+const downloadPDFCorporateUserSecurityAdminyReport_fail = (message) => {
+  return {
+    type: actions.PDF_CORPORATE_USER_REPORT_FAIL,
+    message: message,
+  };
+};
+const downloadPDFCorporateUserSecurityAdminReportApi = (navigate, Data) => {
+  let token = JSON.parse(localStorage.getItem("token"));
+  let form = new FormData();
+  form.append(
+    "RequestMethod",
+    PDFDownloadCorporateUserListSecurityAdminReport.RequestMethod
+  );
+  form.append("RequestData", JSON.stringify(Data));
+
+  return async (dispatch) => {
+    await dispatch(downloadPDFCorporateUserSecurityAdminReport_init());
+
+    axios({
+      method: "post",
+      url: downloadReportApi,
+      data: form,
+      headers: {
+        _token: token,
+        "Content-Type": "application/pdf",
+      },
+      responseType: "arraybuffer",
+    })
+      .then(async (response) => {
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(
+            downloadPDFCorporateUserSecurityAdminReportApi(navigate, Data)
+          );
+        } else if (response.status === 200) {
+          const blob = new Blob([response.data], { type: "application/pdf" });
+          const url = window.URL.createObjectURL(blob);
+
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "CorporateUserReport.pdf");
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+
+          dispatch(
+            downloadPDFCorporateUserSecurityAdminReport_success(
+              response.data.responseResult,
+              "Download-successfully"
+            )
+          );
+        }
+      })
+      .catch((error) => {
+        dispatch(
+          downloadPDFCorporateUserSecurityAdminyReport_fail(error.message)
+        );
+      });
+  };
+};
+
 export {
   cleareMessage,
   downloadBankUserReportApi,
@@ -424,4 +572,6 @@ export {
   downloadAccessDetailReportApi,
   downloadLastLoggedInReportApi,
   downloadUserStatusWiseReportApi,
+  downloadPDFBankUserSecurityAdminReportApi,
+  downloadPDFCorporateUserSecurityAdminReportApi,
 };

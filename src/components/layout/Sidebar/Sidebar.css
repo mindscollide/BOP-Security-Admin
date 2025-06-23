@@ -64,7 +64,6 @@
 .submenu-sidebar-icons::selection {
   color: #fff !important;
 }
-
 /* li.ant-menu-submenu.ant-menu-submenu-inline.submenu-sidebar-icons.ant-menu-submenu-selected {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
 } */
@@ -164,7 +163,8 @@ section.ant-layout.ant-layout-has-sider.css-dev-only-do-not-override-1e3x2xa {
 }
 
 aside.ant-layout-sider.ant-layout-sider-dark {
-  border-top-right-radius: 0px !important;
+  border-top-right-radius: 0 !important;
+  background: #4d4946 !important;
 }
 
 /* :where(.css-dev-only-do-not-override-1e3x2xa).ant-layout
@@ -226,4 +226,9 @@ li.ant-menu-item.ant-menu-item-selected.ant-menu-item-only-child.menu-items-side
 :where(.css-dev-only-do-not-override-1e3x2xa).ant-menu-inline
   .ant-menu-submenu-title {
   margin-block: 0px;
+}
+:where(.css-1e3x2xa).ant-menu-light
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title {
+  color: none !important;
 }

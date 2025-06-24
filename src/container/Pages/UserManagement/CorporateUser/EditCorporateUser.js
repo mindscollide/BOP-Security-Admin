@@ -46,7 +46,10 @@ const EditCorporateUser = () => {
     setOpen(newOpen);
   };
   //Global State
-  const { securityReducer } = useSelector((state) => state);
+  const { securityReducer, DownloadReportReducer } = useSelector(
+    (state) => state
+  );
+
   const corporateUserBulkUpload = useSelector(
     (state) => state.RealtimeReducer.corporateUserBulkUpload
   );

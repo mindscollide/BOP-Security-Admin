@@ -62,7 +62,9 @@ const EditBankUser = () => {
     (state) => state.RealtimeReducer.bankUserCreated
   );
 
-  const { securityReducer } = useSelector((state) => state);
+  const { securityReducer, DownloadReportReducer } = useSelector(
+    (state) => state
+  );
   //Search all corporate Users
   const SearchBankUsers = useSelector(
     (state) => state.securityReducer.SearchBankUsersData

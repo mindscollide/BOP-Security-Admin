@@ -22,11 +22,20 @@ import {
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-import { useMqtt } from "../../../../context/MQTTContext";
-import { downloadCorporateUserReportApi } from "../../../../store/actions/Download-Report";
+import {
+  downloadCorporateUserReportApi,
+  downloadPDFCorporateUserSecurityAdminReportApi,
+} from "../../../../store/actions/Download-Report";
 import { Popover } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
 import excelIcon from "../../../../assets/images/excel.png";
+import {
+  setCorpUserRoleStatusChange,
+  setCorporateUpdated,
+  setCorporateUserBulkRequest,
+  setCorporateUserCreated,
+  setCorporateUserUpdated,
+} from "../../../../store/actions/RealtimeActions";
 
 const EditCorporateUser = () => {
   const navigate = useNavigate();
@@ -37,18 +46,24 @@ const EditCorporateUser = () => {
     setOpen(newOpen);
   };
   //Global State
-  const { securityReducer, DownloadReportReducer } = useSelector(
-    (state) => state
+  const { securityReducer } = useSelector((state) => state);
+  const corporateUserBulkUpload = useSelector(
+    (state) => state.RealtimeReducer.corporateUserBulkUpload
   );
-  const {
-    corporateUserBulkUpload,
-    corporateUserUpdated,
-    setCorporateUserBulkUpload,
-    corporateUserRoleStatusChange,
-    corproateUpdated,
-    setCorporateUserUpdated,
-    setCorporateUpdated,
-  } = useMqtt();
+  const corporateUserUpdated = useSelector(
+    (state) => state.RealtimeReducer.corporateUserUpdated
+  );
+  const corporateUserRoleStatusChange = useSelector(
+    (state) => state.RealtimeReducer.corpUserRoleStatusChange
+  );
+  const corporateUpdated = useSelector(
+    (state) => state.RealtimeReducer.corporateUpdated
+  );
+
+  const corporateUserCreated = useSelector(
+    (state) => state.RealtimeReducer.corporateUserCreated
+  );
+
   const SearchCorporateUsersData = useSelector(
     (state) => state.securityReducer.SearchCorporateUsersData
   );
@@ -178,7 +193,7 @@ const EditCorporateUser = () => {
           Length: 10,
         };
         dispatch(SearchCorporateUsersAPI(navigate, Data));
-        setCorporateUserBulkUpload(null);
+        dispatch(setCorporateUserBulkRequest(null));
       } catch (error) {
         console.log("error", error);
       }
@@ -202,7 +217,7 @@ const EditCorporateUser = () => {
         });
       } catch (error) {}
     }
-    setCorporateUserUpdated(null);
+    dispatch(setCorporateUserUpdated(null));
   }, [corporateUserUpdated]);
 
   useEffect(() => {
@@ -220,14 +235,15 @@ const EditCorporateUser = () => {
             return data2;
           });
         });
+        dispatch(setCorpUserRoleStatusChange(null));
       } catch (error) {}
     }
   }, [corporateUserRoleStatusChange]);
 
   useEffect(() => {
-    if (corproateUpdated !== null) {
+    if (corporateUpdated !== null) {
       try {
-        const { corporate } = corproateUpdated;
+        const { corporate } = corporateUpdated;
         setCorporateUserTableData((prevTableData) => {
           return prevTableData.map((data2, index) => {
             if (data2.corporateID === corporate.corporateID) {
@@ -240,10 +256,29 @@ const EditCorporateUser = () => {
           });
         });
 
-        setCorporateUpdated(null);
+        dispatch(setCorporateUpdated(null));
       } catch (error) {}
     }
-  }, [corproateUpdated]);
+  }, [corporateUpdated]);
+
+  useEffect(() => {
+    if (corporateUserCreated !== null) {
+      try {
+        const { user, createdUserID } = corporateUserCreated;
+        let findisExist = corporateUserTableData.find(
+          (rowData, index) => rowData.userID === createdUserID
+        );
+        if (findisExist === undefined) {
+          setCorporateUserTableData((prevData) => {
+            return [user, ...prevData];
+          });
+        }
+        dispatch(setCorporateUserCreated(null)); // Reset the corporateUserCreated state after processing
+      } catch (error) {
+        console.log(error, "corporateUserCreated error");
+      }
+    }
+  }, [corporateUserCreated]);
 
   //edit user security admin validate handler
   const editUserValidateHandler = (e) => {
@@ -562,7 +597,13 @@ const EditCorporateUser = () => {
       };
       dispatch(downloadCorporateUserReportApi(navigate, data));
     } else if (format === "pdf") {
-      //Logic of PDF Download
+      let data = {
+        Name: editUser.Name.value,
+        CompanyName: editUser.CorporateName.value,
+        Email: editUser.LoginID.value,
+        StatusID: Number(statusID.value),
+      };
+      dispatch(downloadPDFCorporateUserSecurityAdminReportApi(navigate, data));
     }
   };
 

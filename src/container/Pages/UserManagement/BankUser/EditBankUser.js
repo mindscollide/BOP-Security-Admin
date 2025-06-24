@@ -28,34 +28,41 @@ import {
 } from "../../../../store/actions/Security_Admin";
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-import { useMqtt } from "../../../../context/MQTTContext";
 import { IndexCell } from "../../../../helpers/ReusableMethods";
-import { downloadBankUserReportApi } from "../../../../store/actions/Download-Report";
+import {
+  downloadBankUserReportApi,
+  downloadPDFBankUserSecurityAdminReportApi,
+} from "../../../../store/actions/Download-Report";
 import { Popover } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
 import excelIcon from "../../../../assets/images/excel.png";
+import { setBankUserBulkRequest } from "../../../../store/actions/RealtimeActions";
 
 const EditBankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);
-  const {
-    bankUserRoleStatusChange,
-    bankUserUpdated,
-    branchCreated,
-    branchUpdated,
-    bankBulkUpload,
-    bankUserCreated,
-    setBankBulkUpload,
-  } = useMqtt();
-  const { securityReducer, DownloadReportReducer } = useSelector(
-    (state) => state
+  const bankUserRoleStatusChange = useSelector(
+    (state) => state.RealtimeReducer.bankUserRoleStatusChange
+  );
+  const bankUserUpdated = useSelector(
+    (state) => state.RealtimeReducer.bankUserUpdated
+  );
+  const branchCreated = useSelector(
+    (state) => state.RealtimeReducer.branchCreated
+  );
+  const branchUpdated = useSelector(
+    (state) => state.RealtimeReducer.branchUpdated
+  );
+  const bankBulkUpload = useSelector(
+    (state) => state.RealtimeReducer.bankUserBulkUpload
+  );
+  const bankUserCreated = useSelector(
+    (state) => state.RealtimeReducer.bankUserCreated
   );
 
-  // const LoadingState = useSelector((state) => state);
-
-  // console.log(LoadingState, "LoadingState");
+  const { securityReducer } = useSelector((state) => state);
   //Search all corporate Users
   const SearchBankUsers = useSelector(
     (state) => state.securityReducer.SearchBankUsersData
@@ -182,7 +189,7 @@ const EditBankUser = () => {
   useEffect(() => {
     if (bankBulkUpload !== null) {
       try {
-        setBankBulkUpload(null);
+        dispatch(setBankUserBulkRequest(null));
         let Data = {
           Name: "",
           EmployeeID: "",
@@ -253,11 +260,7 @@ const EditBankUser = () => {
             bankUserTableData.userRegistrationRequestID
           );
         });
-        console.log(
-          bankUserTableData,
-          user,
-          "bankUserTableDatabankUserTableData"
-        );
+
         if (findisExist === undefined) {
           let bankUserData = {
             branch: user.branchName,
@@ -283,11 +286,9 @@ const EditBankUser = () => {
   // bankUserUpdated
   useEffect(() => {
     if (bankUserUpdated !== null) {
-      console.log("bankUserUpdated", bankUserUpdated);
       try {
         const { user } = bankUserUpdated;
 
-        console.log(user, "updatedUserupdatedUser");
         setBankUserTableData((prevData) => {
           return prevData.map((data2, index) => {
             if (data2.employeeID === user.employeeID) {
@@ -548,7 +549,6 @@ const EditBankUser = () => {
   }, [modalState]);
 
   const handleClickEdit = (record) => {
-    console.log("recordrecordrecord", record);
     try {
       setEditModalSecurity(true);
       if (statusOptions.length > 0) {
@@ -561,7 +561,6 @@ const EditBankUser = () => {
             label: findStatusObj.statusName,
           });
         }
-        console.log(findStatusObj, "findStatusObj");
       }
 
       if (roleOptions.length > 0) {
@@ -569,21 +568,10 @@ const EditBankUser = () => {
           (roleData, index) => roleData.roleID === record.userRoleID
         );
         if (findRoleObj !== undefined) {
-          // if (findRoleObj.roleID !== 9) {
           setEditBankUserRole({
             value: findRoleObj.roleID,
             label: findRoleObj.roleName,
           });
-          //   setEditBankUserBranch({
-          //     value: 0,
-          //     label: "",
-          //   });
-          // } else if (findRoleObj.roleID === 9) {
-          //   setEditBankUserRole({
-          //     value: findRoleObj.roleID,
-          //     label: findRoleObj.roleName,
-          //   });
-          // }
         }
       }
 
@@ -806,7 +794,14 @@ const EditBankUser = () => {
       };
       dispatch(downloadBankUserReportApi(navigate, data));
     } else if (format === "pdf") {
-      //logic of pdf Download
+      let data = {
+        EmployeeID: BankEditUser.EmployeeID.value,
+        Name: BankEditUser.Name.value,
+        RoleID: Number(roleID.value),
+        StatusID: Number(statusID.value),
+        Email: BankEditUser.LoginID.value,
+      };
+      dispatch(downloadPDFBankUserSecurityAdminReportApi(navigate, data));
     }
   };
 

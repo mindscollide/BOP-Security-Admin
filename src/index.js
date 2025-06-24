@@ -5,16 +5,13 @@ import App from "./App";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import reportWebVitals from "./reportWebVitals";
-import { MqttProvider } from "./context/MQTTContext";
 import "@fontsource/roboto";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <Suspense>
-      <MqttProvider subscribeID={"BOP_SECURITYADMIN"}>
-        <App />
-      </MqttProvider>
+      <App />
     </Suspense>
   </Provider>
 );

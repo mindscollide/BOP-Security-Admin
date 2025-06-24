@@ -49,7 +49,13 @@ const EditBankUser = () => {
     bankUserCreated,
     setBankBulkUpload,
   } = useMqtt();
-  const { securityReducer } = useSelector((state) => state);
+  const { securityReducer, DownloadReportReducer } = useSelector(
+    (state) => state
+  );
+
+  // const LoadingState = useSelector((state) => state);
+
+  // console.log(LoadingState, "LoadingState");
   //Search all corporate Users
   const SearchBankUsers = useSelector(
     (state) => state.securityReducer.SearchBankUsersData
@@ -1026,7 +1032,8 @@ const EditBankUser = () => {
           handleNoButton={handleNoButton}
         />
       )}
-      {securityReducer.Loading && <Loader />}
+      {(securityReducer.Loading && <Loader />) ||
+        (DownloadReportReducer.Loading && <Loader />)}
     </>
   );
 };

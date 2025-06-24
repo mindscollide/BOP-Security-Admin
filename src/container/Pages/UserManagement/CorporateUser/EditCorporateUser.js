@@ -24,7 +24,6 @@ import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Securi
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { useMqtt } from "../../../../context/MQTTContext";
 import { downloadCorporateUserReportApi } from "../../../../store/actions/Download-Report";
-import { ExceptionMap } from "antd/es/result";
 import { Popover } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
 import excelIcon from "../../../../assets/images/excel.png";
@@ -38,7 +37,9 @@ const EditCorporateUser = () => {
     setOpen(newOpen);
   };
   //Global State
-  const { securityReducer } = useSelector((state) => state);
+  const { securityReducer, DownloadReportReducer } = useSelector(
+    (state) => state
+  );
   const {
     corporateUserBulkUpload,
     corporateUserUpdated,
@@ -757,7 +758,8 @@ const EditCorporateUser = () => {
           // onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />
       ) : null}
-      {securityReducer.Loading && <Loader />}
+      {(securityReducer.Loading && <Loader />) ||
+        (DownloadReportReducer.Loading && <Loader />)}
     </>
   );
 };

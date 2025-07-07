@@ -16,7 +16,12 @@ import {
 import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
 import "./PendingApprovalCorporate.css";
-import { setCorpUserRequestRejected, setCorporateUpdated, setCorporateUserRequest, setCorporateUserUpdated } from "../../../../store/actions/RealtimeActions";
+import {
+  setCorpUserRequestRejected,
+  setCorporateUpdated,
+  setCorporateUserRequest,
+  setCorporateUserUpdated,
+} from "../../../../store/actions/RealtimeActions";
 
 const PendingApprovalCorporate = () => {
   const navigate = useNavigate();
@@ -32,7 +37,9 @@ const PendingApprovalCorporate = () => {
   const corporateUserRejected = useSelector(
     (state) => state.RealtimeReducer.corpUserRejected
   );
-  const corporateUpdated = useSelector((state) => state.RealtimeReducer.corporateUpdated )
+  const corporateUpdated = useSelector(
+    (state) => state.RealtimeReducer.corporateUpdated
+  );
 
   //Global State
   const { securityReducer } = useSelector((state) => state);
@@ -83,7 +90,7 @@ const PendingApprovalCorporate = () => {
     dispatch(getNewCorporateUserRequestApi(navigate, Data));
   }, []);
 
-  //custom hook for scrolling (lazy loading)
+  //custom hook for scrolling (lazy loading) (1)
   const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
     console.log("🚀 Table reached bottom");
     // Load more data here if needed
@@ -101,6 +108,7 @@ const PendingApprovalCorporate = () => {
       try {
         const { userRequestList, totalRecords } = GetNewCorporateUserRequests;
         if (hasReachedBottom) {
+          console.log("im here now");
           setHasReachedBottom(false);
           setRecordLength(totalRecords);
           setTableData([...tableData, ...userRequestList]);
@@ -139,9 +147,8 @@ const PendingApprovalCorporate = () => {
                 user.userRegistrationRequestID
             );
           });
-        
         }
-        dispatch(setCorporateUserUpdated(null))
+        dispatch(setCorporateUserUpdated(null));
       } catch (error) {}
     }
   }, [corporateUserCreated]);
@@ -165,7 +172,7 @@ const PendingApprovalCorporate = () => {
             );
           });
         }
-        dispatch(setCorpUserRequestRejected(null))
+        dispatch(setCorpUserRequestRejected(null));
       } catch (error) {}
     }
   }, [corporateUserRejected]);
@@ -178,7 +185,7 @@ const PendingApprovalCorporate = () => {
         console.log(user, "bankUserRequested");
         // if()
         setTableData([user, ...tableData]);
-        dispatch(setCorporateUserRequest(null))
+        dispatch(setCorporateUserRequest(null));
       } catch (error) {
         console.log(error);
       }
@@ -200,7 +207,7 @@ const PendingApprovalCorporate = () => {
             return data2;
           });
         });
-        dispatch(setCorporateUpdated(null))
+        dispatch(setCorporateUpdated(null));
       } catch (error) {}
     }
   }, [corporateUpdated]);
@@ -208,7 +215,7 @@ const PendingApprovalCorporate = () => {
   // column of create user
   const columnsCreate = [
     {
-      title: <label className='bottom-table-header'>Corporate Name</label>,
+      title: <label className="bottom-table-header">Corporate Name</label>,
       dataIndex: "corporateName",
       key: "corporateName",
       width: "300px",
@@ -216,20 +223,20 @@ const PendingApprovalCorporate = () => {
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Email</label>,
+      title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
       width: "380px",
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Name</label>,
+      title: <label className="bottom-table-header">Name</label>,
       dataIndex: "firstname",
       key: "firstname",
       ellipsis: true,
     },
     {
-      title: <label className='bottom-table-header'>Accept</label>,
+      title: <label className="bottom-table-header">Accept</label>,
       dataIndex: "accept",
       key: "accept",
       ellipsis: true,
@@ -240,14 +247,15 @@ const PendingApprovalCorporate = () => {
             onClick={() => {
               console.log("record", record);
               openAcceptModal(record.userRegistrationRequestID);
-            }}>
-            <i className='icon-check icon-accept-column'></i>
+            }}
+          >
+            <i className="icon-check icon-accept-column"></i>
           </label>
         );
       },
     },
     {
-      title: <label className='bottom-table-header'>Reject</label>,
+      title: <label className="bottom-table-header">Reject</label>,
       dataIndex: "reject",
       key: "reject",
       ellipsis: true,
@@ -255,7 +263,7 @@ const PendingApprovalCorporate = () => {
       render: (text, record) => {
         return (
           <label onClick={() => openRejectModal(record)}>
-            <i className='icon-close icon-close-column'></i>
+            <i className="icon-close icon-close-column"></i>
           </label>
         );
       },
@@ -264,23 +272,23 @@ const PendingApprovalCorporate = () => {
 
   return (
     <>
-      <section className='create-user-container'>
+      <section className="create-user-container">
         <Row>
-          <Col lg={12} md={12} sm={12} className='d-flex justify-content-start'>
-            <label className='Pending-Approval-label'>
+          <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
+            <label className="Pending-Approval-label">
               Pending Approval Corporate
             </label>
           </Col>
         </Row>
 
-        <Row className='mt-3'>
-          <Paper className='span-table'>
-            <Col lg={12} md={12} sm={12} className='mt-3'>
+        <Row className="mt-3">
+          <Paper className="span-table">
+            <Col lg={12} md={12} sm={12} className="mt-3">
               <Table
                 column={columnsCreate}
                 rows={tableData}
                 scroll={{ y: 400 }}
-                className='Createuser-table'
+                className="Createuser-table"
                 pagination={false}
               />
             </Col>

@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import "./EditBankUser.css";
-
 import {
   TextField,
   Button,
   Table,
   Paper,
-  Loader,
   Modal,
 } from "../../../../components/elements";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
@@ -62,9 +59,6 @@ const EditBankUser = () => {
     (state) => state.RealtimeReducer.bankUserCreated
   );
 
-  const { securityReducer, DownloadReportReducer } = useSelector(
-    (state) => state
-  );
   //Search all corporate Users
   const SearchBankUsers = useSelector(
     (state) => state.securityReducer.SearchBankUsersData
@@ -1029,8 +1023,6 @@ const EditBankUser = () => {
           handleNoButton={handleNoButton}
         />
       )}
-      {(securityReducer.Loading && <Loader />) ||
-        (DownloadReportReducer.Loading && <Loader />)}
     </>
   );
 };

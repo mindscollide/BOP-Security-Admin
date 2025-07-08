@@ -230,9 +230,9 @@ const SecurityLogin = () => {
           </Row>
         </Container>
       </Col>
-      {LoadingAuthReducerState && <Loader />}
+      {/* {LoadingAuthReducerState && <Loader />} */}
       <Notification setOpen={setOpen} open={open.open} message={open.message} />
-      {auth.Loading && <Loader />}
+      {/* {auth.Loading && <Loader />} */}
     </Fragment>
   );
 };

@@ -36,6 +36,9 @@
 .ant-table-cell::before {
   height: 0px !important;
 }
+.ant-table-cell-ellipsis {
+  height: 0px !important;
+}
 
 .nodata-table-icon {
   font-size: 5rem;

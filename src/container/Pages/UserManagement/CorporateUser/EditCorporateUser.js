@@ -6,7 +6,6 @@ import {
   Button,
   Table,
   Paper,
-  Loader,
   Modal,
 } from "../../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,10 +44,6 @@ const EditCorporateUser = () => {
   const handleOpenChange = (newOpen) => {
     setOpen(newOpen);
   };
-  //Global State
-  const { securityReducer, DownloadReportReducer } = useSelector(
-    (state) => state
-  );
 
   const corporateUserBulkUpload = useSelector(
     (state) => state.RealtimeReducer.corporateUserBulkUpload
@@ -66,23 +61,18 @@ const EditCorporateUser = () => {
   const corporateUserCreated = useSelector(
     (state) => state.RealtimeReducer.corporateUserCreated
   );
-
   const SearchCorporateUsersData = useSelector(
     (state) => state.securityReducer.SearchCorporateUsersData
   );
   // Get all user status selector
   const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
-
   // state for edit corporate user
   const [editUser, setEditUser] = useState(searchEditCorporateUserSchema);
-
   const [editCorporateUserUpdate, seCorporateUserUpdate] = useState(null);
-
   const [editCorporateUserStatus, setEditCorporateUserStatus] = useState({
     value: 0,
     label: "",
   });
-
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -802,8 +792,6 @@ const EditCorporateUser = () => {
           // onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />
       ) : null}
-      {(securityReducer.Loading && <Loader />) ||
-        (DownloadReportReducer.Loading && <Loader />)}
     </>
   );
 };

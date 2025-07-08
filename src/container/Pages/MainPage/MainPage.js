@@ -25,6 +25,7 @@ import {
   setCorporateUserRequest,
   setCorporateUserUpdated,
 } from "../../../store/actions/RealtimeActions";
+import { Loader } from "../../../components/elements";
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -118,7 +119,7 @@ const MainPage = () => {
       }
     },
   });
-  console.log(isConnected, "isConnectedisConnected")
+  console.log(isConnected, "isConnectedisConnected");
   useEffect(() => {
     connectToMqtt({ subscribeID, userID });
   }, []);
@@ -128,15 +129,16 @@ const MainPage = () => {
       <Layout>
         <Header />
         <Layout>
-          <Sider collapsed={false} className='siderClass' width={250}>
+          <Sider collapsed={false} className="siderClass" width={250}>
             <Sidebar />
           </Sider>
 
-          <Content className='px-2 mainContent'>
+          <Content className="px-2 mainContent">
             <Outlet />
           </Content>
         </Layout>
         <ResponseMessage />
+        <Loader />
       </Layout>
     </>
     // <Fragment>

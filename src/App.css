@@ -6,6 +6,13 @@
   margin: 0;
   padding: 0;
 }
+:where(.css-1e3x2xa).ant-table-wrapper .ant-table-cell-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+  padding: 10px 5px !important;
+}
 
 body {
   background-color: #f4f4f4 !important;

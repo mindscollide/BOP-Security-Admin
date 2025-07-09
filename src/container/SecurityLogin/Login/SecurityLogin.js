@@ -18,10 +18,7 @@ const SecurityLogin = () => {
     (state) => state.auth.ResponseMessage
   );
 
-  const LoadingAuthReducerState = useSelector(
-    (state) => state.auth.ResponseMessage
-  );
-  console.log(LoadingAuthReducerState, "AuthReducerState");
+  const LoadingAuthReducerState = useSelector((state) => state.auth.Loading);
   //Auth States
   const [open, setOpen] = useState({
     open: false,
@@ -230,9 +227,8 @@ const SecurityLogin = () => {
           </Row>
         </Container>
       </Col>
-      {/* {LoadingAuthReducerState && <Loader />} */}
+      {LoadingAuthReducerState && <Loader />}
       <Notification setOpen={setOpen} open={open.open} message={open.message} />
-      {/* {auth.Loading && <Loader />} */}
     </Fragment>
   );
 };

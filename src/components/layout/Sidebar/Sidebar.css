@@ -93,6 +93,12 @@
   color: #fff !important;
 }
 
+:where(.css-1e3x2xa).ant-menu-light
+  .ant-menu-submenu-selected
+  > .ant-menu-submenu-title {
+  color: #fff !important;
+}
+
 .menuMain > ant-menu-submenu-arrow,
 .ant-menu-submenu-arrow {
   transform: rotate(270deg) translateX(2.5px) !important;

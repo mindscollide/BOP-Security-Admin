@@ -25,7 +25,7 @@ import {
   downloadCorporateUserReportApi,
   downloadPDFCorporateUserSecurityAdminReportApi,
 } from "../../../../store/actions/Download-Report";
-import { Popover } from "antd";
+import { Popover, Tooltip } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
 import excelIcon from "../../../../assets/images/excel.png";
 import {
@@ -35,6 +35,7 @@ import {
   setCorporateUserCreated,
   setCorporateUserUpdated,
 } from "../../../../store/actions/RealtimeActions";
+import { IndexCell } from "../../../../helpers/ReusableMethods";
 
 const EditCorporateUser = () => {
   const navigate = useNavigate();
@@ -86,21 +87,21 @@ const EditCorporateUser = () => {
 
   const [corporateUserTableData, setCorporateUserTableData] = useState([]);
 
-  const [dropdownvalue, setDropdownvalue] = useState({
-    value: 50,
-    label: "50",
-  });
+  // const [dropdownvalue, setDropdownvalue] = useState({
+  //   value: 50,
+  //   label: "50",
+  // });
   //state for save and cancel button
   const confirmationModal = useSelector(
     (state) => state.securityModalReducer.confirmationModal
   );
   const [modalState, setModalState] = useState(0);
 
-  const options = [
-    { value: 50, label: "50" },
-    { value: 100, label: "100" },
-    { value: 150, label: "150" },
-  ];
+  // const options = [
+  //   { value: 50, label: "50" },
+  //   { value: 100, label: "100" },
+  //   { value: 150, label: "150" },
+  // ];
 
   //row length on scroll
   const [sRow, setSRow] = useState(0);
@@ -131,10 +132,10 @@ const EditCorporateUser = () => {
     // Load more data here if needed
     if (recordsLength !== corporateUserTableData.length) {
       let Data = {
-        Name: "",
-        CompanyName: "",
-        Email: "",
-        StatusID: 0,
+        Name: editUser.Name.value,
+        CompanyName: editUser.CorporateName.value,
+        Email: editUser.LoginID.value,
+        StatusID: statusID.statusID,
         sRow: sRow,
         Length: 10,
       };
@@ -491,17 +492,52 @@ const EditCorporateUser = () => {
       key: "statusId",
       ellipsis: true,
       align: "left",
-      render: (text, record) => {
-        if (statusOptions.length > 0) {
-          let StatusNameFind = statusOptions.find(
-            (role, index) => role.statusID === record.statusId
-          );
-          console.log(StatusNameFind, "roleNameFind");
-          if (StatusNameFind !== undefined) {
-            return StatusNameFind.statusName;
-          }
-        }
-        return text;
+      render: (val, record) => {
+        return (
+          <IndexCell
+            value={
+              val === 1 ? (
+                <Tooltip arrow={false} placement="top" title={"Active"}>
+                  <i
+                    className="icon-user-check active cursor-pointer fw-semibold"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 2 ? (
+                <Tooltip arrow={false} placement="top" title={"Inactive"}>
+                  <i
+                    className="icon-user-delete inactive"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 3 ? (
+                <Tooltip arrow={false} placement="top" title={"Locked"}>
+                  <i
+                    className="icon-lock locked"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 4 ? (
+                <Tooltip arrow={false} placement="top" title={"Closed"}>
+                  <i
+                    className="icon-close closed fw-semibold"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 9 ? (
+                <Tooltip arrow={false} placement="top" title={"Dormant"}>
+                  <i
+                    className="icon-block dormant"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : (
+                ""
+              )
+            }
+            record={record}
+          />
+        );
       },
     },
     {
@@ -530,9 +566,9 @@ const EditCorporateUser = () => {
     setUpdateModal(true);
   };
 
-  const handleChangeDropDown = (value) => {
-    setDropdownvalue(value);
-  };
+  // const handleChangeDropDown = (value) => {
+  //   setDropdownvalue(value);
+  // };
 
   //handling scroll while search (2)
   const handleSearch = () => {

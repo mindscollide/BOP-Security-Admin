@@ -30,7 +30,7 @@ import {
   downloadBankUserReportApi,
   downloadPDFBankUserSecurityAdminReportApi,
 } from "../../../../store/actions/Download-Report";
-import { Popover } from "antd";
+import { Popover, Tooltip } from "antd";
 import pdfIcon from "../../../../assets/images/pdf.png";
 import excelIcon from "../../../../assets/images/excel.png";
 import { setBankUserBulkRequest } from "../../../../store/actions/RealtimeActions";
@@ -121,16 +121,16 @@ const EditBankUser = () => {
   const [branchOptions, setBranchOptions] = useState([]);
   console.log("branchOptions", branchOptions);
 
-  const [dropdownvalue, setDropdownvalue] = useState({
-    value: 50,
-    label: "50",
-  });
+  // const [dropdownvalue, setDropdownvalue] = useState({
+  //   value: 50,
+  //   label: "50",
+  // });
 
-  const options = [
-    { value: 50, label: "50" },
-    { value: 100, label: "100" },
-    { value: 150, label: "150" },
-  ];
+  // const options = [
+  //   { value: 50, label: "50" },
+  //   { value: 100, label: "100" },
+  //   { value: 150, label: "150" },
+  // ];
   const [showExportOptions, setShowExportOptions] = useState(false);
   // Function to toggle the export options (PDF & Excel buttons)
   const toggleExportOptions = () => {
@@ -662,10 +662,46 @@ const EditBankUser = () => {
       render: (val, record) => {
         return (
           <IndexCell
-            value={val === 1 ? "Active" : "Inactive"}
-            // CellClassName={
-            //   val === 1 ? styles.ActiveStatus : styles.InactiveStatus
-            // }
+            value={
+              val === 1 ? (
+                <Tooltip arrow={false} placement="top" title={"Active"}>
+                  <i
+                    className="icon-user-check active cursor-pointer fw-semibold"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 2 ? (
+                <Tooltip arrow={false} placement="top" title={"Inactive"}>
+                  <i
+                    className="icon-user-delete inactive"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 3 ? (
+                <Tooltip arrow={false} placement="top" title={"Locked"}>
+                  <i
+                    className="icon-lock locked"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 4 ? (
+                <Tooltip arrow={false} placement="top" title={"Closed"}>
+                  <i
+                    className="icon-close closed fw-semibold"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 9 ? (
+                <Tooltip arrow={false} placement="top" title={"Dormant"}>
+                  <i
+                    className="icon-block dormant"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : (
+                ""
+              )
+            }
             record={record}
           />
         );
@@ -691,9 +727,9 @@ const EditBankUser = () => {
     },
   ];
 
-  const handleChangeDropDown = (value) => {
-    setDropdownvalue(value);
-  };
+  // const handleChangeDropDown = (value) => {
+  //   setDropdownvalue(value);
+  // };
 
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);

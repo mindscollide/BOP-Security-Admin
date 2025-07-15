@@ -987,7 +987,7 @@ const EditBankUser = () => {
                     column={columns}
                     rows={bankUserTableData}
                     className="UniversalList-table"
-                    scroll={{ y: 230, x: "scroll" }}
+                    scroll={{ y: 300, x: "scroll" }}
                     pagination={false}
                   />
                 </Col>

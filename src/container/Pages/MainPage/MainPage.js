@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Header from "../../../components/layout/Header/Header";
 import Sidebar from "../../../components/layout/Sidebar/Sidebar";
 import { Layout } from "antd";
@@ -26,8 +26,10 @@ import {
   setCorporateUserUpdated,
 } from "../../../store/actions/RealtimeActions";
 import { Loader } from "../../../components/elements";
+import { LogOutAPI } from "../../../store/actions/Auth_Actions";
 
 const MainPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const subscribeID = "BOP_SECURITYADMIN";
@@ -75,8 +77,12 @@ const MainPage = () => {
           break;
         case "BANK_USER_ROLE_STATUS_CHANGE":
           console.log("Message arrived:", data);
+          let userID = localStorage.getItem("userID");
           // When Security Admin Change a Bank User Role
           dispatch(setBankUserRoleStatusChange(data.payload));
+          if (Number(data.payload.updatedUser.userID) === Number(userID)) {
+            dispatch(LogOutAPI(navigate));
+          }
           break;
         case "BRANCH_CREATED":
           console.log("Message arrived:", data);

@@ -1,21 +1,14 @@
-// our base url or machine api
-const baseURL = "http://192.168.18.241";
+// Base URL from env
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
-// our service URLs
-const authenticationPort = ":13000/ERM_Auth";
-const securityAdmintPort = ":13007/SecurityAdmin";
-const systemAdminPort = ":12003/SystemAdmin";
-const downloadReportPort = ":13006/ExcelReport";
-const settingsPort = ":13008/Setting";
+// API endpoints from env
+const authenticationAPI = `${baseURL}${process.env.REACT_APP_AUTH_PORT}`;
+const securityAdminApi = `${baseURL}${process.env.REACT_APP_SECURITY_ADMIN_PORT}`;
+const systemAdminApi = `${baseURL}${process.env.REACT_APP_SYSTEM_ADMIN_PORT}`;
+const downloadReportApi = `${baseURL}${process.env.REACT_APP_DOWNLOAD_REPORT_PORT}`;
+const settingsAPI = `${baseURL}${process.env.REACT_APP_SETTINGS_PORT}`;
 
-//our Final Api
-const authenticationAPI = baseURL + authenticationPort;
-const securityAdminApi = baseURL + securityAdmintPort;
-const systemAdminApi = baseURL + systemAdminPort;
-const downloadReportApi = baseURL + downloadReportPort;
-
-const settingsAPI = baseURL + settingsPort;
-
+// Export all
 export {
   authenticationAPI,
   securityAdminApi,

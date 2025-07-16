@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import "./EditBankUser.css";
-
 import {
   TextField,
   Button,
   Table,
   Paper,
-  Loader,
   Modal,
 } from "../../../../components/elements";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
@@ -28,24 +25,40 @@ import {
 } from "../../../../store/actions/Security_Admin";
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-import { useMqtt } from "../../../../context/MQTTContext";
 import { IndexCell } from "../../../../helpers/ReusableMethods";
-import { downloadBankUserReportApi } from "../../../../store/actions/Download-Report";
+import {
+  downloadBankUserReportApi,
+  downloadPDFBankUserSecurityAdminReportApi,
+} from "../../../../store/actions/Download-Report";
+import { Popover, Tooltip } from "antd";
+import pdfIcon from "../../../../assets/images/pdf.png";
+import excelIcon from "../../../../assets/images/excel.png";
+import { setBankUserBulkRequest } from "../../../../store/actions/RealtimeActions";
+
 const EditBankUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);
-  const {
-    bankUserRoleStatusChange,
-    bankUserUpdated,
-    branchCreated,
-    branchUpdated,
-    bankBulkUpload,
-    bankUserCreated,
-    setBankBulkUpload,
-  } = useMqtt();
-  const { securityReducer } = useSelector((state) => state);
+  const bankUserRoleStatusChange = useSelector(
+    (state) => state.RealtimeReducer.bankUserRoleStatusChange
+  );
+  const bankUserUpdated = useSelector(
+    (state) => state.RealtimeReducer.bankUserUpdated
+  );
+  const branchCreated = useSelector(
+    (state) => state.RealtimeReducer.branchCreated
+  );
+  const branchUpdated = useSelector(
+    (state) => state.RealtimeReducer.branchUpdated
+  );
+  const bankBulkUpload = useSelector(
+    (state) => state.RealtimeReducer.bankUserBulkUpload
+  );
+  const bankUserCreated = useSelector(
+    (state) => state.RealtimeReducer.bankUserCreated
+  );
+
   //Search all corporate Users
   const SearchBankUsers = useSelector(
     (state) => state.securityReducer.SearchBankUsersData
@@ -81,7 +94,11 @@ const EditBankUser = () => {
   const [BankEditUser, setBankEditUser] = useState({
     ...searchEditBankUserSchema,
   });
+  const [open, setOpen] = useState(false);
 
+  const handleOpenChange = (newOpen) => {
+    setOpen(newOpen);
+  };
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -104,16 +121,21 @@ const EditBankUser = () => {
   const [branchOptions, setBranchOptions] = useState([]);
   console.log("branchOptions", branchOptions);
 
-  const [dropdownvalue, setDropdownvalue] = useState({
-    value: 50,
-    label: "50",
-  });
+  // const [dropdownvalue, setDropdownvalue] = useState({
+  //   value: 50,
+  //   label: "50",
+  // });
 
-  const options = [
-    { value: 50, label: "50" },
-    { value: 100, label: "100" },
-    { value: 150, label: "150" },
-  ];
+  // const options = [
+  //   { value: 50, label: "50" },
+  //   { value: 100, label: "100" },
+  //   { value: 150, label: "150" },
+  // ];
+  const [showExportOptions, setShowExportOptions] = useState(false);
+  // Function to toggle the export options (PDF & Excel buttons)
+  const toggleExportOptions = () => {
+    setShowExportOptions(!showExportOptions);
+  };
 
   const [bankUserTableData, setBankUserTableData] = useState([]);
   console.log(bankUserTableData, "bankUserTableData");
@@ -163,7 +185,7 @@ const EditBankUser = () => {
   useEffect(() => {
     if (bankBulkUpload !== null) {
       try {
-        setBankBulkUpload(null);
+        dispatch(setBankUserBulkRequest(null));
         let Data = {
           Name: "",
           EmployeeID: "",
@@ -234,11 +256,7 @@ const EditBankUser = () => {
             bankUserTableData.userRegistrationRequestID
           );
         });
-        console.log(
-          bankUserTableData,
-          user,
-          "bankUserTableDatabankUserTableData"
-        );
+
         if (findisExist === undefined) {
           let bankUserData = {
             branch: user.branchName,
@@ -264,11 +282,9 @@ const EditBankUser = () => {
   // bankUserUpdated
   useEffect(() => {
     if (bankUserUpdated !== null) {
-      console.log("bankUserUpdated", bankUserUpdated);
       try {
         const { user } = bankUserUpdated;
 
-        console.log(user, "updatedUserupdatedUser");
         setBankUserTableData((prevData) => {
           return prevData.map((data2, index) => {
             if (data2.employeeID === user.employeeID) {
@@ -529,7 +545,6 @@ const EditBankUser = () => {
   }, [modalState]);
 
   const handleClickEdit = (record) => {
-    console.log("recordrecordrecord", record);
     try {
       setEditModalSecurity(true);
       if (statusOptions.length > 0) {
@@ -542,7 +557,6 @@ const EditBankUser = () => {
             label: findStatusObj.statusName,
           });
         }
-        console.log(findStatusObj, "findStatusObj");
       }
 
       if (roleOptions.length > 0) {
@@ -550,21 +564,10 @@ const EditBankUser = () => {
           (roleData, index) => roleData.roleID === record.userRoleID
         );
         if (findRoleObj !== undefined) {
-          // if (findRoleObj.roleID !== 9) {
           setEditBankUserRole({
             value: findRoleObj.roleID,
             label: findRoleObj.roleName,
           });
-          //   setEditBankUserBranch({
-          //     value: 0,
-          //     label: "",
-          //   });
-          // } else if (findRoleObj.roleID === 9) {
-          //   setEditBankUserRole({
-          //     value: findRoleObj.roleID,
-          //     label: findRoleObj.roleName,
-          //   });
-          // }
         }
       }
 
@@ -659,10 +662,46 @@ const EditBankUser = () => {
       render: (val, record) => {
         return (
           <IndexCell
-            value={val === 1 ? "Active" : "Inactive"}
-            // CellClassName={
-            //   val === 1 ? styles.ActiveStatus : styles.InactiveStatus
-            // }
+            value={
+              val === 1 ? (
+                <Tooltip arrow={false} placement="top" title={"Active"}>
+                  <i
+                    className="icon-user-check active cursor-pointer fw-semibold"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 2 ? (
+                <Tooltip arrow={false} placement="top" title={"Inactive"}>
+                  <i
+                    className="icon-user-delete inactive"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 3 ? (
+                <Tooltip arrow={false} placement="top" title={"Locked"}>
+                  <i
+                    className="icon-lock locked"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 4 ? (
+                <Tooltip arrow={false} placement="top" title={"Closed"}>
+                  <i
+                    className="icon-close closed fw-semibold"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 9 ? (
+                <Tooltip arrow={false} placement="top" title={"Dormant"}>
+                  <i
+                    className="icon-block dormant"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : (
+                ""
+              )
+            }
             record={record}
           />
         );
@@ -688,9 +727,9 @@ const EditBankUser = () => {
     },
   ];
 
-  const handleChangeDropDown = (value) => {
-    setDropdownvalue(value);
-  };
+  // const handleChangeDropDown = (value) => {
+  //   setDropdownvalue(value);
+  // };
 
   const UpdateBtnHandle = () => {
     setEditModalSecurity(false);
@@ -774,15 +813,28 @@ const EditBankUser = () => {
     }
   }, [GetAllUserStatus, RoleList, BranchList]);
 
-  const handleExportButton = () => {
-    let data = {
-      EmployeeID: BankEditUser.EmployeeID.value,
-      Name: BankEditUser.Name.value,
-      RoleID: Number(roleID.value) !== 0 ? Number(roleID.value) : 0,
-      StatusID: Number(statusID.value) !== 0 ? Number(statusID.value) : 0,
-      Email: BankEditUser.LoginID.value,
-    };
-    dispatch(downloadBankUserReportApi(navigate, data));
+  const handleExportButton = (format) => {
+    if (format === "excel") {
+      let data = {
+        EmployeeID: BankEditUser.EmployeeID.value,
+        Name: BankEditUser.Name.value,
+        RoleID: Number(roleID.value),
+        StatusID: Number(statusID.value),
+        Email: BankEditUser.LoginID.value,
+        sRow: 0,
+        Length: 10,
+      };
+      dispatch(downloadBankUserReportApi(navigate, data));
+    } else if (format === "pdf") {
+      let data = {
+        EmployeeID: BankEditUser.EmployeeID.value,
+        Name: BankEditUser.Name.value,
+        RoleID: Number(roleID.value),
+        StatusID: Number(statusID.value),
+        Email: BankEditUser.LoginID.value,
+      };
+      dispatch(downloadPDFBankUserSecurityAdminReportApi(navigate, data));
+    }
   };
 
   return (
@@ -854,7 +906,12 @@ const EditBankUser = () => {
                   />
                 </Col>
 
-                <Col lg={9} md={9} sm={12}>
+                <Col
+                  lg={9}
+                  md={9}
+                  sm={12}
+                  className="d-flex justify-content-left gap-1"
+                >
                   <Button
                     icon={<i className="icon-search bankUser-icon"></i>}
                     text="Search"
@@ -867,13 +924,35 @@ const EditBankUser = () => {
                     onClick={resetHandler}
                     className="reset-Bank-Edit-User-btn"
                   />
-
-                  <Button
-                    icon={<i className="icon-download bankUser-icon"></i>}
-                    text="Export"
-                    className="export-Bank-Edit-User-btn"
-                    onClick={handleExportButton}
-                  />
+                  <Popover
+                    content={
+                      <div className="EditBankUser_export-options">
+                        <Button
+                          icon={<img src={pdfIcon} alt="PDF Icon" />}
+                          onClick={() => handleExportButton("pdf")}
+                          className="EditBankUser_export-button"
+                        />
+                        <Button
+                          icon={<img src={excelIcon} alt="Excel Icon" />}
+                          onClick={() => handleExportButton("excel")}
+                          className="EditBankUser_export-button"
+                        />
+                      </div>
+                    }
+                    trigger="click"
+                    open={open}
+                    onOpenChange={handleOpenChange}
+                    placement="bottomRight"
+                    arrow={false}
+                  >
+                    <Button
+                      icon={<i className="icon-download"></i>}
+                      className="EditBankUser_Main-Export-Button"
+                      text="Export"
+                      iconClass="resetIconClass"
+                      onClick={toggleExportOptions}
+                    />
+                  </Popover>
                 </Col>
               </Row>
 
@@ -908,7 +987,7 @@ const EditBankUser = () => {
                     column={columns}
                     rows={bankUserTableData}
                     className="UniversalList-table"
-                    scroll={{ y: 230, x: "scroll" }}
+                    scroll={{ y: 300, x: "scroll" }}
                     pagination={false}
                   />
                 </Col>
@@ -980,7 +1059,6 @@ const EditBankUser = () => {
           handleNoButton={handleNoButton}
         />
       )}
-      {securityReducer.Loading && <Loader />}
     </>
   );
 };

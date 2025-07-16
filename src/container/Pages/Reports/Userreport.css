@@ -166,7 +166,7 @@
   font-weight: 500;
   border-radius: 4px;
   padding: 6px 14px !important;
-  border: none;
+  border: none !important;
   background: #dc3545 !important;
 }
 

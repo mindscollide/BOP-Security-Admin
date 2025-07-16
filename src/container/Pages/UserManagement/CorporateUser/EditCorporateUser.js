@@ -6,7 +6,6 @@ import {
   Button,
   Table,
   Paper,
-  Loader,
   Modal,
 } from "../../../../components/elements";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,39 +21,59 @@ import {
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import { ConfirmationModalSecurityAdmin } from "../../../../store/actions/Security_Admin_Modal";
 import ActivateConfirmationModal from "../../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
-import { useMqtt } from "../../../../context/MQTTContext";
-import { downloadCorporateUserReportApi } from "../../../../store/actions/Download-Report";
+import {
+  downloadCorporateUserReportApi,
+  downloadPDFCorporateUserSecurityAdminReportApi,
+} from "../../../../store/actions/Download-Report";
+import { Popover, Tooltip } from "antd";
+import pdfIcon from "../../../../assets/images/pdf.png";
+import excelIcon from "../../../../assets/images/excel.png";
+import {
+  setCorpUserRoleStatusChange,
+  setCorporateUpdated,
+  setCorporateUserBulkRequest,
+  setCorporateUserCreated,
+  setCorporateUserUpdated,
+} from "../../../../store/actions/RealtimeActions";
+import { IndexCell } from "../../../../helpers/ReusableMethods";
 
 const EditCorporateUser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
 
-  //Global State
-  const { securityReducer } = useSelector((state) => state);
-  const {
-    corporateUserBulkUpload,
-    corporateUserUpdated,
-    setCorporateUserBulkUpload,
-    corporateUserRoleStatusChange,
-    corproateUpdated,
-  } = useMqtt();
-  console.log(corporateUserBulkUpload, "corporateUserBulkUpload");
+  const handleOpenChange = (newOpen) => {
+    setOpen(newOpen);
+  };
+
+  const corporateUserBulkUpload = useSelector(
+    (state) => state.RealtimeReducer.corporateUserBulkUpload
+  );
+  const corporateUserUpdated = useSelector(
+    (state) => state.RealtimeReducer.corporateUserUpdated
+  );
+  const corporateUserRoleStatusChange = useSelector(
+    (state) => state.RealtimeReducer.corpUserRoleStatusChange
+  );
+  const corporateUpdated = useSelector(
+    (state) => state.RealtimeReducer.corporateUpdated
+  );
+
+  const corporateUserCreated = useSelector(
+    (state) => state.RealtimeReducer.corporateUserCreated
+  );
   const SearchCorporateUsersData = useSelector(
     (state) => state.securityReducer.SearchCorporateUsersData
   );
   // Get all user status selector
   const GetAllUserStatus = useSelector((state) => state.auth.allUserStatusData);
-
   // state for edit corporate user
   const [editUser, setEditUser] = useState(searchEditCorporateUserSchema);
-
   const [editCorporateUserUpdate, seCorporateUserUpdate] = useState(null);
-
   const [editCorporateUserStatus, setEditCorporateUserStatus] = useState({
     value: 0,
     label: "",
   });
-
   //edit modal on js-security-admin
   const [editModalSecurity, setEditModalSecurity] = useState(false);
   const [updateModal, setUpdateModal] = useState(false);
@@ -68,25 +87,30 @@ const EditCorporateUser = () => {
 
   const [corporateUserTableData, setCorporateUserTableData] = useState([]);
 
-  const [dropdownvalue, setDropdownvalue] = useState({
-    value: 50,
-    label: "50",
-  });
+  // const [dropdownvalue, setDropdownvalue] = useState({
+  //   value: 50,
+  //   label: "50",
+  // });
   //state for save and cancel button
   const confirmationModal = useSelector(
     (state) => state.securityModalReducer.confirmationModal
   );
   const [modalState, setModalState] = useState(0);
 
-  const options = [
-    { value: 50, label: "50" },
-    { value: 100, label: "100" },
-    { value: 150, label: "150" },
-  ];
+  // const options = [
+  //   { value: 50, label: "50" },
+  //   { value: 100, label: "100" },
+  //   { value: 150, label: "150" },
+  // ];
+
   //row length on scroll
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);
-
+  const [showExportOptions, setShowExportOptions] = useState(false);
+  // Function to toggle the export options (PDF & Excel buttons)
+  const toggleExportOptions = () => {
+    setShowExportOptions(!showExportOptions);
+  };
   //initial APIs calling
   useEffect(() => {
     dispatch(GetAllUserStatusAPI(navigate));
@@ -108,10 +132,10 @@ const EditCorporateUser = () => {
     // Load more data here if needed
     if (recordsLength !== corporateUserTableData.length) {
       let Data = {
-        Name: "",
-        CompanyName: "",
-        Email: "",
-        StatusID: 0,
+        Name: editUser.Name.value,
+        CompanyName: editUser.CorporateName.value,
+        Email: editUser.LoginID.value,
+        StatusID: statusID.statusID,
         sRow: sRow,
         Length: 10,
       };
@@ -154,7 +178,6 @@ const EditCorporateUser = () => {
   useEffect(() => {
     if (corporateUserBulkUpload !== null) {
       try {
-        setCorporateUserBulkUpload(null);
         let Data = {
           Name: "",
           CompanyName: "",
@@ -164,11 +187,13 @@ const EditCorporateUser = () => {
           Length: 10,
         };
         dispatch(SearchCorporateUsersAPI(navigate, Data));
+        dispatch(setCorporateUserBulkRequest(null));
       } catch (error) {
         console.log("error", error);
       }
     }
   }, [corporateUserBulkUpload]);
+
   useEffect(() => {
     if (corporateUserUpdated !== null) {
       try {
@@ -186,6 +211,7 @@ const EditCorporateUser = () => {
         });
       } catch (error) {}
     }
+    dispatch(setCorporateUserUpdated(null));
   }, [corporateUserUpdated]);
 
   useEffect(() => {
@@ -203,14 +229,15 @@ const EditCorporateUser = () => {
             return data2;
           });
         });
+        dispatch(setCorpUserRoleStatusChange(null));
       } catch (error) {}
     }
   }, [corporateUserRoleStatusChange]);
 
   useEffect(() => {
-    if (corproateUpdated !== null) {
+    if (corporateUpdated !== null) {
       try {
-        const { corporate } = corproateUpdated;
+        const { corporate } = corporateUpdated;
         setCorporateUserTableData((prevTableData) => {
           return prevTableData.map((data2, index) => {
             if (data2.corporateID === corporate.corporateID) {
@@ -222,9 +249,30 @@ const EditCorporateUser = () => {
             return data2;
           });
         });
+
+        dispatch(setCorporateUpdated(null));
       } catch (error) {}
     }
-  }, [corproateUpdated]);
+  }, [corporateUpdated]);
+
+  useEffect(() => {
+    if (corporateUserCreated !== null) {
+      try {
+        const { user, createdUserID } = corporateUserCreated;
+        let findisExist = corporateUserTableData.find(
+          (rowData, index) => rowData.userID === createdUserID
+        );
+        if (findisExist === undefined) {
+          setCorporateUserTableData((prevData) => {
+            return [user, ...prevData];
+          });
+        }
+        dispatch(setCorporateUserCreated(null)); // Reset the corporateUserCreated state after processing
+      } catch (error) {
+        console.log(error, "corporateUserCreated error");
+      }
+    }
+  }, [corporateUserCreated]);
 
   //edit user security admin validate handler
   const editUserValidateHandler = (e) => {
@@ -326,6 +374,7 @@ const EditCorporateUser = () => {
       setModalState(0);
     }
   }, [modalState]);
+
   const handleSelectStatus = async (selectedStatus) => {
     setStatusID(selectedStatus);
   };
@@ -391,21 +440,18 @@ const EditCorporateUser = () => {
   }, []);
 
   const handleClickEdit = (record) => {
-    console.log("recordrecordrecord", record);
     setEditModalSecurity(true);
     if (statusOptions.length > 0) {
       let findStatusObj = statusOptions.find(
         (statusData, index) => statusData.statusID === record.statusId
       );
 
-      console.log("findStatusObj", findStatusObj);
       if (findStatusObj !== undefined) {
         setEditCorporateUserStatus({
           value: findStatusObj.statusID,
           label: findStatusObj.statusName,
         });
       }
-      console.log(findStatusObj, "findStatusObj");
     }
     seCorporateUserUpdate(record);
   };
@@ -419,7 +465,6 @@ const EditCorporateUser = () => {
       ),
       dataIndex: "corporateName",
       key: "CorporateName",
-      // width: "230px",
       align: "left",
       ellipsis: true,
     },
@@ -430,7 +475,6 @@ const EditCorporateUser = () => {
       dataIndex: "email",
       key: "email",
       align: "left",
-      // width: "400px",
       ellipsis: true,
     },
     {
@@ -439,7 +483,6 @@ const EditCorporateUser = () => {
       ),
       dataIndex: "name",
       key: "name",
-      // width: "280px",
       align: "left",
       ellipsis: true,
     },
@@ -449,18 +492,52 @@ const EditCorporateUser = () => {
       key: "statusId",
       ellipsis: true,
       align: "left",
-      // width: "150px",
-      render: (text, record) => {
-        if (statusOptions.length > 0) {
-          let StatusNameFind = statusOptions.find(
-            (role, index) => role.statusID === record.statusId
-          );
-          console.log(StatusNameFind, "roleNameFind");
-          if (StatusNameFind !== undefined) {
-            return StatusNameFind.statusName;
-          }
-        }
-        return text;
+      render: (val, record) => {
+        return (
+          <IndexCell
+            value={
+              val === 1 ? (
+                <Tooltip arrow={false} placement="top" title={"Active"}>
+                  <i
+                    className="icon-user-check active cursor-pointer fw-semibold"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 2 ? (
+                <Tooltip arrow={false} placement="top" title={"Inactive"}>
+                  <i
+                    className="icon-user-delete inactive"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 3 ? (
+                <Tooltip arrow={false} placement="top" title={"Locked"}>
+                  <i
+                    className="icon-lock locked"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 4 ? (
+                <Tooltip arrow={false} placement="top" title={"Closed"}>
+                  <i
+                    className="icon-close closed fw-semibold"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : val === 9 ? (
+                <Tooltip arrow={false} placement="top" title={"Dormant"}>
+                  <i
+                    className="icon-block dormant"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ) : (
+                ""
+              )
+            }
+            record={record}
+          />
+        );
       },
     },
     {
@@ -489,9 +566,9 @@ const EditCorporateUser = () => {
     setUpdateModal(true);
   };
 
-  const handleChangeDropDown = (value) => {
-    setDropdownvalue(value);
-  };
+  // const handleChangeDropDown = (value) => {
+  //   setDropdownvalue(value);
+  // };
 
   //handling scroll while search (2)
   const handleSearch = () => {
@@ -537,14 +614,26 @@ const EditCorporateUser = () => {
     }
   }, [GetAllUserStatus]);
 
-  const handleCorporateUser = () => {
-    let data = {
-      Name: editUser.Name.value,
-      CompanyName: editUser.CorporateName.value,
-      Email: editUser.LoginID.value,
-      StatusID: Number(statusID.value) !== 0 ? Number(statusID.value) : 0,
-    };
-    dispatch(downloadCorporateUserReportApi(navigate, data));
+  const handleExport = (format) => {
+    if (format === "excel") {
+      let data = {
+        Name: editUser.Name.value,
+        CompanyName: editUser.CorporateName.value,
+        Email: editUser.LoginID.value,
+        StatusID: Number(statusID.value),
+        sRow: 0,
+        Length: 10,
+      };
+      dispatch(downloadCorporateUserReportApi(navigate, data));
+    } else if (format === "pdf") {
+      let data = {
+        Name: editUser.Name.value,
+        CompanyName: editUser.CorporateName.value,
+        Email: editUser.LoginID.value,
+        StatusID: Number(statusID.value),
+      };
+      dispatch(downloadPDFCorporateUserSecurityAdminReportApi(navigate, data));
+    }
   };
 
   return (
@@ -603,7 +692,12 @@ const EditCorporateUser = () => {
                   />
                 </Col>
 
-                <Col lg={4} md={12} sm={12}>
+                <Col
+                  lg={4}
+                  md={4}
+                  sm={12}
+                  className="d-flex justify-content-left gap-1"
+                >
                   <Button
                     icon={
                       <i className="icon-search EditCorporateUser-icon"></i>
@@ -620,45 +714,40 @@ const EditCorporateUser = () => {
                     onClick={resetHandler}
                     className="reset-Corporate-Edit-User-btn"
                   />
-
-                  <Button
-                    icon={
-                      <i className="icon-download EditCorporateUser-icon"></i>
+                  <Popover
+                    content={
+                      <div className="EditBankUser_export-options">
+                        <Button
+                          icon={<img src={pdfIcon} alt="PDF Icon" />}
+                          onClick={() => handleExport("pdf")}
+                          className="EditBankUser_export-button"
+                        />
+                        <Button
+                          icon={<img src={excelIcon} alt="Excel Icon" />}
+                          onClick={() => handleExport("excel")}
+                          className="EditBankUser_export-button"
+                        />
+                      </div>
                     }
-                    text="Export"
-                    className="export-Corporate-Edit-User-btn"
-                    onClick={handleCorporateUser}
-                  />
+                    trigger="click"
+                    open={open}
+                    onOpenChange={handleOpenChange}
+                    placement="bottomRight"
+                    arrow={false}
+                  >
+                    <Button
+                      icon={<i className="icon-download"></i>}
+                      className="EditBankUser_Main-Export-Button"
+                      text="Export"
+                      iconClass="resetIconClass"
+                      onClick={toggleExportOptions}
+                    />
+                  </Popover>
                 </Col>
               </Row>
 
               <Row className="mt-4">
                 <Col lg={12} md={12} sm={12}>
-                  {/* <span>
-                    <Row>
-                      <Col
-                        lg={12}
-                        md={12}
-                        sm={12}
-                        className="d-flex gap-1 align-items-center"
-                      >
-                        <span className={"corporate-show-text-above-table"}>
-                          Show
-                        </span>
-
-                        <Select
-                          options={options}
-                          value={dropdownvalue}
-                          onChange={handleChangeDropDown}
-                          className="select-Bank-field-edit"
-                        />
-
-                        <span className={"corporate-show-text-above-table"}>
-                          entries
-                        </span>
-                      </Col>
-                    </Row>
-                  </span> */}
                   <Table
                     column={columns}
                     rows={corporateUserTableData}
@@ -739,7 +828,6 @@ const EditCorporateUser = () => {
           // onChangeTextFieldHandler={onchangeModalTextFieldsHandler}
         />
       ) : null}
-      {securityReducer.Loading && <Loader />}
     </>
   );
 };

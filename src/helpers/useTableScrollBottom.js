@@ -19,7 +19,7 @@ export const useTableScrollBottom = (onBottomReach, threshold = 0) => {
           onBottomReach?.();
 
           // Reset after action
-        //   setTimeout(() => setHasReachedBottom(false), 1000);
+          //   setTimeout(() => setHasReachedBottom(false), 1000);
         }
       };
 
@@ -31,6 +31,6 @@ export const useTableScrollBottom = (onBottomReach, threshold = 0) => {
   return {
     hasReachedBottom,
     containerRef,
-    setHasReachedBottom
+    setHasReachedBottom,
   };
 };

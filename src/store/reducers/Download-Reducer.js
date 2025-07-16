@@ -10,6 +10,8 @@ const initialState = {
   accessDetailReportData: null,
   lastLoggedInData: null,
   userStatusWiseReportData: null,
+  pdfBankUserReportData: null,
+  pdfCorporateUserReportData: null,
 };
 
 const DownloadReportReducer = (state = initialState, action) => {
@@ -149,6 +151,52 @@ const DownloadReportReducer = (state = initialState, action) => {
         ...state,
         Loading: false,
         userStatusWiseReportData: null,
+        ResponseMessage: action.message,
+      };
+
+    //PDF version Bank User  Report
+    case actions.PDF_BANK_USER_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.PDF_BANK_USER_REPORT_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        pdfBankUserReportData: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.PDF_BANK_USER_REPORT_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        pdfBankUserReportData: null,
+        ResponseMessage: action.message,
+      };
+
+    //PDF version Bank User  Report
+    case actions.PDF_CORPORATE_USER_REPORT_INIT:
+      return {
+        ...state,
+        Loading: true,
+      };
+
+    case actions.PDF_CORPORATE_USER_REPORT_SUCCESS:
+      return {
+        ...state,
+        Loading: false,
+        pdfCorporateUserReportData: action.response,
+        ResponseMessage: action.message,
+      };
+
+    case actions.PDF_CORPORATE_USER_REPORT_FAIL:
+      return {
+        ...state,
+        Loading: false,
+        pdfCorporateUserReportData: null,
         ResponseMessage: action.message,
       };
 

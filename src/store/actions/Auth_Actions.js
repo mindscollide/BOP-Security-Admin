@@ -74,9 +74,8 @@ const RefreshToken = (navigate) => {
         } else if (response.data.responseCode === 200) {
           if (response.data.responseResult.isExecuted) {
             if (
-              response.data.responseResult.responseMessage.includes.toLowerCase(
-                "ERM_AuthService_AuthManager_RefreshToken_01".toLowerCase()
-              )
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_AuthManager_RefreshToken_01".toLowerCase()
             ) {
               await dispatch(
                 refreshtokenSuccess(
@@ -85,9 +84,8 @@ const RefreshToken = (navigate) => {
                 )
               );
             } else if (
-              response.data.responseResult.responseMessage.includes.toLowerCase(
-                "ERM_AuthService_AuthManager_RefreshToken_02".toLowerCase()
-              )
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_AuthManager_RefreshToken_02".toLowerCase()
             ) {
               let message2 = "Your Session has expired. Please login again";
               dispatch(signOut(navigate, message2));

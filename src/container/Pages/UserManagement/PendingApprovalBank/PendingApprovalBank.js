@@ -2,39 +2,39 @@ import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useMqtt } from "../../../../context/MQTTContext";
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
 import {
   getNewBankUserRequestApi,
   saveBankUserApi,
 } from "../../../../store/actions/Security_Admin";
-import {
-  Loader,
-  Notification,
-  Paper,
-  Table,
-} from "../../../../components/elements";
+import { Notification, Paper, Table } from "../../../../components/elements";
 import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
+import {
+  setBankUserRequest,
+  setBankUserRequestRejected,
+  setBranchUpdated,
+} from "../../../../store/actions/RealtimeActions";
 
 const PendingApprovalBank = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const {
-    bankUserRequested,
-    bankUserCreated,
-    bankUserRejected,
-    branchUpdated,
-    setBranchUpdated,
-  } = useMqtt();
-  console.log(
-    { bankUserRequested, bankUserCreated, bankUserRejected },
-    "bankUserRequestedbankUserRequested"
+  const bankUserRequested = useSelector(
+    (state) => state.RealtimeReducer.bankUserRequest
   );
+  const bankUserCreated = useSelector(
+    (state) => state.RealtimeReducer.bankUserCreated
+  );
+  const bankUserRejected = useSelector(
+    (state) => state.RealtimeReducer.bankUserRejected
+  );
+  const branchUpdated = useSelector(
+    (state) => state.RealtimeReducer.branchUpdated
+  );
+
   //Global State
-  const { securityReducer } = useSelector((state) => state);
   //Checking snakbar state
   const [open, setOpen] = useState(false);
 
@@ -143,6 +143,7 @@ const PendingApprovalBank = () => {
             );
           });
         }
+        dispatch(setBankUserRequest(null)); // Reset the bankUserCreated state after processing
       } catch (error) {}
     }
   }, [bankUserCreated]);
@@ -165,6 +166,7 @@ const PendingApprovalBank = () => {
             );
           });
         }
+        dispatch(setBankUserRequestRejected(null)); // Reset the bankUserRejected state after processing
       } catch (error) {}
     }
   }, [bankUserRejected]);
@@ -177,6 +179,7 @@ const PendingApprovalBank = () => {
         console.log(user, "bankUserRequested");
         // if()
         setTableData([user, ...tableData]);
+        dispatch(setBankUserRequest(null)); // Reset the bankUserRequested state after processing
       } catch (error) {
         console.log(error);
       }
@@ -185,8 +188,6 @@ const PendingApprovalBank = () => {
 
   useEffect(() => {
     if (branchUpdated !== null) {
-      console.log("branchUpdatedbranchUpdated", branchUpdated);
-      console.log("UpdatedTableData", tableData);
       const UpdatedTableData = tableData.map((user) => {
         if (user?.fK_BranchID === branchUpdated?.branch?.branchID) {
           return {
@@ -197,7 +198,7 @@ const PendingApprovalBank = () => {
         return user;
       });
       setTableData(UpdatedTableData);
-      setBranchUpdated(null);
+      dispatch(setBranchUpdated(null));
     }
   }, [branchUpdated]);
 
@@ -208,7 +209,6 @@ const PendingApprovalBank = () => {
       dataIndex: "email",
       key: "email",
       width: "380px",
-
       ellipsis: true,
     },
 
@@ -315,7 +315,6 @@ const PendingApprovalBank = () => {
           acceptHandler={handleAccept}
         />
       ) : null}
-      {securityReducer.Loading && <Loader />}
       <Notification setOpen={setOpen} open={open.open} message={open.message} />
     </>
   );

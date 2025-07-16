@@ -2,53 +2,41 @@ import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useMqtt } from "../../../../context/MQTTContext";
 import {
   getNewCorporateUserRequestApi,
   saveCorporateUserApi,
 } from "../../../../store/actions/Security_Admin";
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
-import {
-  Loader,
-  Notification,
-  Paper,
-  Table,
-} from "../../../../components/elements";
+import { Notification, Paper, Table } from "../../../../components/elements";
 import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
 import "./PendingApprovalCorporate.css";
-// import {
-//   Table,
-//   Paper,
-//   Loader,
-//   Notification,
-// } from "../../../../components/elements";
-// import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
-// import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-// import "./PendingApprovalCorporate.css";
-// import {
-//   getNewCorporateUserRequestApi,
-//   saveCorporateUserApi,
-// } from "../../../../store/actions/Security_Admin";
-// import { useMqtt } from "../../../../context/MQTTContext";
-// // import { tab } from "@testing-library/user-event/dist/tab";
-// import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
+import {
+  setCorpUserRequestRejected,
+  setCorporateUpdated,
+  setCorporateUserRequest,
+  setCorporateUserUpdated,
+} from "../../../../store/actions/RealtimeActions";
 
 const PendingApprovalCorporate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
-  const {
-    corproateUserRequested,
-    corproateUserCreated,
-    corproateUserRejected,
-    corproateUpdated
-  } = useMqtt();
+  const corporateUserRequest = useSelector(
+    (state) => state.RealtimeReducer.corporateUserRequest
+  );
+  const corporateUserCreated = useSelector(
+    (state) => state.RealtimeReducer.corporateUserCreated
+  );
+  const corporateUserRejected = useSelector(
+    (state) => state.RealtimeReducer.corpUserRejected
+  );
+  const corporateUpdated = useSelector(
+    (state) => state.RealtimeReducer.corporateUpdated
+  );
+
   //Global State
-  const { securityReducer } = useSelector((state) => state);
   //Checking snakbar state
   const [open, setOpen] = useState(false);
   //row length on scroll
@@ -56,15 +44,6 @@ const PendingApprovalCorporate = () => {
   const [recordsLength, setRecordLength] = useState(0);
   const GetNewCorporateUserRequests = useSelector(
     (state) => state.securityReducer.GetNewCorporateUserRequestsData
-  );
-  console.log(
-    {
-      corproateUserRequested,
-      corproateUserCreated,
-      corproateUserRejected,
-      tableData,
-    },
-    "GetNewCorporateUserRequestsData"
   );
 
   //modal for create user for reject
@@ -105,7 +84,7 @@ const PendingApprovalCorporate = () => {
     dispatch(getNewCorporateUserRequestApi(navigate, Data));
   }, []);
 
-  //custom hook for scrolling (lazy loading)
+  //custom hook for scrolling (lazy loading) (1)
   const { hasReachedBottom, setHasReachedBottom } = useTableScrollBottom(() => {
     console.log("🚀 Table reached bottom");
     // Load more data here if needed
@@ -123,6 +102,7 @@ const PendingApprovalCorporate = () => {
       try {
         const { userRequestList, totalRecords } = GetNewCorporateUserRequests;
         if (hasReachedBottom) {
+          console.log("im here now");
           setHasReachedBottom(false);
           setRecordLength(totalRecords);
           setTableData([...tableData, ...userRequestList]);
@@ -146,9 +126,9 @@ const PendingApprovalCorporate = () => {
 
   // Remove from list
   useEffect(() => {
-    if (corproateUserCreated !== null) {
+    if (corporateUserCreated !== null) {
       try {
-        const { user } = corproateUserCreated;
+        const { user } = corporateUserCreated;
         let findisExist = tableData.find(
           (rowData, index) =>
             rowData.userRegistrationRequestID === user.userRegistrationRequestID
@@ -162,15 +142,16 @@ const PendingApprovalCorporate = () => {
             );
           });
         }
+        dispatch(setCorporateUserUpdated(null));
       } catch (error) {}
     }
-  }, [corproateUserCreated]);
+  }, [corporateUserCreated]);
 
   // Remove From List
   useEffect(() => {
-    if (corproateUserRejected !== null) {
+    if (corporateUserRejected !== null) {
       try {
-        const { userRegistrationRequestID } = corproateUserRejected;
+        const { userRegistrationRequestID } = corporateUserRejected;
 
         let findisExist = tableData.find(
           (rowData, index) =>
@@ -185,28 +166,30 @@ const PendingApprovalCorporate = () => {
             );
           });
         }
+        dispatch(setCorpUserRequestRejected(null));
       } catch (error) {}
     }
-  }, [corproateUserRejected]);
+  }, [corporateUserRejected]);
 
   useEffect(() => {
-    if (corproateUserRequested !== null) {
-      console.log(corproateUserRequested, "bankUserRequested");
+    if (corporateUserRequest !== null) {
+      console.log(corporateUserRequest, "bankUserRequested");
       try {
-        let user = corproateUserRequested?.user;
+        let user = corporateUserRequest?.user;
         console.log(user, "bankUserRequested");
         // if()
         setTableData([user, ...tableData]);
+        dispatch(setCorporateUserRequest(null));
       } catch (error) {
         console.log(error);
       }
     }
-  }, [corproateUserRequested]);
+  }, [corporateUserRequest]);
 
   useEffect(() => {
-    if(corproateUpdated !== null) {
+    if (corporateUpdated !== null) {
       try {
-        const { corporate } = corproateUpdated;
+        const { corporate } = corporateUpdated;
         setTableData((prevTableData) => {
           return prevTableData.map((data2, index) => {
             if (data2.fK_CorporateID === corporate.corporateID) {
@@ -218,9 +201,10 @@ const PendingApprovalCorporate = () => {
             return data2;
           });
         });
+        dispatch(setCorporateUpdated(null));
       } catch (error) {}
     }
-  }, [corproateUpdated])
+  }, [corporateUpdated]);
 
   // column of create user
   const columnsCreate = [
@@ -321,7 +305,6 @@ const PendingApprovalCorporate = () => {
           acceptHandler={handleAccept}
         />
       ) : null}
-      {securityReducer.Loading && <Loader />}
       <Notification setOpen={setOpen} open={open.open} message={open.message} />
     </>
   );

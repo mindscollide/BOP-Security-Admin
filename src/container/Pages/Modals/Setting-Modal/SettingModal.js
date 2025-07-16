@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./SettingModal.css";
 import { Row, Col } from "react-bootstrap";
 
-import {
-  TextField,
-  Button,
-  Modal,
-  Loader,
-} from "../../../../components/elements";
+import { Button, Modal } from "../../../../components/elements";
 import { Checkbox, Switch } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -23,49 +18,12 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
   const navigate = useNavigate();
   const [settingUser, setSettingUser] = useState(true);
   const [passcodeSetting, setPasscodeSetting] = useState(false);
-  // const [marketTiming, setMarketTiming] = useState(false);
-  // const [settings, setSettings] = useState({
-  //   chatPannalOverlap: true,
-  //   soundOnEveryMessage: true,
-  //   twoFactorAuthentication: true,
-  //   newPassword: {
-  //     value: "",
-  //   },
-  //   confirmNewPassword: {
-  //     value: "",
-  //   },
-  //   monToThurStartTime: {
-  //     value: "",
-  //   },
-  //   monToThurEndTime: {
-  //     value: "",
-  //   },
-  //   friStartTime: {
-  //     value: "",
-  //   },
-  //   friEndTime: {
-  //     value: "",
-  //   },
-  // });
 
   const [settingsRecord, setSettingRecords] = useState({
     BD_Enable2FA: false,
     BD_SoundOnEveryMessage: false,
     BD_EmailOnEveryMessage: false,
   });
-
-  // const [errors, setErrors] = useState({
-  //   lengthError: true,
-  //   numberError: true,
-  //   specialCharError: true,
-  //   matchError: true,
-  // });
-
-  console.log(settingsRecord, "settingsRecordsettingsRecord");
-
-  const LoadingState = useSelector((state) => state.settingsReducer.Loading);
-
-  console.log("securityReducersecurityReducer", LoadingState);
 
   const GetUserSettings = useSelector(
     (state) => state.settingsReducer.GetUserSettings
@@ -115,12 +73,6 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
     // setMarketTiming(false);
   };
 
-  // const onClickMarketSetting = () => {
-  //   setSettingUser(false);
-  //   setPasscodeSetting(false);
-  //   setMarketTiming(true);
-  // };
-
   // Checkbox for Chat Panal Overlap and Sound on every personal message
   const onChangeCheckbox = (e) => {
     console.log("e.target.checked,", e.target.checked);
@@ -146,9 +98,6 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
     console.log(`switch to ${e}`);
   };
 
-  // const onChange = (e) => {
-  //   console.log(`checked = ${e.target.checked}`);
-  // };
   const UpdateButtonOnClick = () => {
     try {
       let updateData = {
@@ -210,15 +159,6 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
                       : `${"setting-button-disabled"}`
                   }
                 />
-                {/* <Button
-                  text="Market Timing"
-                  onClick={onClickMarketSetting}
-                  className={
-                    marketTiming
-                      ? `${"setting-button-modal"}`
-                      : `${"setting-button-disabled"}`
-                  }
-                /> */}
               </Col>
             </Row>
 
@@ -294,7 +234,6 @@ const SettingModal = ({ SettingModalState, setSettingModalState }) => {
           </>
         }
       />
-      {LoadingState && <Loader />}
     </>
   );
 };

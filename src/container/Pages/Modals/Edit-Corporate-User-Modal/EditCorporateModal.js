@@ -15,7 +15,6 @@ const EditCorporateModal = ({
   UpdateBtnHandle,
   handleDiscard,
 }) => {
-  console.log("editCorporateUserUpdate", editCorporateUserUpdate);
   return (
     <Fragment>
       <Modal

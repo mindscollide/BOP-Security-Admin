@@ -106,6 +106,14 @@ const SecurityAdminUserStatusWiseReport = {
   RequestMethod: "ServiceManager.DownloadUserStatusWiseSecurityAdminReport",
 };
 
+const PDFDownloadBankUserListSecurityAdminReport = {
+  RequestMethod: "ServiceManager.DownloadBankUsersSecurityAdminPDF",
+};
+
+const PDFDownloadCorporateUserListSecurityAdminReport = {
+  RequestMethod: "ServiceManager.DownloadCorporateUsersSecurityAdminPDF",
+};
+
 export {
   authenticationRefreshToken,
   authenticationLogIn,
@@ -133,4 +141,6 @@ export {
   SecurityAdminAccessDetailReport,
   SecurityAdminLastLoggedInReport,
   SecurityAdminUserStatusWiseReport,
+  PDFDownloadBankUserListSecurityAdminReport,
+  PDFDownloadCorporateUserListSecurityAdminReport,
 };

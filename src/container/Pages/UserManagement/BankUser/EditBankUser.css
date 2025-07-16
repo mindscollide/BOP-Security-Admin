@@ -79,7 +79,6 @@
 }
 
 .reset-Bank-Edit-User-btn {
-  margin-left: 5px;
   font-weight: 400 !important;
   font-size: 14px;
   border-radius: 4px;
@@ -94,18 +93,50 @@
   background: #f85e35 !important;
 }
 
-.export-Bank-Edit-User-btn {
-  margin-left: 5px;
+.EditBankUser_export-button {
+  /* margin-left: 5px;
   font-weight: 400 !important;
   font-size: 14px;
   border-radius: 4px;
   padding: 8px 28px !important;
   border: none;
   background: #12a812 !important;
+  -webkit-transition: all 0.3s ease-in; */
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex; /* Ensures the button stays inline */
+  align-items: center; /* Align icon inside the button */
+}
+
+/* .export-Bank-Edit-User-btn:hover {
+  background-color: #f26522 !important;
+  border-color: #f26522;
+} */
+.EditBankUser_Main-Export-Button {
+  font-size: 14px;
+  border-radius: 4px !important;
+  padding: 6px 18px !important;
+  border: none;
+  height: 100% !important;
+  background: #12a812 !important;
+  display: flex !important;
+  gap: 4px !important;
+  font-family: "Poppins", sans-serif;
+  align-items: center !important;
   -webkit-transition: all 0.3s ease-in;
 }
 
-.export-Bank-Edit-User-btn:hover {
+.EditBankUser_Main-Export-Button:hover {
+  font-size: 14px;
+  border-radius: 4px !important;
+  padding: 6px 18px !important;
+  height: 100% !important;
+  display: flex !important;
+  gap: 4px !important;
+  font-family: "Poppins", sans-serif;
+  align-items: center !important;
   background-color: #f26522 !important;
   border-color: #f26522;
 }
@@ -346,7 +377,11 @@
 .dropdown {
   z-index: 3;
 }
-
+.EditBankUser_export-options {
+  display: flex; /* Ensures items stay in a row */
+  gap: 15px; /* Adjust space between buttons */
+  align-items: center; /* Aligns items properly */
+}
 /* for responsiveness on zoom in and zoom out */
 
 @media (max-width: 1300px) {

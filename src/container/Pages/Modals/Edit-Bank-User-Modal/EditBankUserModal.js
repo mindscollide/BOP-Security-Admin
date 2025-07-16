@@ -8,7 +8,6 @@ import "./EditBankUserModal.css";
 const EditBankUserModal = ({
   modalEdit,
   editBankUserUpdate,
-  setModalEdit,
   Roles,
   StatusList,
   editBankUserStatus,

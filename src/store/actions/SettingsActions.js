@@ -67,7 +67,7 @@ const GetUserSettingsAPI = (navigate) => {
               dispatch(
                 GetUserSettingsSuccess(
                   response.data.responseResult,
-                  "API executed successfully."
+                  ""
                 )
               );
             } else if (
@@ -154,7 +154,7 @@ const UpdateUserSettingsAPI = (navigate, data, setSettingModalState) => {
               dispatch(
                 UpdateUserSettingsSuccess(
                   response.data.responseResult,
-                  "API executed successfully."
+                  "Settings Update Successfully"
                 )
               );
               setSettingModalState(false);

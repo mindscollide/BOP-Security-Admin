@@ -119,7 +119,6 @@ const EditBankUser = () => {
 
   // state for select Status
   const [branchOptions, setBranchOptions] = useState([]);
-  console.log("branchOptions", branchOptions);
 
   // const [dropdownvalue, setDropdownvalue] = useState({
   //   value: 50,

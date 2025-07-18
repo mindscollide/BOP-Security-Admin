@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./SettingModal.css";
 import { Row, Col } from "react-bootstrap";
-
 import { Button, Modal } from "../../../../components/elements";
 import { Checkbox, Switch } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   GetUserSettingsAPI,
-  // GetUserSettingsAPI,
   UpdateUserSettingsAPI,
 } from "../../../../store/actions/SettingsActions";
 

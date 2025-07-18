@@ -49,6 +49,10 @@ const Sidebar = () => {
           defaultOpenKeys={[defaultOpenKey]}
           mode="inline"
           className="Menu-sidebar-class"
+          style={{
+            height: "100%",
+            overflow: "auto",
+          }}
         >
           <SubMenu
             key="userManagement"

@@ -37,6 +37,12 @@
   width: 100% !important;
   height: 100%;
 }
+@media (max-width: 992px) {
+  .Menu-sidebar-class {
+    /* Adjust for smaller screens */
+    max-height: 88vh; /* Limit height and force scroll */
+  }
+}
 
 .menu-icons {
   font-size: 18px !important;

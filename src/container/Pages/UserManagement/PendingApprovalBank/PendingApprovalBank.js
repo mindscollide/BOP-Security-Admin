@@ -27,12 +27,21 @@ const PendingApprovalBank = () => {
   const bankUserCreated = useSelector(
     (state) => state.RealtimeReducer.bankUserCreated
   );
+
+  console.log(
+    { bankUserCreated, bankUserRequested },
+    "bankUserCreatedbankUserCreated"
+  );
+
+  console.log({ tableData }, "tableDatatableDatatableData");
+
   const bankUserRejected = useSelector(
     (state) => state.RealtimeReducer.bankUserRejected
   );
   const branchUpdated = useSelector(
     (state) => state.RealtimeReducer.branchUpdated
   );
+  console.log({ branchUpdated }, "tableDatatableDatatableData");
 
   //Global State
   //Checking snakbar state
@@ -126,27 +135,27 @@ const PendingApprovalBank = () => {
   }, [GetNewBankUserRequests]);
 
   // Remove from list
-  useEffect(() => {
-    if (bankUserCreated !== null) {
-      try {
-        const { user } = bankUserCreated;
-        let findisExist = tableData.find(
-          (rowData, index) =>
-            rowData.userRegistrationRequestID === user.userRegistrationRequestID
-        );
-        if (findisExist !== undefined) {
-          setTableData((prevData) => {
-            return prevData.filter(
-              (tableData, index) =>
-                tableData.userRegistrationRequestID !==
-                user.userRegistrationRequestID
-            );
-          });
-        }
-        dispatch(setBankUserRequest(null)); // Reset the bankUserCreated state after processing
-      } catch (error) {}
-    }
-  }, [bankUserCreated]);
+  // useEffect(() => {
+  //   if (bankUserCreated !== null) {
+  //     try {
+  //       const { user } = bankUserCreated;
+  //       let findisExist = tableData.find(
+  //         (rowData, index) =>
+  //           rowData.userRegistrationRequestID === user.userRegistrationRequestID
+  //       );
+  //       if (findisExist !== undefined) {
+  //         setTableData((prevData) => {
+  //           return prevData.filter(
+  //             (tableData, index) =>
+  //               tableData.userRegistrationRequestID !==
+  //               user.userRegistrationRequestID
+  //           );
+  //         });
+  //       }
+  //       dispatch(setBankUserRequest(null)); // Reset the bankUserCreated state after processing
+  //     } catch (error) {}
+  //   }
+  // }, [bankUserCreated]);
 
   // Remove From List
   useEffect(() => {

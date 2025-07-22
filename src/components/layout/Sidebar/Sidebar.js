@@ -1,132 +1,132 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { Row, Col, Nav, Container, Navbar, NavDropdown } from "react-bootstrap";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
-import Users from "../../../assets/images/Assignees-Icon.png";
-import Broadcast from "../../../assets/images/6.png";
+import { Nav, Navbar } from "react-bootstrap";
+// import { PersonFill, FileEarmarkTextFill } from "react-bootstrap-icons";
 import "./Sidebar.css";
 
 const Sidebar = () => {
-  const { SubMenu } = Menu;
-  const navigate = useNavigate();
-  let defaultOpenKey = localStorage.getItem("defaultOpenKey");
+  const [expandedKey, setExpandedKey] = useState(
+    localStorage.getItem("defaultOpenKey") || null
+  );
 
-  console.log("defaultOpenKey", defaultOpenKey);
+  const selectedKey = localStorage.getItem("defaultSelectedKey");
 
-  //Create User Page Name is Pending User Requests
-
-  const navigateToBankUser = () => {
-    localStorage.setItem("defaultOpenKey", "editBankUser");
-    navigate("/BOP/Admin/BankUser");
+  const handleToggle = (eventKey) => {
+    if (eventKey === "sub1" || eventKey === "sub2") {
+      setExpandedKey(expandedKey === eventKey ? null : eventKey);
+      localStorage.setItem(
+        "defaultOpenKey",
+        expandedKey === eventKey ? null : eventKey
+      );
+    }
   };
 
-  const navigateToCorporateUser = () => {
-    localStorage.setItem("defaultOpenKey", "editCorporateUser");
-    navigate("/BOP/Admin/CorporateUser");
-  };
-
-  const navigateToPendingApproval = () => {
-    localStorage.setItem("defaultOpenKey", "pendingApprovalBank");
-    navigate("/BOP/Admin/PendingApprovalBank");
-  };
-
-  const navigateToPendingApprovalCorporate = () => {
-    localStorage.setItem("defaultOpenKey", "pendingApprovalCorporate");
-    navigate("/BOP/Admin/PendingApprovalCorporate");
-  };
-
-  const navigateToReport = () => {
-    localStorage.setItem("defaultOpenKey", "userReport");
-    navigate("/BOP/Admin/userReport");
+  const handleItemClick = (selectedKey) => {
+    localStorage.setItem("defaultSelectedKey", selectedKey);
   };
 
   return (
-    <Row>
-      <Col lg={12} md={12} sm={12}>
-        <Menu
-          theme="light"
-          defaultOpenKeys={[defaultOpenKey]}
-          mode="inline"
-          className="Menu-sidebar-class"
-          style={{
-            height: "100%",
-            overflow: "auto",
-          }}
-        >
-          <SubMenu
-            key="userManagement"
-            icon={<i className="icon-user menu-icons"></i>}
-            title="User Management"
-            className="submenu-sidebar-icons"
+    <Navbar expand={false} className="sidebar-navbar">
+      <Nav className="w-100">
+        {/* User Management Section */}
+        <Nav.Item className="sidebar-menu-group">
+          <Nav.Link
+            onClick={() => handleToggle("sub1")}
+            className="sidebar-menu-header"
           >
-            <Menu.Item
-              className={
-                defaultOpenKey === "editBankUser"
-                  ? "menu-items-sidebar_active  noDefault"
-                  : "menu-items-sidebar"
-              }
-              key="editBankUser"
-              onClick={navigateToBankUser}
-            >
-              Edit Bank User
-            </Menu.Item>
-            <Menu.Item
-              className={
-                defaultOpenKey === "editCorporateUser"
-                  ? "menu-items-sidebar_active noDefault"
-                  : "menu-items-sidebar"
-              }
-              key="editCorporateUser"
-              onClick={navigateToCorporateUser}
-            >
-              Edit Corporate User
-            </Menu.Item>
-            <Menu.Item
-              className={
-                defaultOpenKey === "pendingApprovalBank"
-                  ? "menu-items-sidebar_active noDefault"
-                  : "menu-items-sidebar"
-              }
-              key="pendingApprovalBank"
-              onClick={navigateToPendingApproval}
-            >
-              Pending Approval Bank
-            </Menu.Item>
-            <Menu.Item
-              className={
-                defaultOpenKey === "pendingApprovalCorporate"
-                  ? "menu-items-sidebar_active noDefault"
-                  : "menu-items-sidebar"
-              }
-              key="pendingApprovalCorporate"
-              onClick={navigateToPendingApprovalCorporate}
-            >
-              Pending Approval Corporate
-            </Menu.Item>
-          </SubMenu>
+            <span>
+              <i className={"sidebar-icon icon-user"} />{" "}
+              <span>User Management</span>
+            </span>
+            <i
+              className={`sidebarExpendIcon ${
+                expandedKey === "sub1" ? "icon-arrow-down" : "icon-arrow-right"
+              }`}
+            ></i>
+          </Nav.Link>
+          {expandedKey === "sub1" && (
+            <div className="sidebar-submenu">
+              <Link
+                to="/BOP/Admin/BankUser"
+                className={
+                  selectedKey === "editBankUser"
+                    ? "sidebar-menu-item_Active"
+                    : "sidebar-menu-item"
+                }
+                onClick={() => handleItemClick("editBankUser")}
+              >
+                Edit Bank User
+              </Link>
+              <Link
+                to="/BOP/Admin/CorporateUser"
+                className={
+                  selectedKey === "editCorporateUser"
+                    ? "sidebar-menu-item_Active"
+                    : "sidebar-menu-item"
+                }
+                onClick={() => handleItemClick("editCorporateUser")}
+              >
+                Edit Corporate User
+              </Link>
+              <Link
+                to="/BOP/Admin/PendingApprovalBank"
+                className={
+                  selectedKey === "pendingApprovalBank"
+                    ? "sidebar-menu-item_Active"
+                    : "sidebar-menu-item"
+                }
+                onClick={() => handleItemClick("pendingApprovalBank")}
+              >
+                Pending Approval Bank
+              </Link>
+              <Link
+                to="/BOP/Admin/PendingApprovalCorporate"
+                className={
+                  selectedKey === "pendingApprovalCorporate"
+                    ? "sidebar-menu-item_Active"
+                    : "sidebar-menu-item"
+                }
+                onClick={() => handleItemClick("pendingApprovalCorporate")}
+              >
+                Pending Approval Corporate
+              </Link>
+            </div>
+          )}
+        </Nav.Item>
 
-          <SubMenu
-            key="sub3"
-            icon={<i className="icon-user menu-icons"></i>}
-            title="Reports"
-            className="submenu-sidebar-icons"
+        {/* Reports Section */}
+        <Nav.Item className="sidebar-menu-group">
+          <Nav.Link
+            onClick={() => handleToggle("sub2")}
+            className="sidebar-menu-header"
           >
-            <Menu.Item
-              className={
-                defaultOpenKey === "userReport"
-                  ? "menu-items-sidebar_active noDefault"
-                  : "menu-items-sidebar"
-              }
-              key="userReport"
-              onClick={navigateToReport}
-            >
-              User Reports
-            </Menu.Item>
-          </SubMenu>
-        </Menu>
-      </Col>
-    </Row>
+            <span>
+              <i className={"sidebar-icon icon-user"} /> <span>Reports</span>
+            </span>
+            <i
+              className={`sidebarExpendIcon ${
+                expandedKey === "sub2" ? "icon-arrow-down" : "icon-arrow-right"
+              }`}
+            ></i>
+          </Nav.Link>
+          {expandedKey === "sub2" && (
+            <div className="sidebar-submenu">
+              <Link
+                to="/BOP/Admin/userReport"
+                className={
+                  selectedKey === "userReport"
+                    ? "sidebar-menu-item_Active"
+                    : "sidebar-menu-item"
+                }
+                onClick={() => handleItemClick("userReport")}
+              >
+                User Reports
+              </Link>
+            </div>
+          )}
+        </Nav.Item>
+      </Nav>
+    </Navbar>
   );
 };
 

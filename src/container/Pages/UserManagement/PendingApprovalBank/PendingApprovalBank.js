@@ -51,6 +51,8 @@ const PendingApprovalBank = () => {
     (state) => state.securityReducer.GetNewBankUserRequestsData
   );
 
+  console.log(GetNewBankUserRequests, "tableDatatableDatatableData");
+
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
 
@@ -243,7 +245,7 @@ const PendingApprovalBank = () => {
       render: (text, record) => {
         return (
           <label className="d-flex justify-content-left">
-            {record.branchName !== "" ? record.branchName : "-"}
+            {record.branchName !== "" && record.branchName !== null ? record.branchName : "-"}
           </label>
         );
       },

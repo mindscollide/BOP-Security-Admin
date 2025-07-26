@@ -245,7 +245,9 @@ const PendingApprovalBank = () => {
       render: (text, record) => {
         return (
           <label className="d-flex justify-content-left">
-            {record.branchName !== "" && record.branchName !== null ? record.branchName : "-"}
+            {record.branchName !== "" && record.branchName !== null
+              ? record.branchName
+              : "-"}
           </label>
         );
       },

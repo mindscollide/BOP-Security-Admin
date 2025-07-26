@@ -3,6 +3,7 @@
 }
 .mainContent {
   min-height: 90vh !important;
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 }

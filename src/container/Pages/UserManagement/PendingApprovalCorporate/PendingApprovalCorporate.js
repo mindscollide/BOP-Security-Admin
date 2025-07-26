@@ -281,7 +281,7 @@ const PendingApprovalCorporate = () => {
               <Table
                 column={columnsCreate}
                 rows={tableData}
-                scroll={{ y: 400 }}
+                scroll={{ y: 400, x: "scroll" }}
                 className="Createuser-table"
                 pagination={false}
               />

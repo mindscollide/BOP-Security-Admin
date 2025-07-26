@@ -136,29 +136,6 @@ const PendingApprovalBank = () => {
     }
   }, [GetNewBankUserRequests]);
 
-  // Remove from list
-  // useEffect(() => {
-  //   if (bankUserCreated !== null) {
-  //     try {
-  //       const { user } = bankUserCreated;
-  //       let findisExist = tableData.find(
-  //         (rowData, index) =>
-  //           rowData.userRegistrationRequestID === user.userRegistrationRequestID
-  //       );
-  //       if (findisExist !== undefined) {
-  //         setTableData((prevData) => {
-  //           return prevData.filter(
-  //             (tableData, index) =>
-  //               tableData.userRegistrationRequestID !==
-  //               user.userRegistrationRequestID
-  //           );
-  //         });
-  //       }
-  //       dispatch(setBankUserRequest(null)); // Reset the bankUserCreated state after processing
-  //     } catch (error) {}
-  //   }
-  // }, [bankUserCreated]);
-
   // Remove From List
   useEffect(() => {
     if (bankUserRejected !== null) {
@@ -240,11 +217,13 @@ const PendingApprovalBank = () => {
       title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "branchName",
       key: "branchName",
-      align: "left",
+      align: "center",
+      width: "150px",
+
       ellipsis: true,
       render: (text, record) => {
         return (
-          <label className="d-flex justify-content-left">
+          <label className="d-flex justify-content-center">
             {record.branchName !== "" && record.branchName !== null
               ? record.branchName
               : "-"}
@@ -257,6 +236,8 @@ const PendingApprovalBank = () => {
       dataIndex: "accept",
       key: "accept",
       ellipsis: true,
+      width: "120px",
+
       align: "center",
       render: (text, record) => {
         return (
@@ -276,6 +257,8 @@ const PendingApprovalBank = () => {
       dataIndex: "reject",
       key: "reject",
       ellipsis: true,
+      width: "120px",
+
       align: "center",
       render: (text, record) => {
         return (
@@ -306,7 +289,7 @@ const PendingApprovalBank = () => {
                 rows={tableData}
                 className="Createuser-table"
                 pagination={false}
-                scroll={{ y: 400, x: "scroll" }}
+                scroll={{ y: 400, x: "max-content" }}
               />
             </Col>
           </Paper>

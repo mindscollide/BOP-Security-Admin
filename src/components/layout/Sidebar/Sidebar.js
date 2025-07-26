@@ -1,28 +1,31 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Nav, Navbar } from "react-bootstrap";
 // import { PersonFill, FileEarmarkTextFill } from "react-bootstrap-icons";
 import "./Sidebar.css";
 
 const Sidebar = () => {
   const [expandedKey, setExpandedKey] = useState(
-    localStorage.getItem("defaultOpenKey") || null
+    sessionStorage.getItem("defaultOpenKey") || null
   );
+  const location = useLocation();
 
-  const selectedKey = localStorage.getItem("defaultSelectedKey");
+  const selectedKey = sessionStorage.getItem("defaultSelectedKey");
 
   const handleToggle = (eventKey) => {
     if (eventKey === "sub1" || eventKey === "sub2") {
       setExpandedKey(expandedKey === eventKey ? null : eventKey);
-      localStorage.setItem(
+      sessionStorage.setItem(
         "defaultOpenKey",
         expandedKey === eventKey ? null : eventKey
       );
     }
   };
 
+  console.log(expandedKey, "expandedKeyexpandedKey");
+
   const handleItemClick = (selectedKey) => {
-    localStorage.setItem("defaultSelectedKey", selectedKey);
+    sessionStorage.setItem("defaultSelectedKey", selectedKey);
   };
 
   return (
@@ -49,7 +52,7 @@ const Sidebar = () => {
               <Link
                 to="/BOP/Admin/BankUser"
                 className={
-                  selectedKey === "editBankUser"
+                  location.pathname.includes("BankUser")
                     ? "sidebar-menu-item_Active"
                     : "sidebar-menu-item"
                 }
@@ -60,7 +63,7 @@ const Sidebar = () => {
               <Link
                 to="/BOP/Admin/CorporateUser"
                 className={
-                  selectedKey === "editCorporateUser"
+                  location.pathname.includes("CorporateUser")
                     ? "sidebar-menu-item_Active"
                     : "sidebar-menu-item"
                 }
@@ -71,7 +74,7 @@ const Sidebar = () => {
               <Link
                 to="/BOP/Admin/PendingApprovalBank"
                 className={
-                  selectedKey === "pendingApprovalBank"
+                  location.pathname.includes("PendingApprovalBank")
                     ? "sidebar-menu-item_Active"
                     : "sidebar-menu-item"
                 }
@@ -82,7 +85,7 @@ const Sidebar = () => {
               <Link
                 to="/BOP/Admin/PendingApprovalCorporate"
                 className={
-                  selectedKey === "pendingApprovalCorporate"
+                  location.pathname.includes("PendingApprovalCorporate")
                     ? "sidebar-menu-item_Active"
                     : "sidebar-menu-item"
                 }

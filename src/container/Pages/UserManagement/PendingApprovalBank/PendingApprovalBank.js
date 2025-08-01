@@ -11,6 +11,7 @@ import { Notification, Paper, Table } from "../../../../components/elements";
 import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
 import {
+  setBankUserCreated,
   setBankUserRequest,
   setBankUserRequestRejected,
   setBranchUpdated,
@@ -137,6 +138,7 @@ const PendingApprovalBank = () => {
   }, [GetNewBankUserRequests]);
 
   // Remove From List
+
   useEffect(() => {
     if (bankUserRejected !== null) {
       try {
@@ -158,6 +160,29 @@ const PendingApprovalBank = () => {
       } catch (error) {}
     }
   }, [bankUserRejected]);
+
+  // Remove from list
+  useEffect(() => {
+    if (bankUserCreated !== null) {
+      try {
+        const { user } = bankUserCreated;
+        let findisExist = tableData.find(
+          (rowData, index) =>
+            rowData.userRegistrationRequestID === user.userRegistrationRequestID
+        );
+        if (findisExist !== undefined) {
+          setTableData((prevData) => {
+            return prevData.filter(
+              (tableData, index) =>
+                tableData.userRegistrationRequestID !==
+                user.userRegistrationRequestID
+            );
+          });
+        }
+        dispatch(setBankUserCreated(null));
+      } catch (error) {}
+    }
+  }, [bankUserCreated]);
 
   useEffect(() => {
     if (bankUserRequested !== null) {

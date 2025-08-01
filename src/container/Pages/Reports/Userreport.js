@@ -381,7 +381,7 @@ const Userreport = () => {
                     className="report-select-field-edit"
                     menuPosition="fixed"
                     isSearchable
-                    placeholder="Select Status"
+                    placeholder="Status ID"
                     options={statusOptions}
                     value={statusID.value !== 0 ? statusID : null}
                     onChange={handleSelectStatus}

@@ -224,7 +224,7 @@ const PendingApprovalCorporate = () => {
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Name</label>,
+      title: <label className="bottom-table-header">User Name</label>,
       dataIndex: "firstname",
       key: "firstname",
       width: "200px",

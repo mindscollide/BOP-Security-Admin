@@ -264,6 +264,12 @@ const loginSecurityAdminAPI = (navigate, data) => {
             ) {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));
+            } else if(
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes("ERM_AuthService_AuthManager_Login_14".toLowerCase())
+            ) {
+              dispatch(loginSecurityAdminFailed("Role InvalidF"));
             } else {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));

@@ -81,6 +81,7 @@ const SecurityLogin = () => {
         Password: securityCredentials.Password,
         DeviceID: "1",
         Device: "Browser",
+        RoleID: 5,
       };
       dispatch(loginSecurityAdminAPI(navigate, data));
     } else {
@@ -117,40 +118,39 @@ const SecurityLogin = () => {
 
   return (
     <Fragment>
-      <Col sm={12} lg={12} md={12} className="sign-in">
+      <Col sm={12} lg={12} md={12} className='sign-in'>
         <Container>
-          <Row className="mt-5">
-            <Col sm={12} md={12} lg={12} className="login-container">
+          <Row className='mt-5'>
+            <Col sm={12} md={12} lg={12} className='login-container'>
               <Row>
-                <Col className="mb-4">
-                  <img src={BOPlogo} width="300px" alt="" />
+                <Col className='mb-4'>
+                  <img src={BOPlogo} width='300px' alt='' />
                 </Col>
               </Row>
               <Row>
-                <Col className="center-div flex-column">
+                <Col className='center-div flex-column'>
                   <Form onSubmit={loginValidateHandler}>
                     <Row>
-                      <Col sm={12} md={12} lg={12} className="mt-3">
-                        <InputGroup className="mb-3">
+                      <Col sm={12} md={12} lg={12} className='mt-3'>
+                        <InputGroup className='mb-3'>
                           <InputGroup.Text
-                            id="basic-addon1"
-                            className="Icon-Field-class"
-                          >
-                            <i className="icon-user"></i>
+                            id='basic-addon1'
+                            className='Icon-Field-class'>
+                            <i className='icon-user'></i>
                           </InputGroup.Text>
                           <Form.Control
                             ref={UserName}
                             onKeyDown={(event) =>
                               enterKeyHandler(event, Password)
                             }
-                            name="UserName"
-                            autoComplete="off"
+                            name='UserName'
+                            autoComplete='off'
                             value={securityCredentials.UserName}
                             onChange={setCredentialHandler}
-                            className="form-comtrol-textfield"
-                            placeholder="Email ID"
-                            aria-label="Username"
-                            aria-describedby="basic-addon1"
+                            className='form-comtrol-textfield'
+                            placeholder='Email ID'
+                            aria-label='Username'
+                            aria-describedby='basic-addon1'
                           />
                         </InputGroup>
 
@@ -164,22 +164,21 @@ const SecurityLogin = () => {
                           {errorMessages.UserNameError}
                         </p> */}
                       </Col>
-                      <Col sm={12} md={12} lg={12} className="mb-3">
+                      <Col sm={12} md={12} lg={12} className='mb-3'>
                         <InputGroup>
                           <InputGroup.Text
-                            id="basic-addon1"
-                            className="Icon-Field-class"
-                          >
-                            <i className="icon-lock"></i>
+                            id='basic-addon1'
+                            className='Icon-Field-class'>
+                            <i className='icon-lock'></i>
                           </InputGroup.Text>
                           <Form.Control
-                            name="Password"
+                            name='Password'
                             // ref={Password}
-                            autoComplete="off"
-                            className="form-comtrol-textfield-password"
-                            placeholder="Password"
-                            aria-label="passwordText"
-                            aria-describedby="basic-addon2"
+                            autoComplete='off'
+                            className='form-comtrol-textfield-password'
+                            placeholder='Password'
+                            aria-label='passwordText'
+                            aria-describedby='basic-addon2'
                             type={showPassword ? "text" : "password"}
                             value={
                               // showPassword
@@ -190,14 +189,13 @@ const SecurityLogin = () => {
                             onChange={setCredentialHandler}
                           />
                           <InputGroup.Text
-                            id="basic-addon2"
-                            className="eyeIcon-Field-class-BOP-login"
-                            onClick={toggleEyeIcon}
-                          >
+                            id='basic-addon2'
+                            className='eyeIcon-Field-class-BOP-login'
+                            onClick={toggleEyeIcon}>
                             {!showPassword ? (
-                              <i className="icon-eye-slash"></i>
+                              <i className='icon-eye-slash'></i>
                             ) : (
-                              <i className="icon-eye"></i>
+                              <i className='icon-eye'></i>
                             )}
                           </InputGroup.Text>
                         </InputGroup>
@@ -215,9 +213,8 @@ const SecurityLogin = () => {
                         sm={12}
                         md={12}
                         lg={12}
-                        className="signIn-Signup-btn-col"
-                      >
-                        <Button text="Login" className="login-btn" />
+                        className='signIn-Signup-btn-col'>
+                        <Button text='Login' className='login-btn' />
                       </Col>
                     </Row>
                   </Form>

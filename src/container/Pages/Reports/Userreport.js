@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
 import "./Userreport.css";
-import moment from "moment";
+// import moment from "moment";
 import ActivateConfirmationModal from "../Modals/ActivateConfirmationModal/ActivateConfirmationModal";
 import { Button, Paper, TextField } from "../../../components/elements";
 import { GetAllUserStatusAPI } from "../../../store/actions/Auth_Actions";
@@ -16,6 +16,7 @@ import {
   downloadSystemAdminUserLoginHistoryReportApi,
   downloadUserStatusWiseReportApi,
 } from "../../../store/actions/Download-Report";
+import { formatDate } from "../../../helpers/ReusableMethods";
 
 const Userreport = () => {
   const navigate = useNavigate();
@@ -33,20 +34,20 @@ const Userreport = () => {
     label: "",
   });
   // state for disable the previous date from end date by selecting date from start date
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  // const [startDate, setStartDate] = useState(null);
+  // const [endDate, setEndDate] = useState(null);
 
-  const [startDateProps, setStartDateProps] = useState({
-    value: new Date(),
-    format: "MM-DD-YYYY",
-    onChange: (date) => console.log(date.format()),
-  });
+  // const [startDateProps, setStartDateProps] = useState({
+  //   value: new Date(),
+  //   format: "MM-DD-YYYY",
+  //   onChange: (date) => console.log(date.format()),
+  // });
 
-  const [endDateProps, setEndDateProps] = useState({
-    value: new Date(),
-    format: "MM-DD-YYYY",
-    onChange: (date) => console.log(date.format()),
-  });
+  // const [endDateProps, setEndDateProps] = useState({
+  //   value: new Date(),
+  //   format: "MM-DD-YYYY",
+  //   onChange: (date) => console.log(date.format()),
+  // });
 
   //state for save and cancel button
   const confirmationModal = useSelector(
@@ -170,30 +171,30 @@ const Userreport = () => {
   };
 
   //start date state of multi datepicker
-  const changeDateStartHandler = (date) => {
-    setStartDate(date);
-    setEndDate(null);
-    let newDate = moment(date).format("YYYY-MM-DD");
-    setUserReport({
-      ...userReport,
-      startDate: {
-        value: newDate,
-      },
-    });
-    console.log(newDate, "changeDateStartHandler");
-  };
+  // const changeDateStartHandler = (date) => {
+  //   setStartDate(date);
+  //   setEndDate(null);
+  //   let newDate = moment(date).format("YYYY-MM-DD");
+  //   setUserReport({
+  //     ...userReport,
+  //     startDate: {
+  //       value: newDate,
+  //     },
+  //   });
+  //   console.log(newDate, "changeDateStartHandler");
+  // };
 
-  //end date state of multi datepicker
-  const changeDateEndHandler = (date) => {
-    setEndDate(date);
-    let newEndDate = moment(date).format("YYYY-MM-DD");
-    setUserReport({
-      ...userReport,
-      endDate: {
-        value: newEndDate,
-      },
-    });
-  };
+  // //end date state of multi datepicker
+  // const changeDateEndHandler = (date) => {
+  //   setEndDate(date);
+  //   let newEndDate = moment(date).format("YYYY-MM-DD");
+  //   setUserReport({
+  //     ...userReport,
+  //     endDate: {
+  //       value: newEndDate,
+  //     },
+  //   });
+  // };
   //Table columns for customer List
   const handleNoButton = useCallback(() => {
     if (modalState === 1) {
@@ -226,24 +227,33 @@ const Userreport = () => {
           value: "",
         },
         startDate: {
-          value: 0,
+          value: "",
+          errorMessage: "",
+          errorStatus: false,
         },
         endDate: {
           value: "",
+          errorMessage: "",
+          errorStatus: false,
         },
         roleID: {
           value: 0,
         },
+        statusID: {
+          value: 0,
+          errorMessage: "",
+          errorStatus: false,
+        },
       });
-      setStartDateProps({
-        ...startDateProps,
-        value: "",
-      });
+      // setStartDateProps({
+      //   ...startDateProps,
+      //   value: "",
+      // });
 
-      setEndDateProps({
-        ...endDateProps,
-        value: "",
-      });
+      // setEndDateProps({
+      //   ...endDateProps,
+      //   value: "",
+      // });
 
       setStatusID({
         value: 0,
@@ -287,8 +297,13 @@ const Userreport = () => {
           : 0,
       Name: userReport.name.value !== "" ? userReport.name.value : "",
       DateFrom:
-        userReport.startDate.value !== "" ? userReport.startDate.value : "",
-      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : null,
+        userReport.startDate.value !== ""
+          ? formatDate(userReport.startDate.value)
+          : "",
+      DateTo:
+        userReport.endDate.value !== ""
+          ? formatDate(userReport.endDate.value)
+          : "",
     };
     console.log(data, "downloadAccessDetailReportApi");
     dispatch(downloadAccessDetailReportApi(navigate, data));
@@ -307,8 +322,13 @@ const Userreport = () => {
           : 0,
       Name: userReport.name.value !== "" ? userReport.name.value : "",
       DateFrom:
-        userReport.startDate.value !== "" ? userReport.startDate.value : "",
-      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : null,
+        userReport.startDate.value !== ""
+          ? formatDate(userReport.startDate.value)
+          : "",
+      DateTo:
+        userReport.endDate.value !== ""
+          ? formatDate(userReport.endDate.value)
+          : "",
     };
     console.log(data, "downloadAccessDetailReportApi");
     dispatch(downloadSystemAdminUserLoginHistoryReportApi(navigate, data));
@@ -326,8 +346,13 @@ const Userreport = () => {
           : 0,
       Name: userReport.name.value !== "" ? userReport.name.value : "",
       DateFrom:
-        userReport.startDate.value !== "" ? userReport.startDate.value : "",
-      DateTo: userReport.endDate.value !== "" ? userReport.endDate.value : "",
+        userReport.startDate.value !== ""
+          ? formatDate(userReport.startDate.value)
+          : "",
+      DateTo:
+        userReport.endDate.value !== ""
+          ? formatDate(userReport.endDate.value)
+          : "",
     };
     console.log(data, "downloadAccessDetailReportApi");
     dispatch(downloadLastLoggedInReportApi(navigate, data));
@@ -352,6 +377,31 @@ const Userreport = () => {
     dispatch(downloadUserStatusWiseReportApi(navigate, data));
   };
 
+  const handleFromChange = (value) => {
+    console.log(value, "valuevalue123");
+    setUserReport((prev) => ({
+      ...prev,
+      startDate: {
+        ...prev,
+        value,
+        errorMessage: "",
+        errorStatus: false,
+      },
+    }));
+  };
+
+  const handleToChange = (value) => {
+    console.log(value, "valuevalue123");
+    setUserReport((prev) => ({
+      ...prev,
+      endDate: {
+        ...prev,
+        value,
+        errorMessage: "",
+        errorStatus: false,
+      },
+    }));
+  };
   return (
     <>
       <section className="report-user-container">
@@ -401,45 +451,64 @@ const Userreport = () => {
 
                 <Col lg={4} md={4} sm={12} className="d-flex">
                   <DatePicker
-                    selected={startDate}
-                    highlightToday={true}
-                    onOpenPickNewDate={false}
-                    value={userReport.startDate.value}
-                    onPropsChange={setStartDateProps}
-                    selectsStart
-                    startDate={startDate}
-                    endDate={endDate}
-                    minDate={new Date()}
-                    showOtherDays={true}
-                    onChange={(value) =>
-                      changeDateStartHandler(value?.toDate?.().toString())
-                    }
                     inputClass="date-picker-left"
-                    placeholder="Start Date"
+                    // name={"dateFrom"}
+                    // // selected={startDate}
+                    // highlightToday={true}
+                    // onOpenPickNewDate={false}
+                    // value={userReport.startDate.value}
+                    // onPropsChange={setStartDateProps}
+                    // selectsStart
+                    // startDate={startDate}
+                    // endDate={endDate}
+                    // minDate={new Date()}
+                    // showOtherDays={true}
+                    // onChange={(value) =>
+                    //   changeDateStartHandler(value?.toDate?.().toString())
+                    // }
+                    // placeholder="Start Date"
+
+                    name={"dateFrom"}
+                    labelClass={"d-none"}
+                    placeholder="Start date"
+                    showOtherDays={true}
+                    value={userReport.startDate.value}
+                    onChange={(date) => handleFromChange(date)}
+                    minDate={null} // No restriction initially
+                    maxDate={userReport.endDate.value || null}
                   />
                   <label className="date-to">to</label>
 
                   <DatePicker
-                    selected={endDate}
-                    highlightToday={true}
-                    onOpenPickNewDate={false}
-                    value={userReport.endDate.value}
-                    onPropsChange={setEndDateProps}
-                    showOtherDays={true}
-                    selectsEnd
-                    startDate={startDate}
-                    endDate={endDate}
-                    minDate={
-                      startDate
-                        ? moment(startDate).add(1, "days").toDate()
-                        : null
-                    }
-                    autoComplete="off"
-                    onChange={(value) =>
-                      changeDateEndHandler(value?.toDate?.().toString())
-                    }
                     inputClass="date-picker-right"
+                    // selected={endDate}
+                    // highlightToday={true}
+                    // onOpenPickNewDate={false}
+                    // value={userReport.endDate.value}
+                    // onPropsChange={setEndDateProps}
+                    // showOtherDays={true}
+                    // selectsEnd
+                    // startDate={startDate}
+                    // endDate={endDate}
+                    // minDate={
+                    //   startDate
+                    //     ? moment(startDate).add(1, "days").toDate()
+                    //     : null
+                    // }
+                    // autoComplete="off"
+                    // onChange={(value) =>
+                    //   changeDateEndHandler(value?.toDate?.().toString())
+                    // }
+                    // placeholder="End Date"
+
+                    name="dateTo"
+                    labelClass={"d-none"}
                     placeholder="End Date"
+                    showOtherDays={true}
+                    value={userReport.endDate.value}
+                    onChange={(date) => handleToChange(date)}
+                    minDate={userReport.startDate.value || null} // Disable dates before selected startDate
+                    maxDate={null} // No restriction initially
                   />
                 </Col>
 

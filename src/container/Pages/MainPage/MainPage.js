@@ -120,8 +120,33 @@ const MainPage = () => {
         case "BANK_USER_BULK_REQUEST":
           dispatch(setBankUserBulkRequest(data.payload));
           break;
-        default:
+
+        case "LOGIN":
+          console.log("LOGIN event received", data.payload);
+          // Handle login event if necessary
+          let token = localStorage.getItem("token");
+          let userId = localStorage.getItem("userID");
+          console.log(
+            "LOGIN event received",
+            token,
+            userId,
+            data.payload.loginDetials.token,
+            data.payload.loginDetials.userID,
+            token !== data.payload.loginDetials.token &&
+              Number(userId) === Number(data.payload.loginDetials.userID)
+          );
+
+          if (
+            token !== data.payload.loginDetials.token &&
+            Number(userId) === Number(data.payload.loginDetials.userID)
+          ) {
+            console.log("LOGIN event received", data.payload);
+
+            // localStorage.clear();
+            dispatch(LogOutAPI(navigate));
+          }
           break;
+        default:
       }
     },
   });

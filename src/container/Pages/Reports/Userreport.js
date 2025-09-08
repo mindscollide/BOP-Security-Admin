@@ -16,7 +16,7 @@ import {
   downloadSystemAdminUserLoginHistoryReportApi,
   downloadUserStatusWiseReportApi,
 } from "../../../store/actions/Download-Report";
-import { formatDate } from "../../../helpers/ReusableMethods";
+import { formatDatetoLocal } from "../../../helpers/ReusableMethods";
 
 const Userreport = () => {
   const navigate = useNavigate();
@@ -298,14 +298,14 @@ const Userreport = () => {
       Name: userReport.name.value !== "" ? userReport.name.value : "",
       DateFrom:
         userReport.startDate.value !== ""
-          ? formatDate(userReport.startDate.value)
+          ? formatDatetoLocal(userReport.startDate.value)
           : "",
       DateTo:
         userReport.endDate.value !== ""
-          ? formatDate(userReport.endDate.value)
+          ? formatDatetoLocal(userReport.endDate.value)
           : "",
     };
-    console.log(data, "downloadAccessDetailReportApi");
+    // console.log(data, "downloadAccessDetailReportApi");
     dispatch(downloadAccessDetailReportApi(navigate, data));
   };
 
@@ -323,11 +323,11 @@ const Userreport = () => {
       Name: userReport.name.value !== "" ? userReport.name.value : "",
       DateFrom:
         userReport.startDate.value !== ""
-          ? formatDate(userReport.startDate.value)
+          ? formatDatetoLocal(userReport.startDate.value)
           : "",
       DateTo:
         userReport.endDate.value !== ""
-          ? formatDate(userReport.endDate.value)
+          ? formatDatetoLocal(userReport.endDate.value)
           : "",
     };
     console.log(data, "downloadAccessDetailReportApi");
@@ -347,11 +347,11 @@ const Userreport = () => {
       Name: userReport.name.value !== "" ? userReport.name.value : "",
       DateFrom:
         userReport.startDate.value !== ""
-          ? formatDate(userReport.startDate.value)
+          ? formatDatetoLocal(userReport.startDate.value)
           : "",
       DateTo:
         userReport.endDate.value !== ""
-          ? formatDate(userReport.endDate.value)
+          ? formatDatetoLocal(userReport.endDate.value)
           : "",
     };
     console.log(data, "downloadAccessDetailReportApi");
@@ -370,8 +370,13 @@ const Userreport = () => {
           : 0,
       Name: userReport.name.value !== "" ? userReport.name.value : "",
       DateFrom:
-        userReport.startDate.value !== "" ? userReport.startDate.value : "",
-      DateTo: userReport.endDate.value !== "" ? userReport.startDate.value : "",
+        userReport.startDate.value !== ""
+          ? formatDatetoLocal(userReport.startDate.value)
+          : "",
+      DateTo:
+        userReport.endDate.value !== ""
+          ? formatDatetoLocal(userReport.endDate.value)
+          : "",
     };
     console.log(data, "downloadAccessDetailReportApi");
     dispatch(downloadUserStatusWiseReportApi(navigate, data));

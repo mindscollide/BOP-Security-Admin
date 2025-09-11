@@ -212,7 +212,7 @@ const PendingApprovalCorporate = () => {
       title: <label className="bottom-table-header">Corporate Name</label>,
       dataIndex: "corporateName",
       key: "corporateName",
-      width: "300px",
+      width: "280px",
 
       ellipsis: true,
     },
@@ -220,7 +220,7 @@ const PendingApprovalCorporate = () => {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "350px",
+      width: "320px",
       ellipsis: true,
     },
     {

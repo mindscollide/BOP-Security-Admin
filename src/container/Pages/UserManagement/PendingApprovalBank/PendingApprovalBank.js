@@ -221,7 +221,7 @@ const PendingApprovalBank = () => {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "380px",
+      width: "300px",
       ellipsis: true,
     },
 
@@ -229,7 +229,7 @@ const PendingApprovalBank = () => {
       title: <label className="bottom-table-header">Employee Name</label>,
       dataIndex: "firstname",
       key: "firstname",
-      width: "280px",
+      width: "250px",
       ellipsis: true,
     },
     {

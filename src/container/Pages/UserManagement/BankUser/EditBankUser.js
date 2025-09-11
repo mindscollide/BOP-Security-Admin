@@ -602,7 +602,7 @@ const EditBankUser = () => {
       dataIndex: "email",
       key: "loginId",
       align: "left",
-      width: "320px",
+      width: "300px",
       ellipsis: true,
     },
     {

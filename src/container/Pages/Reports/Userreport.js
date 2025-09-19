@@ -481,6 +481,7 @@ const Userreport = () => {
                     onChange={(date) => handleFromChange(date)}
                     minDate={null} // No restriction initially
                     maxDate={userReport.endDate.value || null}
+                    editable={false}
                   />
                   <label className="date-to">to</label>
 
@@ -514,6 +515,7 @@ const Userreport = () => {
                     onChange={(date) => handleToChange(date)}
                     minDate={userReport.startDate.value || null} // Disable dates before selected startDate
                     maxDate={null} // No restriction initially
+                    editable={false}
                   />
                 </Col>
 

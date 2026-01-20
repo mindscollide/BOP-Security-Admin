@@ -264,6 +264,12 @@ const loginSecurityAdminAPI = (navigate, data) => {
             ) {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));
+            } else if(
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes("ERM_AuthService_AuthManager_Login_14".toLowerCase())
+            ) {
+              dispatch(loginSecurityAdminFailed("Role InvalidF"));
             } else {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));
@@ -457,14 +463,14 @@ const GetAllUserStatusAPI = (navigate) => {
               dispatch(
                 GetAllUserStatusSuccess(
                   response.data.responseResult,
-                  "Data Available"
+                  ""
                 )
               );
             } else if (
               response.data.responseResult.responseMessage.toLowerCase() ===
               "ERM_AuthService_CommonManager_GetAllUserStatus_02".toLowerCase()
             ) {
-              dispatch(GetAllUserStatusFail("No Data Available"));
+              dispatch(GetAllUserStatusFail(""));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -543,13 +549,13 @@ const RoleListAPI = (navigate) => {
               // console.log(response);
 
               dispatch(
-                RoleListSuccess(response.data.responseResult, "Data Available")
+                RoleListSuccess(response.data.responseResult, "")
               );
             } else if (
               response.data.responseResult.responseMessage.toLowerCase() ===
               "ERM_AuthService_CommonManager_RoleList_02".toLowerCase()
             ) {
-              dispatch(RoleListFail("No Data Available"));
+              dispatch(RoleListFail(""));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -627,7 +633,7 @@ const GetBankUserRolesAPI = (navigate) => {
               dispatch(
                 GetBankUserRolesSuccess(
                   response.data.responseResult,
-                  "Data Available"
+                  ""
                 )
               );
             } else if (
@@ -713,7 +719,7 @@ const GetAllBranchesAPI = (navigate) => {
               dispatch(
                 GetAllBranchesSuccess(
                   response.data.responseResult,
-                  "Data Available"
+                  ""
                 )
               );
             } else if (
@@ -795,7 +801,7 @@ const LogOutAPI = (navigate) => {
                 .includes("ERM_AuthService_AuthManager_LogOut_01".toLowerCase())
             ) {
               dispatch(
-                LogOutSuccess(response.data.responseResult, "Data Available")
+                LogOutSuccess(response.data.responseResult, "")
               );
               dispatch(signOut(navigate, ""));
             } else if (

@@ -12,7 +12,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between; /* Ensure the brand and dropdown are spaced correctly */
-  align-items: center;
+  align-items: flex-start;
   padding: 0;
 }
 

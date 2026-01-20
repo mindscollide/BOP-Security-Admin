@@ -5,8 +5,8 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import {
   authReducer,
   securityReducer,
-  CorporateReducer,
-  SearchReducer,
+  // CorporateReducer,
+  // SearchReducer,
   downloadReducer,
   securityModalReducer,
   SettingsReducer,
@@ -20,8 +20,8 @@ import * as actions from "./action_types";
 const AppReducer = combineReducers({
   auth: authReducer,
   securityReducer: securityReducer,
-  CorporateReducer: CorporateReducer,
-  SearchReducer: SearchReducer,
+  // CorporateReducer: CorporateReducer,
+  // SearchReducer: SearchReducer,
   downloadReducer: downloadReducer,
   securityModalReducer: securityModalReducer,
   settingsReducer: SettingsReducer,

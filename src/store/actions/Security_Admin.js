@@ -331,7 +331,7 @@ const getNewBankUserRequestApi = (navigate, Data) => {
               dispatch(
                 getNewBankUserRequestSuccess(
                   response.data.responseResult,
-                  "Data Available"
+                  ""
                 )
               );
             } else if (
@@ -341,7 +341,7 @@ const getNewBankUserRequestApi = (navigate, Data) => {
                   "SecurityAdmin_SecurityAdminManager_GetNewBankUserRequests_02".toLowerCase()
                 )
             ) {
-              dispatch(getNewBankUserRequestFail("No Data Available"));
+              dispatch(getNewBankUserRequestFail(""));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -420,7 +420,7 @@ const getNewCorporateUserRequestApi = (navigate, Data) => {
               dispatch(
                 getNewCorporateUserRequestSuccess(
                   response.data.responseResult,
-                  "Data Available"
+                  ""
                 )
               );
             } else if (
@@ -430,7 +430,7 @@ const getNewCorporateUserRequestApi = (navigate, Data) => {
                   "SecurityAdmin_SecurityAdminManager_GetNewCorporateUserRequests_02".toLowerCase()
                 )
             ) {
-              dispatch(getNewCorporateUserRequestFail("No Data Available"));
+              dispatch(getNewCorporateUserRequestFail(""));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -704,7 +704,7 @@ const SearchCorporateUsersAPI = (navigate, data) => {
               dispatch(
                 SearchCorporateUsersSuccess(
                   response.data.responseResult,
-                  "Data Available"
+                  ""
                 )
               );
             } else if (
@@ -714,7 +714,7 @@ const SearchCorporateUsersAPI = (navigate, data) => {
                   "SecurityAdmin_SecurityAdminManager_SearchCorporateUsers_02".toLowerCase()
                 )
             ) {
-              dispatch(SearchCorporateUsersFail("No Data Available"));
+              dispatch(SearchCorporateUsersFail(""));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
@@ -791,7 +791,7 @@ const SearchBankUsersAPI = (navigate, data) => {
               dispatch(
                 SearchBankUsersSuccess(
                   response.data.responseResult,
-                  "Data Available"
+                  ""
                 )
               );
             } else if (
@@ -801,7 +801,7 @@ const SearchBankUsersAPI = (navigate, data) => {
                   "SecurityAdmin_SecurityAdminManager_SearchBankUsers_02".toLowerCase()
                 )
             ) {
-              dispatch(SearchBankUsersFail("No Data Available"));
+              dispatch(SearchBankUsersFail(""));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

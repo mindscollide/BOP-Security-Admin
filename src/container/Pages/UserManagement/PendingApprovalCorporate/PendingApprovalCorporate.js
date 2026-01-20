@@ -212,7 +212,7 @@ const PendingApprovalCorporate = () => {
       title: <label className="bottom-table-header">Corporate Name</label>,
       dataIndex: "corporateName",
       key: "corporateName",
-      width: "300px",
+      width: "280px",
 
       ellipsis: true,
     },
@@ -220,13 +220,14 @@ const PendingApprovalCorporate = () => {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "380px",
+      width: "320px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Name</label>,
+      title: <label className="bottom-table-header">User Name</label>,
       dataIndex: "firstname",
       key: "firstname",
+      width: "200px",
       ellipsis: true,
     },
     {
@@ -234,6 +235,7 @@ const PendingApprovalCorporate = () => {
       dataIndex: "accept",
       key: "accept",
       ellipsis: true,
+      width: "120px",
       align: "center",
       render: (text, record) => {
         return (
@@ -253,6 +255,7 @@ const PendingApprovalCorporate = () => {
       dataIndex: "reject",
       key: "reject",
       ellipsis: true,
+      width: "120px",
       align: "center",
       render: (text, record) => {
         return (
@@ -281,7 +284,7 @@ const PendingApprovalCorporate = () => {
               <Table
                 column={columnsCreate}
                 rows={tableData}
-                scroll={{ y: 400 }}
+                scroll={{ y: 400, x: "max-content" }}
                 className="Createuser-table"
                 pagination={false}
               />

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import "./SecurityLogin.css";
 const SecurityLogin = () => {
   const { auth } = useSelector((state) => state);
-  console.log(auth, "authReducerauthReducerauthReducer");
+  // console.log(auth, "authReducerauthReducerauthReducer");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const ResponseMessageAuthReducerState = useSelector(
@@ -81,6 +81,7 @@ const SecurityLogin = () => {
         Password: securityCredentials.Password,
         DeviceID: "1",
         Device: "Browser",
+        RoleID: 5,
       };
       dispatch(loginSecurityAdminAPI(navigate, data));
     } else {

@@ -11,6 +11,7 @@ import { Notification, Paper, Table } from "../../../../components/elements";
 import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
 import {
+  setBankUserCreated,
   setBankUserRequest,
   setBankUserRequestRejected,
   setBranchUpdated,
@@ -27,12 +28,21 @@ const PendingApprovalBank = () => {
   const bankUserCreated = useSelector(
     (state) => state.RealtimeReducer.bankUserCreated
   );
+
+  console.log(
+    { bankUserCreated, bankUserRequested },
+    "bankUserCreatedbankUserCreated"
+  );
+
+  console.log({ tableData }, "tableDatatableDatatableData");
+
   const bankUserRejected = useSelector(
     (state) => state.RealtimeReducer.bankUserRejected
   );
   const branchUpdated = useSelector(
     (state) => state.RealtimeReducer.branchUpdated
   );
+  console.log({ branchUpdated }, "tableDatatableDatatableData");
 
   //Global State
   //Checking snakbar state
@@ -41,6 +51,8 @@ const PendingApprovalBank = () => {
   const GetNewBankUserRequests = useSelector(
     (state) => state.securityReducer.GetNewBankUserRequestsData
   );
+
+  console.log(GetNewBankUserRequests, "tableDatatableDatatableData");
 
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
@@ -125,30 +137,8 @@ const PendingApprovalBank = () => {
     }
   }, [GetNewBankUserRequests]);
 
-  // Remove from list
-  useEffect(() => {
-    if (bankUserCreated !== null) {
-      try {
-        const { user } = bankUserCreated;
-        let findisExist = tableData.find(
-          (rowData, index) =>
-            rowData.userRegistrationRequestID === user.userRegistrationRequestID
-        );
-        if (findisExist !== undefined) {
-          setTableData((prevData) => {
-            return prevData.filter(
-              (tableData, index) =>
-                tableData.userRegistrationRequestID !==
-                user.userRegistrationRequestID
-            );
-          });
-        }
-        dispatch(setBankUserRequest(null)); // Reset the bankUserCreated state after processing
-      } catch (error) {}
-    }
-  }, [bankUserCreated]);
-
   // Remove From List
+
   useEffect(() => {
     if (bankUserRejected !== null) {
       try {
@@ -170,6 +160,29 @@ const PendingApprovalBank = () => {
       } catch (error) {}
     }
   }, [bankUserRejected]);
+
+  // Remove from list
+  useEffect(() => {
+    if (bankUserCreated !== null) {
+      try {
+        const { user } = bankUserCreated;
+        let findisExist = tableData.find(
+          (rowData, index) =>
+            rowData.userRegistrationRequestID === user.userRegistrationRequestID
+        );
+        if (findisExist !== undefined) {
+          setTableData((prevData) => {
+            return prevData.filter(
+              (tableData, index) =>
+                tableData.userRegistrationRequestID !==
+                user.userRegistrationRequestID
+            );
+          });
+        }
+        dispatch(setBankUserCreated(null));
+      } catch (error) {}
+    }
+  }, [bankUserCreated]);
 
   useEffect(() => {
     if (bankUserRequested !== null) {
@@ -208,15 +221,15 @@ const PendingApprovalBank = () => {
       title: <label className="bottom-table-header">Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "380px",
+      width: "300px",
       ellipsis: true,
     },
 
     {
-      title: <label className="bottom-table-header">Name</label>,
+      title: <label className="bottom-table-header">Employee Name</label>,
       dataIndex: "firstname",
       key: "firstname",
-      width: "280px",
+      width: "250px",
       ellipsis: true,
     },
     {
@@ -229,12 +242,16 @@ const PendingApprovalBank = () => {
       title: <label className="bottom-table-header">Branch</label>,
       dataIndex: "branchName",
       key: "branchName",
-      align: "left",
+      align: "center",
+      width: "150px",
+
       ellipsis: true,
       render: (text, record) => {
         return (
-          <label className="d-flex justify-content-left">
-            {record.branchName !== "" ? record.branchName : "-"}
+          <label className="d-flex justify-content-center">
+            {record.branchName !== "" && record.branchName !== null
+              ? record.branchName
+              : "-"}
           </label>
         );
       },
@@ -244,6 +261,8 @@ const PendingApprovalBank = () => {
       dataIndex: "accept",
       key: "accept",
       ellipsis: true,
+      width: "120px",
+
       align: "center",
       render: (text, record) => {
         return (
@@ -263,6 +282,8 @@ const PendingApprovalBank = () => {
       dataIndex: "reject",
       key: "reject",
       ellipsis: true,
+      width: "120px",
+
       align: "center",
       render: (text, record) => {
         return (
@@ -293,7 +314,7 @@ const PendingApprovalBank = () => {
                 rows={tableData}
                 className="Createuser-table"
                 pagination={false}
-                scroll={{ y: 400, x: "scroll" }}
+                scroll={{ y: 400, x: "max-content" }}
               />
             </Col>
           </Paper>

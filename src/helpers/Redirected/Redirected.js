@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-import BOPlogo from "../../assets/images/BOP-logo.png";
+import BOPlogo from "../../assets/images/BOPlogo.png";
 import "./Redirected.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { resetPasswordEmailVerificationApi } from "../../store/actions/Auth-Actions";
+import { resetPasswordEmailVerificationApi } from "../../store/actions/Auth_Actions";
+
 const Redirected = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Redirected = () => {
     // to /resetPassword, an expired/used one to /resetPasswordLinkExpired. Navigating
     // again here would replace whichever route it just picked, so only failures are
     // handled below.
-    dispatch(resetPasswordEmailVerificationApi(Data, navigate));
+    dispatch(resetPasswordEmailVerificationApi(navigate, Data));
   }, [location.search]);
   return (
     <section className={"wrapper_verifyEmail"}>

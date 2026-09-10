@@ -151,7 +151,7 @@ const loginSecurityAdminAPI = (navigate, data) => {
       // },
     })
       .then(async (response) => {
-           const {
+        const {
           isExecuted,
           responseMessage,
           token,
@@ -205,7 +205,7 @@ const loginSecurityAdminAPI = (navigate, data) => {
             ) {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminSuccess("LDAP auth Successful"));
-               if (!isPasswordReset) {
+              if (!isPasswordReset) {
                 const encryptedName = await encryptField(firstName);
                 const encryptedUserID = await encryptField(String(userID));
                 navigate("/ResetPassword", {
@@ -1017,7 +1017,10 @@ const forgotPasswordApi = (navigate, Data) => {
               response.data.responseResult.responseMessage.toLowerCase() ===
               "ERM_AuthService_AuthManager_SendEmailForForgetPasword_01".toLowerCase()
             ) {
-              navigate("/EmailSent", { replace: true });
+              navigate("/EmailSent", {
+                replace: true,
+                state: "EmailSentSuccessfully",
+              });
 
               dispatch(
                 forgotPassword_success(response.data.responseResult, ""),
@@ -1139,6 +1142,13 @@ const resetPasswordEmailVerificationApi = (navigate, Data) => {
                   "ERM_AuthService_AuthManager_EmailToken_02".toLowerCase(),
                 )
             ) {
+              navigate("/resetPasswordLinkExpired", {
+                replace: true,
+                state: {
+                  email: response.data.responseResult.email,
+                  requestToken: Data.EncryptedString,
+                },
+              });
               dispatch(resetPasswordEmailVerification_fail("Invalid Email"));
             } else {
               dispatch(

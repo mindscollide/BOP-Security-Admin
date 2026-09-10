@@ -104,3 +104,17 @@ body::-webkit-scrollbar-thumb {
   color: #808285 !important;
   font-size: 18px;
 }
+
+/*
+ * Renders a `type="text"` field as dots, so the browser's autofill/password-manager
+ * heuristics don't recognize it as a credential field and offer to save it — used
+ * together with type="text" + autoComplete="off" on the input.
+ * `text-security`/`-webkit-text-security` is WebKit/Blink-only (Chrome, Edge, Safari,
+ * Opera) — there is no equivalent in Firefox, so this field renders as plain,
+ * unmasked text there. Chrome's save-password heuristic also isn't purely
+ * type="password"-driven, so this reduces but doesn't guarantee suppression.
+ */
+.masked-password-field {
+  -webkit-text-security: disc;
+  text-security: disc;
+}

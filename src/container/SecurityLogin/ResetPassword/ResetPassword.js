@@ -218,13 +218,16 @@ const ResetPassword = () => {
                         <i className='icon-lock'></i>
                       </InputGroup.Text>
                       <Form.Control
+                        id='password'
                         name='password'
                         autoComplete='off'
-                        className='form-comtrol-ResetPassword-textfield'
+                        data-lpignore='true'
+                        data-1p-ignore='true'
+                        className='form-comtrol-ResetPassword-textfield masked-password-field'
                         placeholder='Password'
                         aria-label='Password'
                         aria-describedby='basic-addon1'
-                        type={"password"}
+                        type={"text"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                       />
@@ -238,13 +241,16 @@ const ResetPassword = () => {
                         <i className='icon-lock'></i>
                       </InputGroup.Text>
                       <Form.Control
+                        id='confirmPassword'
                         name='confirmPassword'
                         autoComplete='off'
-                        className='form-comtrol-ResetPassword-textfield-password'
+                        data-lpignore='true'
+                        data-1p-ignore='true'
+                        className='form-comtrol-ResetPassword-textfield-password masked-password-field'
                         placeholder='New Confirm Password'
                         aria-label='Confirm Password'
                         aria-describedby='basic-addon1'
-                        type={"password"}
+                        type={"text"}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                       />

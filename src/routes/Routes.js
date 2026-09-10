@@ -19,31 +19,37 @@ import ForgotPassword from "../container/SecurityLogin/forgetPassword/ForgotPass
 import EmailSentPage from "../container/SecurityLogin/PasswordEmailSent/EmailSentPage";
 import EditBankUser from "../container/Pages/UserManagement/BankUser/EditBankUser";
 import EditCorporateUser from "../container/Pages/UserManagement/CorporateUser/EditCorporateUser";
+import ResetPasswordLinkExpired from "../container/SecurityLogin/ResetPasswordLinkExpired/ResetPasswordLinkExpired";
+import Redirected from "../helpers/Redirected/Redirected";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route exact path="/" element={<SecurityLogin />} />
-      <Route exact path="/ChangePassword" element={<ChangePassword />} />
-      <Route exact path="/CreatePassword" element={<CreatePassword />} />
-      <Route exact path="/resetPassword" element={<ResetPassword />} />
-      <Route exact path="/TwoFaVerification" element={<TwoFaVerification />} />
-      <Route exact path="/ForgotPassword" element={<ForgotPassword />} />
-      <Route exact path="/EmailSent" element={<EmailSentPage />} />
-
+      <Route exact path='/' element={<SecurityLogin />} />
+      <Route exact path='/ChangePassword' element={<ChangePassword />} />
+      <Route exact path='/CreatePassword' element={<CreatePassword />} />
+      <Route exact path='/resetPassword' element={<ResetPassword />} />
+      <Route exact path='/TwoFaVerification' element={<TwoFaVerification />} />
+      <Route exact path='/ForgotPassword' element={<ForgotPassword />} />
+      <Route exact path='/EmailSent' element={<EmailSentPage />} />
+      <Route
+        path='resetPasswordLinkExpired'
+        element={<ResetPasswordLinkExpired />}
+      />
+      <Route path='redirected' element={<Redirected />} />
       <Route element={<PrivateRoutes />}>
-        <Route exact path="/BOP/Admin/" element={<MainPage />}>
-          <Route index path="" element={<EditBankUser />} />
-          <Route path="BankUser" element={<EditBankUser />} />
-          <Route path="CorporateUser" element={<EditCorporateUser />} />
-          <Route path="userReport" element={<Userreport />} />
-          <Route path="PendingApprovalBank" element={<PendingApprovalBank />} />
+        <Route exact path='/BOP/Admin/' element={<MainPage />}>
+          <Route index path='' element={<EditBankUser />} />
+          <Route path='BankUser' element={<EditBankUser />} />
+          <Route path='CorporateUser' element={<EditCorporateUser />} />
+          <Route path='userReport' element={<Userreport />} />
+          <Route path='PendingApprovalBank' element={<PendingApprovalBank />} />
           <Route
-            path="PendingApprovalCorporate"
+            path='PendingApprovalCorporate'
             element={<PendingApprovalCorporate />}
           />
         </Route>
       </Route>
-    </>
-  )
+    </>,
+  ),
 );

@@ -4,12 +4,11 @@ import { Button, Notification } from "../../../components/elements";
 import { loginSecurityAdminAPI } from "../../../store/actions/Auth_Actions";
 import { useDispatch } from "react-redux";
 import BOPlogo from "../../../assets/images/BOPlogo.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./SecurityLogin.css";
 import {
   encryptField,
   bopEmailValidation,
-  decryptField,
 } from "../../../commen/functions/utils";
 
 const SecurityLogin = () => {
@@ -79,7 +78,6 @@ const SecurityLogin = () => {
     try {
       const email = securityCredentials.Email.trim();
       const password = securityCredentials.Password;
-      console.log("Hello", email, password);
 
       if (!email || !password) {
         throw new Error("Missing credentials");
@@ -148,16 +146,6 @@ const SecurityLogin = () => {
                             aria-describedby='basic-addon1'
                           />
                         </InputGroup>
-
-                        {/* <p
-                          className={
-                            errorMessages.UserNameError
-                              ? "error-message"
-                              : "error-message-nothing"
-                          }
-                        >
-                          {errorMessages.UserNameError}
-                        </p> */}
                       </Col>
                       <Col sm={12} md={12} lg={12} className='mb-3'>
                         <InputGroup>
@@ -167,20 +155,18 @@ const SecurityLogin = () => {
                             <i className='icon-lock'></i>
                           </InputGroup.Text>
                           <Form.Control
+                            id='password'
                             name='Password'
                             ref={Password}
                             autoComplete='off'
-                            className='form-comtrol-textfield-password'
+                            data-lpignore='true'
+                            data-1p-ignore='true'
+                            className='form-comtrol-textfield-password masked-password-field'
                             placeholder='Password'
                             aria-label='passwordText'
                             aria-describedby='basic-addon2'
-                            type={"password"}
-                            value={
-                              // showPassword
-                              //   ? securityCredentials.Password
-                              //   : securityCredentials.fakePassword
-                              securityCredentials.Password
-                            }
+                            type={"text"}
+                            value={securityCredentials.Password}
                             onChange={setCredentialHandler}
                           />
                         </InputGroup>
@@ -190,11 +176,11 @@ const SecurityLogin = () => {
                         md={12}
                         lg={12}
                         className='mb-2 d-flex justify-content-end'>
-                        <a
+                        <Link
                           className='forgotPassword-text'
-                          href='/forgotpassword'>
+                          to='/forgotpassword'>
                           Forgot Password?
-                        </a>
+                        </Link>
                       </Col>
 
                       <Col

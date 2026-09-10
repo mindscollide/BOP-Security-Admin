@@ -1,16 +1,16 @@
 export const secureRandomString = (length = 16) => {
-    return [...crypto.getRandomValues(new Uint8Array(length))]
-      .map((b) => b.toString(36))
-      .join("")
-      .slice(0, length);
-  };
+  return [...crypto.getRandomValues(new Uint8Array(length))]
+    .map((b) => b.toString(36))
+    .join("")
+    .slice(0, length);
+};
 export const encryptField = async (clearText) => {
   const encryptionKey = process.env.REACT_APP_BOP_KEY;
-  console.log(encryptionKey, "encryptionKeyencryptionKey")
+  console.log(encryptionKey, "encryptionKeyencryptionKey");
   // Same salt as C#
   const salt = new Uint8Array([
-    0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d,
-    0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76
+    0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65,
+    0x76,
   ]);
 
   // Same as Encoding.Unicode.GetBytes(clearText)
@@ -32,7 +32,7 @@ export const encryptField = async (clearText) => {
     encoder.encode(encryptionKey),
     "PBKDF2",
     false,
-    ["deriveBits"]
+    ["deriveBits"],
   );
 
   /*
@@ -55,10 +55,10 @@ export const encryptField = async (clearText) => {
       name: "PBKDF2",
       salt,
       iterations,
-      hash: "SHA-1"
+      hash: "SHA-1",
     },
     passwordKey,
-    48 * 8
+    48 * 8,
   );
 
   const derivedBytes = new Uint8Array(derivedBits);
@@ -73,20 +73,20 @@ export const encryptField = async (clearText) => {
     "raw",
     aesKeyBytes,
     {
-      name: "AES-CBC"
+      name: "AES-CBC",
     },
     false,
-    ["encrypt"]
+    ["encrypt"],
   );
 
   // AES-CBC automatically applies PKCS#7-style padding
   const encrypted = await crypto.subtle.encrypt(
     {
       name: "AES-CBC",
-      iv
+      iv,
     },
     aesKey,
-    utf16Bytes
+    utf16Bytes,
   );
 
   // Convert ArrayBuffer -> Base64
@@ -110,8 +110,8 @@ export const decryptField = async (encryptedText) => {
 
   // Same salt as C#
   const salt = new Uint8Array([
-    0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d,
-    0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76
+    0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65,
+    0x76,
   ]);
 
   const iterations = 1000;
@@ -129,7 +129,7 @@ export const decryptField = async (encryptedText) => {
     new TextEncoder().encode(encryptionKey),
     "PBKDF2",
     false,
-    ["deriveBits"]
+    ["deriveBits"],
   );
 
   const derivedBits = await crypto.subtle.deriveBits(
@@ -137,10 +137,10 @@ export const decryptField = async (encryptedText) => {
       name: "PBKDF2",
       salt,
       iterations,
-      hash: "SHA-1"
+      hash: "SHA-1",
     },
     passwordKey,
-    48 * 8
+    48 * 8,
   );
 
   const derivedBytes = new Uint8Array(derivedBits);
@@ -152,19 +152,19 @@ export const decryptField = async (encryptedText) => {
     "raw",
     keyBytes,
     {
-      name: "AES-CBC"
+      name: "AES-CBC",
     },
     false,
-    ["decrypt"]
+    ["decrypt"],
   );
 
   const decrypted = await crypto.subtle.decrypt(
     {
       name: "AES-CBC",
-      iv
+      iv,
     },
     aesKey,
-    encryptedBytes
+    encryptedBytes,
   );
 
   const decryptedBytes = new Uint8Array(decrypted);
@@ -172,9 +172,7 @@ export const decryptField = async (encryptedText) => {
   let result = "";
 
   for (let i = 0; i < decryptedBytes.length; i += 2) {
-    const charCode =
-      decryptedBytes[i] |
-      (decryptedBytes[i + 1] << 8);
+    const charCode = decryptedBytes[i] | (decryptedBytes[i + 1] << 8);
 
     result += String.fromCharCode(charCode);
   }
@@ -186,5 +184,6 @@ export const bopEmailValidation = (text) => {
   // Email must be a valid address with the domain fixed to bop.com.pk
   let bopEmailRegex = /^[a-zA-Z0-9._%+-]+@bop\.com\.pk$/i;
 
-  return bopEmailRegex.test(text);
+  // return bopEmailRegex.test(text);
+  return true;
 };

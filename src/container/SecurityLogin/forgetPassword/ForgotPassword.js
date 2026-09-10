@@ -28,6 +28,7 @@ const ForgotPassword = () => {
     try {
       const Data = {
         Email: await encryptField(email.trim()),
+        RoleID: 5,
       };
 
       console.log("Forgot Password Data:", Data);

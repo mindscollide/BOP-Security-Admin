@@ -1032,7 +1032,7 @@ const forgotPasswordApi = (navigate, Data) => {
                   "ERM_AuthService_AuthManager_SendEmailForForgetPasword_02".toLowerCase(),
                 )
             ) {
-              dispatch(forgotPassword_fail("Invalid Email"));
+              dispatch(forgotPassword_fail(""));
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()

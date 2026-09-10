@@ -20,7 +20,7 @@ const ResetPasswordLinkExpired = () => {
       return;
     }
 
-    const Data = { Email: email };
+    const Data = { Email: email, RoleID: 5 };
     dispatch(forgotPasswordApi(navigate, Data));
   };
   return (
@@ -53,8 +53,7 @@ const ResetPasswordLinkExpired = () => {
               width='100'
               height='auto'
               viewBox='0 0 847 757'
-              enable-background='new 0 0 847 757'
-             >
+              enable-background='new 0 0 847 757'>
               <g>
                 <path
                   fill-rule='evenodd'

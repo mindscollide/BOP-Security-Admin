@@ -26,24 +26,24 @@ export const router = createBrowserRouter(
       <Route exact path="/" element={<SecurityLogin />} />
       <Route exact path="/ChangePassword" element={<ChangePassword />} />
       <Route exact path="/CreatePassword" element={<CreatePassword />} />
-      <Route exact path="/ResetPassword" element={<ResetPassword />} />
+      <Route exact path="/resetPassword" element={<ResetPassword />} />
       <Route exact path="/TwoFaVerification" element={<TwoFaVerification />} />
       <Route exact path="/ForgotPassword" element={<ForgotPassword />} />
       <Route exact path="/EmailSent" element={<EmailSentPage />} />
 
-      {/* <Route element={<PrivateRoutes />}> */}
-      <Route exact path="/BOP/Admin/" element={<MainPage />}>
-        <Route index path="" element={<EditBankUser />} />
-        <Route path="BankUser" element={<EditBankUser />} />
-        <Route path="CorporateUser" element={<EditCorporateUser />} />
-        <Route path="userReport" element={<Userreport />} />
-        <Route path="PendingApprovalBank" element={<PendingApprovalBank />} />
-        <Route
-          path="PendingApprovalCorporate"
-          element={<PendingApprovalCorporate />}
-        />
+      <Route element={<PrivateRoutes />}>
+        <Route exact path="/BOP/Admin/" element={<MainPage />}>
+          <Route index path="" element={<EditBankUser />} />
+          <Route path="BankUser" element={<EditBankUser />} />
+          <Route path="CorporateUser" element={<EditCorporateUser />} />
+          <Route path="userReport" element={<Userreport />} />
+          <Route path="PendingApprovalBank" element={<PendingApprovalBank />} />
+          <Route
+            path="PendingApprovalCorporate"
+            element={<PendingApprovalCorporate />}
+          />
+        </Route>
       </Route>
-      {/* </Route> */}
     </>
   )
 );

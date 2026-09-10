@@ -46,7 +46,7 @@ const PendingApprovalBank = () => {
 
   //Global State
   //Checking snakbar state
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState({ open: false, message: "" });
 
   const GetNewBankUserRequests = useSelector(
     (state) => state.securityReducer.GetNewBankUserRequestsData

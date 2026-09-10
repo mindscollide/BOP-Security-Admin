@@ -9,8 +9,12 @@ import {
   GetBankUserRoles,
   GetAllBranches,
   LogOut,
+  EmailTokenVerify,
+  ForgetPassword,
+  BankResetPassword,
 } from "../../commen/apis/Api_config";
 import { authenticationAPI } from "../../commen/apis/Api_ends_points";
+import { encryptField } from "../../commen/functions/utils";
 
 const cleareMessage = (response) => {
   return {
@@ -80,8 +84,8 @@ const RefreshToken = (navigate) => {
               await dispatch(
                 refreshtokenSuccess(
                   response.data.responseResult,
-                  "Refresh Token Update Successfully"
-                )
+                  "Refresh Token Update Successfully",
+                ),
               );
             } else if (
               response.data.responseResult.responseMessage.toLowerCase() ===
@@ -101,7 +105,7 @@ const RefreshToken = (navigate) => {
       })
       .catch((response) => {
         dispatch(
-          refreshtokenFail("Your Session has expired. Please login again.")
+          refreshtokenFail("Your Session has expired. Please login again."),
         );
       });
   };
@@ -147,6 +151,24 @@ const loginSecurityAdminAPI = (navigate, data) => {
       // },
     })
       .then(async (response) => {
+           const {
+          isExecuted,
+          responseMessage,
+          token,
+          refreshToken,
+          isPasswordReset,
+          user: {
+            branch,
+            employeeID,
+            ldapAccount,
+            userID,
+            firstName,
+            email,
+            contactNumber,
+            userRoleID,
+            userStatusID,
+          },
+        } = response.data.responseResult;
         if (response.data?.responseCode === 401) {
           navigate("/");
           localStorage.clear();
@@ -166,8 +188,8 @@ const loginSecurityAdminAPI = (navigate, data) => {
               dispatch(
                 loginSecurityAdminFailed(
                   response.data.responseResult,
-                  "Device is Empty"
-                )
+                  "Device is Empty",
+                ),
               );
             } else if (
               response.data.responseResult.responseMessage
@@ -183,21 +205,37 @@ const loginSecurityAdminAPI = (navigate, data) => {
             ) {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminSuccess("LDAP auth Successful"));
+               if (!isPasswordReset) {
+                const encryptedName = await encryptField(firstName);
+                const encryptedUserID = await encryptField(String(userID));
+                navigate("/ResetPassword", {
+                  state: {
+                    isResetPassword: false,
+                    firstName: encryptedName,
+                    email: email,
+                    userID: encryptedUserID,
+                  },
+                });
+                return;
+              }
               localStorage.setItem(
                 "token",
-                JSON.stringify(response.data.responseResult.token)
+                JSON.stringify(response.data.responseResult.token),
               );
               localStorage.setItem(
                 "refreshToken",
-                JSON.stringify(response.data.responseResult.refreshToken)
+                JSON.stringify(response.data.responseResult.refreshToken),
               );
+              // The service rejects a mismatched role before reaching this
+              // branch, so the RoleID that was sent is the validated one.
+              localStorage.setItem("roleID", JSON.stringify(data.RoleID));
               localStorage.setItem(
                 "userID",
-                response.data.responseResult.user.userID
+                response.data.responseResult.user.userID,
               );
               localStorage.setItem(
                 "userName",
-                response.data.responseResult.user.firstName
+                response.data.responseResult.user.firstName,
               );
               localStorage.setItem("defaultOpenKey", "editBankUser");
               navigate("/BOP/Admin/BankUser");
@@ -264,12 +302,12 @@ const loginSecurityAdminAPI = (navigate, data) => {
             ) {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));
-            } else if(
+            } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_14".toLowerCase())
             ) {
-              dispatch(loginSecurityAdminFailed("Role InvalidF"));
+              dispatch(loginSecurityAdminFailed("Role Invalid"));
             } else {
               console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));
@@ -342,24 +380,24 @@ const SendEmailResetPasswordAPI = (navigate, data) => {
               dispatch(
                 SendEmailResetPasswordSuccess(
                   response.data.responseResult,
-                  "Email for Reset Password Sent Successfully"
-                )
+                  "Email for Reset Password Sent Successfully",
+                ),
               );
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_AuthManager_SendEmailForResetPasword_02".toLowerCase()
+                  "ERM_AuthService_AuthManager_SendEmailForResetPasword_02".toLowerCase(),
                 )
             ) {
               dispatch(
-                SendEmailResetPasswordFail("No Email sent for Reset Password")
+                SendEmailResetPasswordFail("No Email sent for Reset Password"),
               );
             } else if (
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_AuthManager_SendEmailForResetPasword_03".toLowerCase()
+                  "ERM_AuthService_AuthManager_SendEmailForResetPasword_03".toLowerCase(),
                 )
             ) {
               dispatch(SendEmailResetPasswordFail("Invalid Corporate User"));
@@ -368,7 +406,7 @@ const SendEmailResetPasswordAPI = (navigate, data) => {
             response.data.responseResult.responseMessage
               .toLowerCase()
               .includes(
-                "ERM_AuthService_AuthManager_SendEmailForResetPasword_04".toLowerCase()
+                "ERM_AuthService_AuthManager_SendEmailForResetPasword_04".toLowerCase(),
               )
           ) {
             dispatch(SendEmailResetPasswordFail("Please Enter A valid Email"));
@@ -376,7 +414,7 @@ const SendEmailResetPasswordAPI = (navigate, data) => {
             response.data.responseResult.responseMessage
               .toLowerCase()
               .includes(
-                "ERM_AuthService_AuthManager_SendEmailForResetPasword_05".toLowerCase()
+                "ERM_AuthService_AuthManager_SendEmailForResetPasword_05".toLowerCase(),
               )
           ) {
             dispatch(SendEmailResetPasswordFail("Something went wrong"));
@@ -457,14 +495,11 @@ const GetAllUserStatusAPI = (navigate) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_CommonManager_GetAllUserStatus_01".toLowerCase()
+                  "ERM_AuthService_CommonManager_GetAllUserStatus_01".toLowerCase(),
                 )
             ) {
               dispatch(
-                GetAllUserStatusSuccess(
-                  response.data.responseResult,
-                  ""
-                )
+                GetAllUserStatusSuccess(response.data.responseResult, ""),
               );
             } else if (
               response.data.responseResult.responseMessage.toLowerCase() ===
@@ -475,7 +510,7 @@ const GetAllUserStatusAPI = (navigate) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_CommonManager_GetAllUserStatus_03".toLowerCase()
+                  "ERM_AuthService_CommonManager_GetAllUserStatus_03".toLowerCase(),
                 )
             ) {
               dispatch(GetAllUserStatusFail("Exception"));
@@ -543,14 +578,12 @@ const RoleListAPI = (navigate) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_CommonManager_RoleList_01".toLowerCase()
+                  "ERM_AuthService_CommonManager_RoleList_01".toLowerCase(),
                 )
             ) {
               // console.log(response);
 
-              dispatch(
-                RoleListSuccess(response.data.responseResult, "")
-              );
+              dispatch(RoleListSuccess(response.data.responseResult, ""));
             } else if (
               response.data.responseResult.responseMessage.toLowerCase() ===
               "ERM_AuthService_CommonManager_RoleList_02".toLowerCase()
@@ -560,7 +593,7 @@ const RoleListAPI = (navigate) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_CommonManager_RoleList_03".toLowerCase()
+                  "ERM_AuthService_CommonManager_RoleList_03".toLowerCase(),
                 )
             ) {
               dispatch(RoleListFail("Exception"));
@@ -627,14 +660,11 @@ const GetBankUserRolesAPI = (navigate) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_CommonManager_GetBankUserRoles_01".toLowerCase()
+                  "ERM_AuthService_CommonManager_GetBankUserRoles_01".toLowerCase(),
                 )
             ) {
               dispatch(
-                GetBankUserRolesSuccess(
-                  response.data.responseResult,
-                  ""
-                )
+                GetBankUserRolesSuccess(response.data.responseResult, ""),
               );
             } else if (
               response.data.responseResult.responseMessage.toLowerCase() ===
@@ -645,7 +675,7 @@ const GetBankUserRolesAPI = (navigate) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_CommonManager_GetBankUserRoles_03".toLowerCase()
+                  "ERM_AuthService_CommonManager_GetBankUserRoles_03".toLowerCase(),
                 )
             ) {
               dispatch(GetBankUserRolesFail("Exception"));
@@ -713,15 +743,10 @@ const GetAllBranchesAPI = (navigate) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_CommonManager_GetAllBranches_01".toLowerCase()
+                  "ERM_AuthService_CommonManager_GetAllBranches_01".toLowerCase(),
                 )
             ) {
-              dispatch(
-                GetAllBranchesSuccess(
-                  response.data.responseResult,
-                  ""
-                )
-              );
+              dispatch(GetAllBranchesSuccess(response.data.responseResult, ""));
             } else if (
               response.data.responseResult.responseMessage.toLowerCase() ===
               "ERM_AuthService_CommonManager_GetAllBranches_02".toLowerCase()
@@ -731,7 +756,7 @@ const GetAllBranchesAPI = (navigate) => {
               response.data.responseResult.responseMessage
                 .toLowerCase()
                 .includes(
-                  "ERM_AuthService_CommonManager_GetAllBranches_03".toLowerCase()
+                  "ERM_AuthService_CommonManager_GetAllBranches_03".toLowerCase(),
                 )
             ) {
               dispatch(GetAllBranchesFail("Exception"));
@@ -800,9 +825,7 @@ const LogOutAPI = (navigate) => {
                 .toLowerCase()
                 .includes("ERM_AuthService_AuthManager_LogOut_01".toLowerCase())
             ) {
-              dispatch(
-                LogOutSuccess(response.data.responseResult, "")
-              );
+              dispatch(LogOutSuccess(response.data.responseResult, ""));
               dispatch(signOut(navigate, ""));
             } else if (
               response.data.responseResult.responseMessage.toLowerCase() ===
@@ -829,7 +852,318 @@ const LogOutAPI = (navigate) => {
   };
 };
 
+const resetPassword_init = () => {
+  return {
+    type: actions.RESET_PASSWORD_INIT,
+  };
+};
+const resetPassword_success = (response, message) => {
+  return {
+    type: actions.RESET_PASSWORD_SUCCESS,
+    response,
+    message,
+  };
+};
+const resetPassword_fail = (message) => {
+  return {
+    type: actions.RESET_PASSWORD_FAIL,
+  };
+};
+
+const resetPasswordApi = (navigate, Data) => {
+  let token = localStorage.getItem("token");
+  return (dispatch) => {
+    dispatch(resetPassword_init());
+    let form = new FormData();
+    form.append("RequestMethod", BankResetPassword.RequestMethod);
+    form.append("RequestData", JSON.stringify(Data));
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(resetPasswordApi(navigate, Data));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_AuthManager_ResetPassword_01".toLowerCase()
+            ) {
+              localStorage.setItem("defaultOpenKey", "sub1");
+              localStorage.setItem("defaultSelectedKey", "1");
+              localStorage.setItem(
+                "token",
+                JSON.stringify(response.data.responseResult.token),
+              );
+              localStorage.setItem(
+                "refreshToken",
+                JSON.stringify(response.data.responseResult.refreshToken),
+              );
+              localStorage.setItem("roleID", JSON.stringify(Data.RoleID));
+
+              localStorage.setItem(
+                "userID",
+                response.data.responseResult.user.userID,
+              );
+              localStorage.setItem(
+                "userName",
+                response.data.responseResult.user.firstName,
+              );
+              navigate("/BOP/Admin/BankUser");
+              dispatch(resetPassword_success(response.data.responseResult, ""));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_ResetPassword_02".toLowerCase(),
+                )
+            ) {
+              dispatch(resetPassword_fail("No Record Updated"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_ResetPassword_03".toLowerCase(),
+                )
+            ) {
+              dispatch(resetPassword_fail("Something went wrong"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_ResetPassword_04".toLowerCase(),
+                )
+            ) {
+              dispatch(resetPassword_fail("Something went wrong"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_ResetPassword_05".toLowerCase(),
+                )
+            ) {
+              dispatch(resetPassword_fail("Something went wrong"));
+            } else {
+              dispatch(resetPassword_fail("Something went wrong"));
+            }
+          } else {
+            dispatch(resetPassword_fail("Something went wrong"));
+          }
+        } else {
+          dispatch(resetPassword_fail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(resetPassword_fail("something went wrong"));
+      });
+  };
+};
+
+const forgotPassword_init = () => {
+  return {
+    type: actions.FORGOT_PASSWORD_INIT,
+  };
+};
+const forgotPassword_success = (response, message) => {
+  return {
+    type: actions.FORGOT_PASSWORD_SUCCESS,
+    response,
+    message,
+  };
+};
+const forgotPassword_fail = (message) => {
+  return {
+    type: actions.FORGOT_PASSWORD_FAIL,
+    message,
+  };
+};
+
+const forgotPasswordApi = (navigate, Data) => {
+  let token = localStorage.getItem("token");
+  return (dispatch) => {
+    dispatch(forgotPassword_init());
+    let form = new FormData();
+    form.append("RequestMethod", ForgetPassword.RequestMethod);
+    form.append("RequestData", JSON.stringify(Data));
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(forgotPasswordApi(navigate, Data));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_AuthManager_SendEmailForForgetPasword_01".toLowerCase()
+            ) {
+              navigate("/EmailSent", { replace: true });
+
+              dispatch(
+                forgotPassword_success(response.data.responseResult, ""),
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_SendEmailForForgetPasword_02".toLowerCase(),
+                )
+            ) {
+              dispatch(forgotPassword_fail("Invalid Email"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_SendEmailForForgetPasword_03".toLowerCase(),
+                )
+            ) {
+              dispatch(forgotPassword_fail("User Inactive"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_SendEmailForForgetPasword_04".toLowerCase(),
+                )
+            ) {
+              dispatch(forgotPassword_fail("Something went wrong"));
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_SendEmailForForgetPasword_05".toLowerCase(),
+                )
+            ) {
+              dispatch(forgotPassword_fail("Something went wrong"));
+            } else {
+              dispatch(forgotPassword_fail("Something went wrong"));
+            }
+          } else {
+            dispatch(forgotPassword_fail("Something went wrong"));
+          }
+        } else {
+          dispatch(forgotPassword_fail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(forgotPassword_fail("something went wrong"));
+      });
+  };
+};
+
+const resetPasswordEmailVerification_init = () => {
+  return {
+    type: actions.RESETPASSWORDEMAILVERIFICATION_INIT,
+  };
+};
+const resetPasswordEmailVerification_success = (response, message) => {
+  return {
+    type: actions.RESETPASSWORDEMAILVERIFICATION_SUCCESS,
+    response,
+    message,
+  };
+};
+const resetPasswordEmailVerification_fail = (message) => {
+  return {
+    type: actions.RESETPASSWORDEMAILVERIFICATION_FAIL,
+    message,
+  };
+};
+
+const resetPasswordEmailVerificationApi = (navigate, Data) => {
+  let token = localStorage.getItem("token");
+  return (dispatch) => {
+    dispatch(resetPasswordEmailVerification_init());
+    let form = new FormData();
+    form.append("RequestMethod", EmailTokenVerify.RequestMethod);
+    form.append("RequestData", JSON.stringify(Data));
+    axios({
+      method: "POST",
+      url: authenticationAPI,
+      data: form,
+      headers: {
+        _token: token,
+      },
+    })
+      .then(async (response) => {
+        if (response.data?.responseCode === 401) {
+          navigate("/");
+          localStorage.clear();
+        }
+        if (response.data.responseCode === 417) {
+          await dispatch(RefreshToken(navigate));
+          dispatch(resetPasswordEmailVerificationApi(navigate, Data));
+        } else if (response.data.responseCode === 200) {
+          if (response.data.responseResult.isExecuted === true) {
+            if (
+              response.data.responseResult.responseMessage.toLowerCase() ===
+              "ERM_AuthService_AuthManager_EmailToken_01".toLowerCase()
+            ) {
+              navigate("/resetPassword", {
+                replace: true,
+                state: {
+                  email: response.data.responseResult.email,
+                  requestToken: Data.EncryptedString,
+                },
+              });
+
+              dispatch(
+                resetPasswordEmailVerification_success(
+                  response.data.responseResult,
+                  "",
+                ),
+              );
+            } else if (
+              response.data.responseResult.responseMessage
+                .toLowerCase()
+                .includes(
+                  "ERM_AuthService_AuthManager_EmailToken_02".toLowerCase(),
+                )
+            ) {
+              dispatch(resetPasswordEmailVerification_fail("Invalid Email"));
+            } else {
+              dispatch(
+                resetPasswordEmailVerification_fail("Something went wrong"),
+              );
+            }
+          } else {
+            dispatch(
+              resetPasswordEmailVerification_fail("Something went wrong"),
+            );
+          }
+        } else {
+          dispatch(resetPasswordEmailVerification_fail("Something went wrong"));
+        }
+      })
+      .catch((response) => {
+        dispatch(resetPasswordEmailVerification_fail("something went wrong"));
+      });
+  };
+};
+
 export {
+  resetPasswordApi,
+  resetPasswordEmailVerificationApi,
+  forgotPasswordApi,
   RefreshToken,
   loginSecurityAdminAPI,
   SendEmailResetPasswordAPI,

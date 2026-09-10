@@ -38,7 +38,7 @@ const PendingApprovalCorporate = () => {
 
   //Global State
   //Checking snakbar state
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState({ open: false, message: "" });
   //row length on scroll
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);

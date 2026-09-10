@@ -944,13 +944,13 @@ const UpdateBankUserAPI = (
 //Update Corporate Users
 const UpdateCorporateUserInit = () => {
   return {
-    type: actions.SEARCH_BANK_USERS_INIT,
+    type: actions.UPDATE_CORPORATE_USER_INIT,
   };
 };
 
 const UpdateCorporateUserSuccess = (response, message) => {
   return {
-    type: actions.SEARCH_BANK_USERS_SUCCESS,
+    type: actions.UPDATE_CORPORATE_USER_SUCCESS,
     response: response,
     message: message,
   };
@@ -958,7 +958,7 @@ const UpdateCorporateUserSuccess = (response, message) => {
 
 const UpdateCorporateUserFail = (message) => {
   return {
-    type: actions.SEARCH_BANK_USERS_FAIL,
+    type: actions.UPDATE_CORPORATE_USER_FAIL,
     message: message,
   };
 };

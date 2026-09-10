@@ -127,3 +127,21 @@
 .error-message-nothing {
   height: 2px !important;
 }
+
+.login-heading {
+  display: flex;
+  justify-content: center;
+  color: #eb5300;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.forgotPassword-text {
+  color: #000 !important;
+  text-decoration: underline;
+  margin-top: 0.5rem !important;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}

@@ -1,8 +1,19 @@
 import { Navigate, Outlet } from "react-router-dom";
+
+// Everything in localStorage is written with JSON.stringify. A half-written or
+// hand-edited entry would otherwise throw out of the guard and blank the app.
+const readStored = (key) => {
+  try {
+    return JSON.parse(localStorage.getItem(key));
+  } catch (error) {
+    return null;
+  }
+};
+
 const PrivateRoutes = () => {
-  let RoleID = JSON.parse(localStorage.getItem("roleID"));
-  const currentUser = RoleID === 5 ? true : false;
-  const token = JSON.parse(localStorage.getItem("token"));
-  return currentUser && token ? <Outlet /> : <Navigate to="*" />;
+  const RoleID = readStored("roleID");
+  const token = readStored("token");
+  const currentUser = RoleID === 5;
+  return currentUser && token ? <Outlet /> : <Navigate to="/" replace />;
 };
 export default PrivateRoutes;

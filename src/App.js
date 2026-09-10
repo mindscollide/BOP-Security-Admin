@@ -7,6 +7,7 @@ import "@fontsource/roboto";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/Routes";
 import { Loader } from "./components/elements";
+import ResponseMessage from "./utils/ResponseMessage";
 import { useEffect, useRef } from "react";
 function App() {
   const currentVersion = useRef(null);
@@ -44,9 +45,11 @@ function App() {
   }, []);
 
   return (
-    <RouterProvider router={router}>
+    <>
+      <RouterProvider router={router} />
       <Loader />
-    </RouterProvider>
+      <ResponseMessage />
+    </>
   );
 }
 

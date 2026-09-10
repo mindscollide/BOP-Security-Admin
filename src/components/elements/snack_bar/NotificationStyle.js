@@ -6,23 +6,37 @@ export const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(10),
     },
   },
-  BackGroundSucces: {
+  // The Loader overlay sits at z-index 9999; MUI's Snackbar defaults to
+  // theme.zIndex.snackbar (1400), so without this it renders underneath it.
+  snackbar: {
+    zIndex: "10000 !important",
+  },
+  success: {
     width: "100%",
-    background:
-      "linear-gradient(to bottom, #eeb592 0%, #fc6d0f 100%) !important",
+    backgroundColor: "#2e7d32 !important",
     marginTop: theme.spacing(5),
     position: "relative",
     fontSize: "15px",
-
-    // zIndex: 5,
   },
-  BackGroundfailed: {
+  error: {
     width: "100%",
-    backgroundColor: "#ce0000",
-    marginTop: theme.spacing(6),
+    backgroundColor: "#ce0000 !important",
+    marginTop: theme.spacing(5),
     position: "relative",
     fontSize: "15px",
-
-    // zIndex: 5,
+  },
+  warning: {
+    width: "100%",
+    backgroundColor: "#ed6c02 !important",
+    marginTop: theme.spacing(5),
+    position: "relative",
+    fontSize: "15px",
+  },
+  info: {
+    width: "100%",
+    backgroundColor: "#0288d1 !important",
+    marginTop: theme.spacing(5),
+    position: "relative",
+    fontSize: "15px",
   },
 }));

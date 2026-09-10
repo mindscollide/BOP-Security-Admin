@@ -4,6 +4,7 @@ const initialState = {
   Loading: false,
   GetUserSettings: null,
   UpdateUserSettings: null,
+  ResponseMessage: "",
 };
 
 const settingsReducer = (state = initialState, action) => {
@@ -51,6 +52,12 @@ const settingsReducer = (state = initialState, action) => {
         Loading: false,
         UpdateUserSettings: null,
         ResponseMessage: action.message,
+      };
+
+    case actions.CLEARE_MESSAGE:
+      return {
+        ...state,
+        ResponseMessage: "",
       };
 
     default:

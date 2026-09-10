@@ -210,6 +210,11 @@ const securityReducer = (state = initialState, action) => {
         UpdateCorporateUser: null,
         ResponseMessage: action.message,
       };
+    case actions.CLEARE_MESSAGE:
+      return {
+        ...state,
+        ResponseMessage: "",
+      };
     default:
       return { ...state };
   }

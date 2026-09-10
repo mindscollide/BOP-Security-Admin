@@ -3,7 +3,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Header from "../../../components/layout/Header/Header";
 import Sidebar from "../../../components/layout/Sidebar/Sidebar";
 import { Layout } from "antd";
-import ResponseMessage from "../../../utils/ResponseMessage";
 import "./MainPage.css";
 import { useMqttClient } from "../../../commen/functions/MqttConnection";
 import { useDispatch } from "react-redux";
@@ -25,7 +24,6 @@ import {
   setCorporateUserRequest,
   setCorporateUserUpdated,
 } from "../../../store/actions/RealtimeActions";
-import { Loader } from "../../../components/elements";
 import { LogOutAPI } from "../../../store/actions/Auth_Actions";
 
 const MainPage = () => {
@@ -168,8 +166,6 @@ const MainPage = () => {
             <Outlet />
           </Content>
         </Layout>
-        <ResponseMessage />
-        <Loader />
       </Layout>
     </>
     // <Fragment>

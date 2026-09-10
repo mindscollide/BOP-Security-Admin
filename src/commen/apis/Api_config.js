@@ -113,8 +113,21 @@ const PDFDownloadBankUserListSecurityAdminReport = {
 const PDFDownloadCorporateUserListSecurityAdminReport = {
   RequestMethod: "ServiceManager.DownloadCorporateUsersSecurityAdminPDF",
 };
+const BankResetPassword = {
+  RequestMethod: "ServiceManager.ResetPassword",
+};
 
+const EmailTokenVerify = {
+  RequestMethod: "ServiceManager.EmailTokenVerify",
+};
+
+const ForgetPassword = {
+  RequestMethod: "ServiceManager.ForgetPassword",
+};
 export {
+  ForgetPassword,
+  EmailTokenVerify,
+  BankResetPassword,
   authenticationRefreshToken,
   authenticationLogIn,
   emailSentResetPassword,

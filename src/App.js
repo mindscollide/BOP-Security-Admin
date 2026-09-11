@@ -9,38 +9,60 @@ import { router } from "./routes/Routes";
 import { Loader } from "./components/elements";
 import ResponseMessage from "./utils/ResponseMessage";
 import { useEffect, useRef } from "react";
+// Matches the entry bundle's <script src="..."> tag in index.html, e.g.
+// <script defer="defer" src="/static/js/main.f1587a40.js"></script>
+// Deliberately anchored to a .js src so it can't match the <link ...rel="stylesheet">
+// tag also present in the built HTML.
+const ENTRY_SCRIPT_SRC_REGEX = /<script[^>]+src="([^"]+\.js)"[^>]*>/i;
+
 function App() {
-  const currentVersion = useRef(null);
-  // 🔹 Auto-update page when version.json changes
+  // Holds the entry bundle path (e.g. "/static/js/main.f1587a40.js") seen on the
+  // previous check, so a later check can tell a new deployment landed.
+  const entryScriptSrcRef = useRef(null);
+
+  // 🔹 Detect a new deployment and auto-reload.
+  // index.html is already unavoidably public (it's what boots the SPA) and the
+  // build tool stamps a fresh content hash into its entry <script src> on every
+  // build, so it doubles as a version signal for free — no separate, guessable
+  // version.json endpoint needed for this.
   useEffect(() => {
-    const checkVersion = async () => {
+    const checkForNewDeployment = async () => {
       try {
-        const response = await fetch("/version.json", { cache: "no-cache" }); // ✅ root path
+        const response = await fetch("/index.html", { cache: "no-cache" });
+        const html = await response.text();
+        const match = html.match(ENTRY_SCRIPT_SRC_REGEX);
 
-        const data = await response.json();
-
-        console.log(data, currentVersion.current, "version");
-
-        if (currentVersion.current && currentVersion.current !== data.version) {
-          // 🔹 Clear browser caches (for service workers / cache API)
-          if ("caches" in window) {
-            caches.keys().then((names) => {
-              for (let name of names) {
-                caches.delete(name);
-              }
-            });
-          }
-          window.location.reload(true); // force reload
+        if (!match) {
+          console.error(
+            "Deployment check: entry script tag not found in index.html",
+          );
+          return;
         }
 
-        currentVersion.current = data.version;
+        const entryScriptSrc = match[1];
+
+        if (
+          entryScriptSrcRef.current &&
+          entryScriptSrcRef.current !== entryScriptSrc
+        ) {
+          // 🔹 New deployment detected — clear caches (service workers / Cache API)
+          // and reload so the user picks up the new bundle instead of a stale one.
+          if ("caches" in window) {
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map((name) => caches.delete(name)));
+          }
+          window.location.reload();
+          return;
+        }
+
+        entryScriptSrcRef.current = entryScriptSrc;
       } catch (err) {
-        console.error("Error checking version.json:", err);
+        console.error("Deployment check failed:", err);
       }
     };
 
-    checkVersion();
-    const interval = setInterval(checkVersion, 30000); // check every 30 sec
+    checkForNewDeployment();
+    const interval = setInterval(checkForNewDeployment, 30000); // check every 30 sec
     return () => clearInterval(interval);
   }, []);
 

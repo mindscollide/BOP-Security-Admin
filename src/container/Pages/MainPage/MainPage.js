@@ -122,7 +122,11 @@ const MainPage = () => {
         case "LOGIN":
           console.log("LOGIN event received", data.payload);
           // Handle login event if necessary
-          let token = localStorage.getItem("token");
+          // localStorage stores this JSON.stringify-wrapped (see loginSecurityAdminAPI),
+          // while the MQTT payload carries the plain token — comparing the raw
+          // localStorage string against it always mismatches, even for this same
+          // session's own just-issued token, which force-logs-out a fresh login.
+          let token = JSON.parse(localStorage.getItem("token"));
           let userId = localStorage.getItem("userID");
           console.log(
             "LOGIN event received",

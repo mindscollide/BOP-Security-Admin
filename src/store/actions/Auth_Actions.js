@@ -157,34 +157,37 @@ const loginSecurityAdminAPI = (navigate, data) => {
           token,
           refreshToken,
           isPasswordReset,
-          user: {
-            branch,
-            employeeID,
-            ldapAccount,
-            userID,
-            firstName,
-            email,
-            contactNumber,
-            userRoleID,
-            userStatusID,
-          },
+          user = {},
         } = response.data.responseResult;
+
+        const {
+          branch,
+          employeeID,
+          ldapAccount,
+          userID,
+          firstName,
+          email,
+          contactNumber,
+          userRoleID,
+          userStatusID,
+        } = user || {};
+
         if (response.data?.responseCode === 401) {
           navigate("/");
           localStorage.clear();
         }
+
         if (response.data.responseCode === 417) {
           await dispatch(RefreshToken(navigate));
           dispatch(loginSecurityAdminAPI(navigate, data));
         } else if (response.data.responseCode === 200) {
           console.log("loginSecurityAdmin", response);
 
-          if (response.data.responseResult.isExecuted === true) {
+          if (isExecuted === true) {
             if (
-              response.data.responseResult.responseMessage.toLowerCase() ===
+              responseMessage?.toLowerCase() ===
               "ERM_AuthService_AuthManager_Login_01".toLowerCase()
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(
                 loginSecurityAdminFailed(
                   response.data.responseResult,
@@ -192,124 +195,118 @@ const loginSecurityAdminAPI = (navigate, data) => {
                 ),
               );
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_02".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Device ID is Empty"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_03".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
-              dispatch(loginSecurityAdminSuccess("LDAP auth Successful"));
-              if (!isPasswordReset) {
-                const encryptedName = await encryptField(firstName);
-                const encryptedUserID = await encryptField(String(userID));
-                navigate("/ResetPassword", {
-                  state: {
-                    isResetPassword: false,
-                    firstName: encryptedName,
-                    email: email,
-                    userID: encryptedUserID,
-                  },
-                });
-                return;
+              // Login success
+              dispatch(loginSecurityAdminSuccess(""));
+
+              try {
+                if (!isPasswordReset) {
+                  const encryptedName = await encryptField(firstName);
+                  const encryptedUserID = await encryptField(String(userID));
+
+                  navigate("/ResetPassword", {
+                    state: {
+                      isResetPassword: false,
+                      firstName: encryptedName,
+                      email: email,
+                      userID: encryptedUserID,
+                    },
+                  });
+
+                  return;
+                }
+
+                localStorage.setItem("token", JSON.stringify(token));
+
+                localStorage.setItem(
+                  "refreshToken",
+                  JSON.stringify(refreshToken),
+                );
+
+                localStorage.setItem("roleID", JSON.stringify(data.RoleID));
+
+                localStorage.setItem("userID", userID);
+                localStorage.setItem("userName", firstName);
+                localStorage.setItem("defaultOpenKey", "editBankUser");
+
+                navigate("/BOP/Admin/BankUser");
+              } catch (error) {
+                console.log(error);
               }
-              localStorage.setItem(
-                "token",
-                JSON.stringify(response.data.responseResult.token),
-              );
-              localStorage.setItem(
-                "refreshToken",
-                JSON.stringify(response.data.responseResult.refreshToken),
-              );
-              // The service rejects a mismatched role before reaching this
-              // branch, so the RoleID that was sent is the validated one.
-              localStorage.setItem("roleID", JSON.stringify(data.RoleID));
-              localStorage.setItem(
-                "userID",
-                response.data.responseResult.user.userID,
-              );
-              localStorage.setItem(
-                "userName",
-                response.data.responseResult.user.firstName,
-              );
-              localStorage.setItem("defaultOpenKey", "editBankUser");
-              navigate("/BOP/Admin/BankUser");
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_04".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
-              dispatch(loginSecurityAdminFailed("LDAP Auth Failed"));
+              dispatch(loginSecurityAdminFailed("Wrong Password"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_05".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("User is Locked"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_06".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("User is Disabled"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_07".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("User is Closed"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_08".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("User is Dormant"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_09".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Login Failed"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_12".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Not A valid role to login"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_10".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
-              dispatch(loginSecurityAdminFailed("Login Failed"));
+              dispatch(
+                loginSecurityAdminFailed(
+                  "Not a valid user. Please login with valid ID",
+                ),
+              );
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_11".toLowerCase())
             ) {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));
             } else if (
-              response.data.responseResult.responseMessage
-                .toLowerCase()
+              responseMessage
+                ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_14".toLowerCase())
             ) {
               dispatch(loginSecurityAdminFailed("Role Invalid"));
             } else {
-              console.log("loginSecurityAdmin", response);
               dispatch(loginSecurityAdminFailed("Something went wrong"));
             }
           } else {

@@ -13,7 +13,8 @@ export const useStyles = makeStyles((theme) => ({
   },
   success: {
     width: "100%",
-    backgroundColor: "#2e7d32 !important",
+    backgroundColor: "#32a852",
+    color: "#fff",
     marginTop: theme.spacing(5),
     position: "relative",
     fontSize: "15px",

@@ -5,6 +5,9 @@ const initialState = {
   GetUserSettings: null,
   UpdateUserSettings: null,
   ResponseMessage: "",
+  // Drives the global toast's color: "success" on a *_SUCCESS case that sets
+  // ResponseMessage, "error" on a *_FAIL case. See utils/ResponseMessage.js.
+  Severity: "",
 };
 
 const settingsReducer = (state = initialState, action) => {
@@ -22,6 +25,7 @@ const settingsReducer = (state = initialState, action) => {
         Loading: false,
         GetUserSettings: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.GET_USER_SETTINGS_FAIL:
@@ -30,6 +34,7 @@ const settingsReducer = (state = initialState, action) => {
         Loading: false,
         GetUserSettings: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     // Uodate User Settings reducer
     case actions.UPDATE_USER_SETTINGS_INIT:
@@ -44,6 +49,7 @@ const settingsReducer = (state = initialState, action) => {
         Loading: false,
         UpdateUserSettings: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.UPDATE_USER_SETTINGS_FAIL:
@@ -52,12 +58,14 @@ const settingsReducer = (state = initialState, action) => {
         Loading: false,
         UpdateUserSettings: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     case actions.CLEARE_MESSAGE:
       return {
         ...state,
         ResponseMessage: "",
+        Severity: "",
       };
 
     default:

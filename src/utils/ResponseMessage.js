@@ -1,79 +1,169 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { Notification, Message } from "../components/elements";
 import { cleareMessage } from "../store/actions/Auth_Actions";
+import { hideToast } from "../store/actions/UI_Actions";
 
-// Global toast for the plain ResponseMessage string every reducer's *_FAIL (and a
-// few *_SUCCESS) actions set. That string carries no success/fail flag of its own,
-// so this always renders as an error toast — genuine success toasts need the
-// reducer/action to be extended to carry a type, or the screen to call
-// <Notification type={Message.success} .../> directly with its own local state.
-//
-// Each watched slice is reset via CLEARE_MESSAGE right after being picked up. Without
-// that the string stays set in Redux forever, so if the exact same message fires
-// again later the toast never reopens — the effect's dependency doesn't see a change.
 const ResponseMessage = () => {
   const dispatch = useDispatch();
+  const timerRef = useRef(null);
+
+  // Security
   const securityAdminResponseMessage = useSelector(
     (state) => state.securityReducer.ResponseMessage
   );
+  const securityAdminSeverity = useSelector(
+    (state) => state.securityReducer.Severity
+  );
+
+  // Auth
   const authResponseMessage = useSelector(
     (state) => state.auth.ResponseMessage
   );
+  const authSeverity = useSelector(
+    (state) => state.auth.Severity
+  );
+
+  // Settings
   const settingsResponseMessage = useSelector(
     (state) => state.settingsReducer.ResponseMessage
   );
+  const settingsSeverity = useSelector(
+    (state) => state.settingsReducer.Severity
+  );
+
+  // Download Report
   const downloadReportResponseMessage = useSelector(
     (state) => state.DownloadReportReducer.ResponseMessage
   );
-  const [open, setOpen] = useState({ open: false, message: "" });
+  const downloadReportSeverity = useSelector(
+    (state) => state.DownloadReportReducer.Severity
+  );
 
-  useEffect(() => {
-    if (securityAdminResponseMessage !== "") {
-      setOpen({ open: true, message: securityAdminResponseMessage });
-      dispatch(cleareMessage());
-      setTimeout(() => {
-        setOpen({ open: false, message: "" });
-      }, 5000); // 5 seconds timeout for the snackbar message to disappear.
-    }
-  }, [securityAdminResponseMessage]);
+  // Global Toast
+  const toast = useSelector((state) => state.ui.toast);
 
-  useEffect(() => {
-    if (authResponseMessage !== "") {
-      setOpen({ open: true, message: authResponseMessage });
-      dispatch(cleareMessage());
-      setTimeout(() => {
-        setOpen({ open: false, message: "" });
-      }, 5000); // 5 seconds timeout for the snackbar message to disappear.
-    }
-  }, [authResponseMessage]);
+  const [open, setOpen] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
 
-  useEffect(() => {
-    if (settingsResponseMessage) {
-      setOpen({ open: true, message: settingsResponseMessage });
-      dispatch(cleareMessage());
-      setTimeout(() => {
-        setOpen({ open: false, message: "" });
-      }, 5000); // 5 seconds timeout for the snackbar message to disappear.
-    }
-  }, [settingsResponseMessage]);
+  const showToast = (message, severity) => {
+    // Show only if both message and severity exist
+    if (!message || !severity) return;
 
-  useEffect(() => {
-    if (downloadReportResponseMessage) {
-      setOpen({ open: true, message: downloadReportResponseMessage });
-      dispatch(cleareMessage());
-      setTimeout(() => {
-        setOpen({ open: false, message: "" });
-      }, 5000); // 5 seconds timeout for the snackbar message to disappear.
+    // Clear old timeout
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
     }
-  }, [downloadReportResponseMessage]);
+
+    setOpen({
+      open: true,
+      message,
+      type: severity,
+    });
+
+    timerRef.current = setTimeout(() => {
+      setOpen((prev) => ({
+        ...prev,
+        open: false,
+      }));
+    }, 5000);
+  };
+
+  // Security
+  useEffect(() => {
+    if (securityAdminResponseMessage && securityAdminSeverity) {
+      showToast(
+        securityAdminResponseMessage,
+        securityAdminSeverity
+      );
+
+      dispatch(cleareMessage());
+    }
+  }, [securityAdminResponseMessage, securityAdminSeverity, dispatch]);
+
+  // Auth
+  useEffect(() => {
+    if (authResponseMessage && authSeverity) {
+      showToast(
+        authResponseMessage,
+        authSeverity
+      );
+
+      dispatch(cleareMessage());
+    }
+  }, [authResponseMessage, authSeverity, dispatch]);
+
+  // Settings
+  useEffect(() => {
+    if (settingsResponseMessage && settingsSeverity) {
+      showToast(
+        settingsResponseMessage,
+        settingsSeverity
+      );
+
+      dispatch(cleareMessage());
+    }
+  }, [settingsResponseMessage, settingsSeverity, dispatch]);
+
+  // Download Report
+  useEffect(() => {
+    if (
+      downloadReportResponseMessage &&
+      downloadReportSeverity
+    ) {
+      showToast(
+        downloadReportResponseMessage,
+        downloadReportSeverity
+      );
+
+      dispatch(cleareMessage());
+    }
+  }, [
+    downloadReportResponseMessage,
+    downloadReportSeverity,
+    dispatch,
+  ]);
+
+  // Global Toast
+  useEffect(() => {
+    if (
+      toast?.open &&
+      toast?.message &&
+      toast?.severity
+    ) {
+      showToast(
+        toast.message,
+        toast.severity
+      );
+
+      dispatch(hideToast());
+    }
+  }, [
+    toast?.open,
+    toast?.message,
+    toast?.severity,
+    dispatch,
+  ]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Notification
       setOpen={setOpen}
       open={open.open}
       message={open.message}
-      type={Message.error}
+      type={open.type}
     />
   );
 };

@@ -2,15 +2,12 @@ import React, { Fragment, useEffect, useState } from "react";
 import BOPLOGO from "../../../assets/images/logo-hd.png";
 import { Col } from "react-bootstrap";
 import styles from "./Loader.module.css";
-import { all } from "axios";
 import { useSelector } from "react-redux";
 import "./Loader.css";
 
 const Loader = () => {
   const [isLoader, setIsLoading] = useState(false);
 
-  const allStates = useSelector((state) => state);
-  console.log("All States: ", allStates);
   const DownloadReportReducer = useSelector(
     (state) => state.DownloadReportReducer.Loading
   );
@@ -18,6 +15,9 @@ const Loader = () => {
   const downloadReducer = useSelector((state) => state.downloadReducer.Loading);
   const securityReducer = useSelector((state) => state.securityReducer.Loading);
   const settingsReducer = useSelector((state) => state.settingsReducer.Loading);
+  // Global, feature-reducer-independent signal — dispatch(showLoader())/
+  // dispatch(hideLoader()) from anywhere (see store/actions/UI_Actions.js).
+  const uiLoadingCount = useSelector((state) => state.ui.loadingCount);
 
   const isLoading = [
     DownloadReportReducer,
@@ -25,6 +25,7 @@ const Loader = () => {
     downloadReducer,
     securityReducer,
     settingsReducer,
+    uiLoadingCount > 0,
   ].some((loading) => loading);
 
   useEffect(() => {

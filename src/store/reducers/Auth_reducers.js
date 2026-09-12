@@ -7,6 +7,9 @@ const initialState = {
   Spinner: false,
   emailData: "",
   ResponseMessage: "",
+  // Drives the global toast's color: "success" on a *_SUCCESS case that sets
+  // ResponseMessage, "error" on a *_FAIL case. See utils/ResponseMessage.js.
+  Severity: "",
   Token: "",
   Refresh: "",
   SessionExpeireResponseMessage: "",
@@ -30,6 +33,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         UserDetails: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
         Loading: false,
         Token: action.response.token,
         Refresh: action.response.refreshToken,
@@ -41,6 +45,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         UserDetails: null,
         ResponseMessage: action.message,
+        Severity: "error",
         Loading: false,
         Token: "",
         Refresh: "",
@@ -66,6 +71,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         UserDetails: null,
         ResponseMessage: action.message,
+        Severity: "error",
         Loading: false,
         Token: "",
         Refresh: "",
@@ -81,6 +87,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         emailData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.GET_ALL_USER_STATUS_INIT:
       return {
@@ -94,6 +101,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         allUserStatusData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.GET_ALL_USER_STATUS_FAIL:
@@ -102,6 +110,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         allUserStatusData: [],
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //RoleList Reducer
@@ -117,6 +126,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         RoleList: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.ROLE_LIST_FAIL:
@@ -125,6 +135,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         RoleList: [],
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //GetBankUserRoles Reducer
@@ -140,6 +151,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         GetBankUserRoles: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.GET_BANK_USER_ROLES_FAIL:
@@ -148,6 +160,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         GetBankUserRoles: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //GetAllBranches Reducer
@@ -163,6 +176,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         GetAllBranches: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.GET_ALL_BRANCHES_FAIL:
@@ -171,6 +185,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         GetAllBranches: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     case actions.SEND_EMAIL_RESET_PASSWORD_FAIL:
@@ -179,11 +194,13 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         emailData: "",
         ResponseMessage: action.message,
+        Severity: "error",
       };
     case actions.CLEARE_MESSAGE: {
       return {
         ...state,
         ResponseMessage: "",
+        Severity: "",
       };
     }
     case actions.LOGOUT_INIT:
@@ -195,6 +212,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         LogOut: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.LOGOUT_FAIL: {
@@ -203,6 +221,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         LogOut: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     }
     case actions.SIGN_OUT:
@@ -226,6 +245,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         resetPassword: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     }
 
@@ -235,6 +255,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         resetPassword: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     }
 
@@ -251,6 +272,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         forgotPassword: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     }
 
@@ -260,6 +282,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         forgotPassword: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     }
 
@@ -276,6 +299,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         resetPasswordEmailVerification: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     }
 
@@ -285,6 +309,7 @@ const authReducer = (state = initialState, action) => {
         Loading: false,
         resetPasswordEmailVerification: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     }
     default:

@@ -7,3 +7,4 @@ export { default as securityModalReducer } from "./Security_Admin_Modal_reducer"
 export { default as SettingsReducer } from "./SettingsReducer";
 export { default as DownloadReportReducer } from "./Download-Reducer";
 export { default as RealtimeReducer } from "./RealtimeActions_reducer";
+export { default as uiReducer } from "./UI_reducer";

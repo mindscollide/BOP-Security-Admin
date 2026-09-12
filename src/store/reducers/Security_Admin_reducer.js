@@ -3,6 +3,9 @@ import * as actions from "../action_types";
 const initialState = {
   Spinner: false,
   ResponseMessage: "",
+  // Drives the global toast's color: "success" on a *_SUCCESS case that sets
+  // ResponseMessage, "error" on a *_FAIL case. See utils/ResponseMessage.js.
+  Severity: "",
   GetNewBankUserRequestsData: null,
   GetNewCorporateUserRequestsData: null,
   rejectUserRequest: "",
@@ -28,6 +31,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         SaveBankUserData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.SAVE_BANK_USER_FAIL:
       return {
@@ -35,6 +39,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         SaveBankUserData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     case actions.GET_NEW_BANK_USER_REQUESTS_INIT:
@@ -46,6 +51,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         GetNewBankUserRequestsData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.GET_NEW_BANK_USER_REQUESTS_FAIL:
       return {
@@ -53,6 +59,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         GetNewBankUserRequestsData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     case actions.GET_NEW_CORPORATE_USER_REQUESTS_INIT:
       return { ...state, Loading: true };
@@ -63,6 +70,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         GetNewCorporateUserRequestsData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.GET_NEW_CORPORATE_USER_REQUESTS_FAIL:
       return {
@@ -70,6 +78,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         GetNewCorporateUserRequestsData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     case actions.SAVE_CORPORATE_USER_INIT:
       return { ...state, Loading: true };
@@ -79,6 +88,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         saveCorporateUserData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.SAVE_CORPORATE_USER_FAIL:
       return {
@@ -86,6 +96,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         saveCorporateUserData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     case actions.REJECT_USER_REQUEST_INIT:
@@ -97,6 +108,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         rejectUserRequest: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.REJECT_USER_REQUEST_FAIL:
@@ -105,6 +117,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         rejectUserRequest: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     case actions.GET_ALL_USERS_LIST_INIT:
@@ -119,6 +132,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         getAllUsersList: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.GET_ALL_USERS_LIST_FAIL:
@@ -127,6 +141,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         getAllUsersList: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     //Search Corporate Users
     case actions.SEARCH_CORPORATE_USERS_INIT:
@@ -140,6 +155,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         SearchCorporateUsersData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.SEARCH_CORPORATE_USERS_FAIL:
       return {
@@ -147,6 +163,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         SearchCorporateUsersData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     //Search Bank Users
     case actions.SEARCH_BANK_USERS_INIT:
@@ -160,6 +177,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         SearchBankUsersData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.SEARCH_BANK_USERS_FAIL:
       return {
@@ -167,6 +185,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         SearchBankUsersData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //Update Bank User Reducer
@@ -181,6 +200,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         UpdateBankUser: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.UPDATE_BANK_USER_FAIL:
       return {
@@ -188,6 +208,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         UpdateBankUser: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //Update Corporate User Reducer
@@ -202,6 +223,7 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         UpdateCorporateUser: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
     case actions.UPDATE_CORPORATE_USER_FAIL:
       return {
@@ -209,11 +231,13 @@ const securityReducer = (state = initialState, action) => {
         Loading: false,
         UpdateCorporateUser: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
     case actions.CLEARE_MESSAGE:
       return {
         ...state,
         ResponseMessage: "",
+        Severity: "",
       };
     default:
       return { ...state };

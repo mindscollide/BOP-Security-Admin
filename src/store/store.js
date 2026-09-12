@@ -12,6 +12,7 @@ import {
   SettingsReducer,
   DownloadReportReducer,
   RealtimeReducer,
+  uiReducer,
 } from "./reducers";
 
 import { configureStore } from "@reduxjs/toolkit";
@@ -27,6 +28,7 @@ const AppReducer = combineReducers({
   settingsReducer: SettingsReducer,
   DownloadReportReducer: DownloadReportReducer,
   RealtimeReducer: RealtimeReducer,
+  ui: uiReducer,
 });
 
 const rootReducer = (state, action) => {

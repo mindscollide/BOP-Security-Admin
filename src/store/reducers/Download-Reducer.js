@@ -4,6 +4,9 @@ const initialState = {
   Loading: false,
   Spinner: false,
   ResponseMessage: "",
+  // Drives the global toast's color: "success" on a *_SUCCESS case that sets
+  // ResponseMessage, "error" on a *_FAIL case. See utils/ResponseMessage.js.
+  Severity: "",
   bankuserReportData: null,
   corporateUserReportData: null,
   userLoginHistoryData: null,
@@ -29,6 +32,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         bankuserReportData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.BANK_USER_REPORT_FAIL:
@@ -37,6 +41,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         bankuserReportData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //Corporate  User Report
@@ -52,6 +57,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         corporateUserReportData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.CORPORATE_USER_REPORT_FAIL:
@@ -60,6 +66,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         corporateUserReportData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //Security User Login History Report
@@ -75,6 +82,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         userLoginHistoryData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.SECURITY_ADMIN_USER_LOGIN_HISTORY_FAIL:
@@ -83,6 +91,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         userLoginHistoryData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //Access Detail  Report
@@ -98,6 +107,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         accessDetailReportData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.ACCESS_DETAIL_REPORT_FAIL:
@@ -106,6 +116,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         accessDetailReportData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //Access Detail  Report
@@ -121,6 +132,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         lastLoggedInData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.LAST_LOGGED_IN_REPORT_FAIL:
@@ -129,6 +141,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         lastLoggedInData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //User Status Wise  Report
@@ -144,6 +157,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         userStatusWiseReportData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.USER_STATUS_WISE_REPORT_FAIL:
@@ -152,6 +166,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         userStatusWiseReportData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //PDF version Bank User  Report
@@ -167,6 +182,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         pdfBankUserReportData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.PDF_BANK_USER_REPORT_FAIL:
@@ -175,6 +191,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         pdfBankUserReportData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     //PDF version Bank User  Report
@@ -190,6 +207,7 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         pdfCorporateUserReportData: action.response,
         ResponseMessage: action.message,
+        Severity: "success",
       };
 
     case actions.PDF_CORPORATE_USER_REPORT_FAIL:
@@ -198,12 +216,14 @@ const DownloadReportReducer = (state = initialState, action) => {
         Loading: false,
         pdfCorporateUserReportData: null,
         ResponseMessage: action.message,
+        Severity: "error",
       };
 
     case actions.CLEARE_MESSAGE: {
       return {
         ...state,
         ResponseMessage: "",
+        Severity: "",
       };
     }
 

@@ -7,7 +7,7 @@ import {
   getNewBankUserRequestApi,
   saveBankUserApi,
 } from "../../../../store/actions/Security_Admin";
-import { Notification, Paper, Table } from "../../../../components/elements";
+import { Paper, Table } from "../../../../components/elements";
 import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
 import {
@@ -23,36 +23,22 @@ const PendingApprovalBank = () => {
   const [tableData, setTableData] = useState([]);
   const [selectedRequestId, setSelectedRequestId] = useState(null);
   const bankUserRequested = useSelector(
-    (state) => state.RealtimeReducer.bankUserRequest
+    (state) => state.RealtimeReducer.bankUserRequest,
   );
   const bankUserCreated = useSelector(
-    (state) => state.RealtimeReducer.bankUserCreated
+    (state) => state.RealtimeReducer.bankUserCreated,
   );
-
-  console.log(
-    { bankUserCreated, bankUserRequested },
-    "bankUserCreatedbankUserCreated"
-  );
-
-  console.log({ tableData }, "tableDatatableDatatableData");
 
   const bankUserRejected = useSelector(
-    (state) => state.RealtimeReducer.bankUserRejected
+    (state) => state.RealtimeReducer.bankUserRejected,
   );
   const branchUpdated = useSelector(
-    (state) => state.RealtimeReducer.branchUpdated
+    (state) => state.RealtimeReducer.branchUpdated,
   );
-  console.log({ branchUpdated }, "tableDatatableDatatableData");
-
-  //Global State
-  //Checking snakbar state
-  const [open, setOpen] = useState({ open: false, message: "" });
 
   const GetNewBankUserRequests = useSelector(
-    (state) => state.securityReducer.GetNewBankUserRequestsData
+    (state) => state.securityReducer.GetNewBankUserRequestsData,
   );
-
-  console.log(GetNewBankUserRequests, "tableDatatableDatatableData");
 
   //modal for create user for reject
   const [createRejectModal, setCreateRejectModal] = useState(false);
@@ -145,14 +131,14 @@ const PendingApprovalBank = () => {
         const { userRegistrationRequestID } = bankUserRejected;
         let findisExist = tableData.find(
           (rowData, index) =>
-            rowData.userRegistrationRequestID === userRegistrationRequestID
+            rowData.userRegistrationRequestID === userRegistrationRequestID,
         );
         if (findisExist !== undefined) {
           setTableData((prevData) => {
             return prevData.filter(
               (tableData, index) =>
                 tableData.userRegistrationRequestID !==
-                userRegistrationRequestID
+                userRegistrationRequestID,
             );
           });
         }
@@ -168,14 +154,15 @@ const PendingApprovalBank = () => {
         const { user } = bankUserCreated;
         let findisExist = tableData.find(
           (rowData, index) =>
-            rowData.userRegistrationRequestID === user.userRegistrationRequestID
+            rowData.userRegistrationRequestID ===
+            user.userRegistrationRequestID,
         );
         if (findisExist !== undefined) {
           setTableData((prevData) => {
             return prevData.filter(
               (tableData, index) =>
                 tableData.userRegistrationRequestID !==
-                user.userRegistrationRequestID
+                user.userRegistrationRequestID,
             );
           });
         }
@@ -218,28 +205,29 @@ const PendingApprovalBank = () => {
   // column of create user
   const columns = [
     {
-      title: <label className="bottom-table-header">Email</label>,
+      title: <label className='bottom-table-header'>Email</label>,
       dataIndex: "email",
       key: "email",
-      width: "300px",
+      width: "200px",
       ellipsis: true,
     },
 
     {
-      title: <label className="bottom-table-header">Employee Name</label>,
+      title: <label className='bottom-table-header'>Employee Name</label>,
       dataIndex: "firstname",
       key: "firstname",
-      width: "250px",
+      width: "200px",
       ellipsis: true,
     },
     {
-      title: <label className="bottom-table-header">Role</label>,
+      title: <label className='bottom-table-header'>Role</label>,
       dataIndex: "role",
       key: "fK_UserRoleID",
       ellipsis: true,
+      width: "120px",
     },
     {
-      title: <label className="bottom-table-header">Branch</label>,
+      title: <label className='bottom-table-header'>Branch</label>,
       dataIndex: "branchName",
       key: "branchName",
       align: "center",
@@ -248,7 +236,7 @@ const PendingApprovalBank = () => {
       ellipsis: true,
       render: (text, record) => {
         return (
-          <label className="d-flex justify-content-center">
+          <label className='d-flex justify-content-center'>
             {record.branchName !== "" && record.branchName !== null
               ? record.branchName
               : "-"}
@@ -257,7 +245,7 @@ const PendingApprovalBank = () => {
       },
     },
     {
-      title: <label className="bottom-table-header">Accept</label>,
+      title: <label className='bottom-table-header'>Accept</label>,
       dataIndex: "accept",
       key: "accept",
       ellipsis: true,
@@ -270,15 +258,14 @@ const PendingApprovalBank = () => {
             onClick={() => {
               // console.log("record", record);
               openAcceptModal(record.userRegistrationRequestID);
-            }}
-          >
-            <i className="icon-check icon-accept-column"></i>
+            }}>
+            <i className='icon-check icon-accept-column'></i>
           </label>
         );
       },
     },
     {
-      title: <label className="bottom-table-header">Reject</label>,
+      title: <label className='bottom-table-header'>Reject</label>,
       dataIndex: "reject",
       key: "reject",
       ellipsis: true,
@@ -288,7 +275,7 @@ const PendingApprovalBank = () => {
       render: (text, record) => {
         return (
           <label onClick={() => openRejectModal(record)}>
-            <i className="icon-close icon-close-column"></i>
+            <i className='icon-close icon-close-column'></i>
           </label>
         );
       },
@@ -297,24 +284,24 @@ const PendingApprovalBank = () => {
 
   return (
     <>
-      <section className="create-user-container">
+      <section className='create-user-container'>
         <Row>
-          <Col lg={12} md={12} sm={12} className="d-flex justify-content-start">
-            <label className="Pending-Approval-label">
+          <Col lg={12} md={12} sm={12} className='d-flex justify-content-start'>
+            <label className='Pending-Approval-label'>
               Pending Approval Bank
             </label>
           </Col>
         </Row>
 
-        <Row className="mt-3">
-          <Paper className="span-table">
-            <Col lg={12} md={12} sm={12} className="mt-3">
+        <Row className='mt-3'>
+          <Paper className='span-table'>
+            <Col lg={12} md={12} sm={12} className='mt-3'>
               <Table
                 column={columns}
                 rows={tableData}
-                className="Createuser-table"
+                className='Createuser-table'
                 pagination={false}
-                scroll={{ y: 400, x: "max-content" }}
+                scroll={{ y: 400 }}
               />
             </Col>
           </Paper>
@@ -336,7 +323,6 @@ const PendingApprovalBank = () => {
           acceptHandler={handleAccept}
         />
       ) : null}
-      <Notification setOpen={setOpen} open={open.open} message={open.message} />
     </>
   );
 };

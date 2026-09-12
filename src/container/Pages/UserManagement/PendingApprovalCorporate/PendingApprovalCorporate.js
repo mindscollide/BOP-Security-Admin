@@ -7,7 +7,7 @@ import {
   saveCorporateUserApi,
 } from "../../../../store/actions/Security_Admin";
 import { useTableScrollBottom } from "../../../../helpers/useTableScrollBottom";
-import { Notification, Paper, Table } from "../../../../components/elements";
+import { Paper, Table } from "../../../../components/elements";
 import CreateModal from "../../Modals/Create-User-Modal/CreateModal";
 import AcceptModal from "../../Modals/Accept-User-Modal/AcceptModal";
 import "./PendingApprovalCorporate.css";
@@ -36,9 +36,6 @@ const PendingApprovalCorporate = () => {
     (state) => state.RealtimeReducer.corporateUpdated
   );
 
-  //Global State
-  //Checking snakbar state
-  const [open, setOpen] = useState({ open: false, message: "" });
   //row length on scroll
   const [sRow, setSRow] = useState(0);
   const [recordsLength, setRecordLength] = useState(0);
@@ -284,7 +281,7 @@ const PendingApprovalCorporate = () => {
               <Table
                 column={columnsCreate}
                 rows={tableData}
-                scroll={{ y: 400, x: "max-content" }}
+                scroll={{ y: 400, }}
                 className="Createuser-table"
                 pagination={false}
               />
@@ -308,7 +305,6 @@ const PendingApprovalCorporate = () => {
           acceptHandler={handleAccept}
         />
       ) : null}
-      <Notification setOpen={setOpen} open={open.open} message={open.message} />
     </>
   );
 };

@@ -204,3 +204,11 @@ export const RESETPASSWORDEMAILVERIFICATION_SUCCESS =
   "RESETPASSWORDEMAILVERIFICATION_SUCCESS";
 export const RESETPASSWORDEMAILVERIFICATION_FAIL =
   "RESETPASSWORDEMAILVERIFICATION_FAIL";
+
+// Global UI (toast/loader) — dispatchable from anywhere (any thunk or any
+// component), independent of any single feature reducer's own
+// ResponseMessage/Loading fields. See store/actions/UI_Actions.js.
+export const SHOW_TOAST = "SHOW_TOAST";
+export const HIDE_TOAST = "HIDE_TOAST";
+export const SHOW_LOADER = "SHOW_LOADER";
+export const HIDE_LOADER = "HIDE_LOADER";

@@ -12,7 +12,6 @@ import Paper from "./paper/Paper";
 import Loader from "./loader/Loader";
 import CustomUpload from "./upload/Upload";
 import VerificationInputField from "./verification_input/Verification_Input";
-import { Notification, Message } from "./snack_bar";
 
 export {
   Button,
@@ -28,7 +27,5 @@ export {
   Table,
   Paper,
   CustomUpload,
-  Notification,
-  Message,
   VerificationInputField,
 };

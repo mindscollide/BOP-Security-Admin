@@ -7,7 +7,7 @@ import "@fontsource/roboto";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/Routes";
 import { Loader } from "./components/elements";
-import ResponseMessage from "./utils/ResponseMessage";
+import { NotificationProvider } from "./context/NotificationContext";
 import { useEffect, useRef } from "react";
 // Matches the entry bundle's <script src="..."> tag in index.html, e.g.
 // <script defer="defer" src="/static/js/main.f1587a40.js"></script>
@@ -67,11 +67,10 @@ function App() {
   }, []);
 
   return (
-    <>
+    <NotificationProvider>
       <RouterProvider router={router} />
       <Loader />
-      <ResponseMessage />
-    </>
+    </NotificationProvider>
   );
 }
 

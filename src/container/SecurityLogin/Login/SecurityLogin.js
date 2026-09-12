@@ -2,7 +2,7 @@ import React, { Fragment, useState, useRef } from "react";
 import { Container, Col, Row, InputGroup, Form } from "react-bootstrap";
 import { Button } from "../../../components/elements";
 import { loginSecurityAdminAPI } from "../../../store/actions/Auth_Actions";
-import { showToast } from "../../../store/actions/UI_Actions";
+import { useNotification } from "../../../context/NotificationContext";
 import { useDispatch } from "react-redux";
 import BOPlogo from "../../../assets/images/BOPlogo.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import {
 const SecurityLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { showMessage } = useNotification();
 
   const UserName = useRef(null);
   const Password = useRef(null);
@@ -93,7 +94,7 @@ const SecurityLogin = () => {
     } catch (err) {
       console.log("Hello", err);
 
-      dispatch(showToast("Please Enter All Credentials"));
+      showMessage("Please Enter All Credentials", "error");
     }
   };
 

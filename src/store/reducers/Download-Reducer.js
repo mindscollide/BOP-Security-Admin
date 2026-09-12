@@ -5,7 +5,7 @@ const initialState = {
   Spinner: false,
   ResponseMessage: "",
   // Drives the global toast's color: "success" on a *_SUCCESS case that sets
-  // ResponseMessage, "error" on a *_FAIL case. See utils/ResponseMessage.js.
+  // ResponseMessage, "error" on a *_FAIL case. See context/NotificationContext.js.
   Severity: "",
   bankuserReportData: null,
   corporateUserReportData: null,

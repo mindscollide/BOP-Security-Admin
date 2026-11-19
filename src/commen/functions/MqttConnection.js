@@ -23,7 +23,7 @@ export const useMqttClient = ({
             onSuccess: () => {
               console.log(`Subscribed to topic: ${topic}`);
               setSubscribedTopics((prev) =>
-                Array.from(new Set([...prev, topic]))
+                Array.from(new Set([...prev, topic])),
               );
             },
             onFailure: (err) => {
@@ -33,7 +33,7 @@ export const useMqttClient = ({
         }
       });
     },
-    [subscribedTopics]
+    [subscribedTopics],
   );
 
   const unsubscribeFromTopics = useCallback(
@@ -52,7 +52,7 @@ export const useMqttClient = ({
         });
       });
     },
-    [isConnected]
+    [isConnected],
   );
 
   const onMessageArrived = useCallback(
@@ -65,7 +65,7 @@ export const useMqttClient = ({
         console.error("Failed to parse message:", err);
       }
     },
-    [onMessageArrivedCallback]
+    [onMessageArrivedCallback],
   );
 
   const onConnectionLost = useCallback(
@@ -75,7 +75,7 @@ export const useMqttClient = ({
       setSubscribedTopics([]);
       if (onConnectionLostCallback) onConnectionLostCallback(resObj);
     },
-    [onConnectionLostCallback]
+    [onConnectionLostCallback],
   );
 
   const connectToMqtt = useCallback(
@@ -89,7 +89,7 @@ export const useMqttClient = ({
       clientRef.current = new Paho.Client(
         process.env.REACT_APP_MQTT_HOST,
         Number(process.env.REACT_APP_MQTT_PORT),
-        newClientID
+        newClientID,
       );
 
       clientRef.current.onConnectionLost = onConnectionLost;
@@ -113,14 +113,10 @@ export const useMqttClient = ({
         userName: process.env.REACT_APP_MQTT_USERNAME,
         password: process.env.REACT_APP_MQTT_PASSWORD,
         cleanSession: true,
-        useSSL:
-          process.env.REACT_APP_MQTT_PORT === "8883" &&
-          process.env.REACT_APP_MQTT_HOST === "boptrade.tresmark.com"
-            ? true
-            : false,
+        useSSL: process.env.REACT_APP_MQTT_PORT === "8883" ? true : false,
       });
     },
-    [onMessageArrived, onConnectionLost, randomString, subscribeToTopics]
+    [onMessageArrived, onConnectionLost, randomString, subscribeToTopics],
   );
 
   return {

@@ -247,13 +247,13 @@ const loginSecurityAdminAPI = (navigate, data) => {
                 ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_04".toLowerCase())
             ) {
-              dispatch(loginSecurityAdminFailed("Wrong Password"));
+              dispatch(loginSecurityAdminFailed("Invalid login credentails. Please try again"));
             } else if (
               responseMessage
                 ?.toLowerCase()
                 .includes("ERM_AuthService_AuthManager_Login_05".toLowerCase())
             ) {
-              dispatch(loginSecurityAdminFailed("User is Locked"));
+              dispatch(loginSecurityAdminFailed("Account locked. Contact your administrator."));
             } else if (
               responseMessage
                 ?.toLowerCase()
@@ -291,7 +291,7 @@ const loginSecurityAdminAPI = (navigate, data) => {
             ) {
               dispatch(
                 loginSecurityAdminFailed(
-                  "Not a valid user. Please login with valid ID",
+                  "Invalid login credentails. Please try again",
                 ),
               );
             } else if (

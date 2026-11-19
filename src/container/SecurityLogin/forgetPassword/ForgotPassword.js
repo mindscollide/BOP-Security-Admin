@@ -3,7 +3,7 @@ import { Container, Col, Row, InputGroup, Form } from "react-bootstrap";
 import { Button } from "../../../components/elements";
 import BOPlogo from "../../../assets/images/BOPlogo.png";
 import "./ForgotPassword.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   bopEmailValidation,
   encryptField,
@@ -16,12 +16,16 @@ const ForgotPassword = () => {
 
   const [email, setEmail] = useState("");
   //state for login credentials
+  // Only true once a submit attempt has actually been made, so the error
+  // below the input can show on click even when the field is still empty.
+  const [submitted, setSubmitted] = useState(false);
 
   const isEmailValid = email.trim() !== "" && bopEmailValidation(email.trim());
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     if (!isEmailValid) {
+      setSubmitted(true);
       return;
     }
 
@@ -56,7 +60,7 @@ const ForgotPassword = () => {
                     <Row className='flex-column'>
                       <Col className='d-flex justify-content-center'>
                         <p className='forget-password-heading'>
-                          Forget Password ?
+                          Recover Password
                         </p>
                       </Col>
                       <Col className='d-flex justify-content-center'>
@@ -67,38 +71,52 @@ const ForgotPassword = () => {
                     </Row>
                     <Row>
                       <Col sm={12} md={12} lg={12} className='mt-3'>
-                        <InputGroup className='mb-3'>
+                        <InputGroup>
                           <InputGroup.Text
                             id='basic-addon1'
                             className='Icon-Field-class'>
                             <i className='icon-user'></i>
                           </InputGroup.Text>
                           <Form.Control
-                            name='email'
-                            type='email'
-                            autoComplete='email'
+                            name='new_email'
+                            type='text'
+                            autoComplete={false}
                             className='form-comtrol-ResetPassword-textfield'
                             placeholder='Email'
                             aria-label='Email'
                             aria-describedby='basic-addon1'
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                              setEmail(e.target.value);
+                              if (submitted) setSubmitted(false);
+                            }}
                           />
                         </InputGroup>
-                        {email.trim() !== "" && !isEmailValid && (
-                          <div className='text-danger mt-1'>
-                            Email should be correct
-                          </div>
-                        )}
+                        {(submitted || email.trim() !== "") &&
+                          !isEmailValid && (
+                            <span className='emailErrorText'>
+                              Enter a valid email address
+                            </span>
+                          )}
                       </Col>
 
-                      <Col className='d-flex justify-content-center mt-2'>
+                      <Col
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        className='d-flex justify-content-center mt-3'>
                         <Button
-                          text='Forgot Password'
+                          text='Send Change Password Link'
                           className='ResetPassword-btn'
-                          disableBtn={!isEmailValid}
                           onClick={handleForgotPassword}
                         />
+                      </Col>
+                      <Col className='d-flex justify-content-center'>
+                        <span className='mt-2 text-center'>
+                          <Link className={"forgotPasswordLink"} to={"/"}>
+                            Back to Login
+                          </Link>
+                        </span>
                       </Col>
                     </Row>
                   </Form>
